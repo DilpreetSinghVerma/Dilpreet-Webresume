@@ -37,8 +37,8 @@ function Stars(props: any) {
 
       // Dynamic rotation based on scroll AND mouse
       // Mouse influence is subtle but adds "feel"
-      const mouseX = mouse.x * 0.2;
-      const mouseY = mouse.y * 0.2;
+      const mouseX = mouse.x * 0.8; // Increased sensitivity from 0.2
+      const mouseY = mouse.y * 0.8; // Increased sensitivity from 0.2
 
       ref.current.rotation.x = -(time * 0.05) - (scrollY * 0.0005) + mouseY;
       ref.current.rotation.y = -(time * 0.03) - (scrollY * 0.0005) + mouseX;

@@ -43,6 +43,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8">
           <button onClick={() => scrollTo('skills')} className="text-sm hover:text-primary transition-colors">Skills</button>
           <button onClick={() => scrollTo('experience')} className="text-sm hover:text-primary transition-colors">Experience</button>
+          <button onClick={() => scrollTo('certifications')} className="text-sm hover:text-primary transition-colors">Certifications</button>
           <button onClick={() => scrollTo('projects')} className="text-sm hover:text-primary transition-colors">Projects</button>
           <Button variant="outline" className="rounded-full border-primary/50 hover:bg-primary/10" onClick={() => window.location.href = 'mailto:dilpreetsinghverma@gmail.com'}>
             Contact Me
@@ -61,6 +62,7 @@ export default function Navbar() {
               <div className="flex flex-col gap-6 mt-10">
                 <button onClick={() => scrollTo('skills')} className="text-lg font-medium hover:text-primary text-left">Skills</button>
                 <button onClick={() => scrollTo('experience')} className="text-lg font-medium hover:text-primary text-left">Experience</button>
+                <button onClick={() => scrollTo('certifications')} className="text-lg font-medium hover:text-primary text-left">Certifications</button>
                 <button onClick={() => scrollTo('projects')} className="text-lg font-medium hover:text-primary text-left">Projects</button>
                 <Button className="w-full mt-4" onClick={() => window.location.href = 'mailto:dilpreetsinghverma@gmail.com'}>Contact Me</Button>
               </div>
