@@ -53,8 +53,9 @@ function Stars(props: any) {
       <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
         <PointMaterial
           transparent
+          opacity={0.8}
           color="#00e5ff"
-          size={0.003}
+          size={0.002}
           sizeAttenuation={true}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
@@ -87,7 +88,7 @@ function FloatingFlare({ color, position, scale, speed }: { color: string, posit
     <Float speed={speed} rotationIntensity={0.5} floatIntensity={1}>
       <mesh ref={meshRef} position={position}>
         <sphereGeometry args={[scale, 32, 32]} />
-        <meshBasicMaterial color={color} transparent opacity={0.15} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <meshBasicMaterial color={color} transparent opacity={0.05} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </Float>
   );
@@ -111,8 +112,8 @@ export default function Scene() {
           <Bloom 
             luminanceThreshold={0} 
             mipmapBlur 
-            intensity={1.5} 
-            radius={0.6}
+            intensity={0.8} 
+            radius={0.5}
           />
           <Vignette eskil={false} offset={0.1} darkness={1.1} />
         </EffectComposer>
