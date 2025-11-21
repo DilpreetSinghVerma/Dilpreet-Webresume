@@ -9,8 +9,8 @@ function Stars(props: any) {
   const { mouse } = useThree(); // Access mouse from R3F
   
   const sphere = useMemo(() => {
-    const temp = new Float32Array(6000 * 3);
-    for (let i = 0; i < 6000; i++) {
+    const temp = new Float32Array(2000 * 3);
+    for (let i = 0; i < 2000; i++) {
       const u = Math.random();
       const v = Math.random();
       const theta = 2 * Math.PI * u;
@@ -106,6 +106,7 @@ export default function Scene() {
         {/* Floating "Lens Flares" / Orbs */}
         <FloatingFlare color="#00e5ff" position={[-1.2, 0.5, 0]} scale={0.3} speed={1.5} />
         <FloatingFlare color="#7c3aed" position={[1.5, -0.8, 0.5]} scale={0.4} speed={1.2} />
+        <FloatingFlare color="#ec4899" position={[0, 1.2, -0.5]} scale={0.2} speed={2} />
 
         <EffectComposer disableNormalPass>
           <Bloom 
