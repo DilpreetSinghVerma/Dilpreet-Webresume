@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Instagram } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
       <Scene />
       
@@ -52,6 +52,11 @@ export default function Hero() {
               <Button variant="outline" size="icon" className="rounded-full border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:text-primary transition-colors" asChild>
                 <a href="https://www.linkedin.com/in/dilpreet-singh-709b35310/" target="_blank" rel="noopener noreferrer">
                   <Linkedin className="h-5 w-5" />
+                </a>
+              </Button>
+              <Button variant="outline" size="icon" className="rounded-full border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:text-primary transition-colors" asChild>
+                <a href="https://www.instagram.com/dilpreet_singh_verma/" target="_blank" rel="noopener noreferrer">
+                  <Instagram className="h-5 w-5" />
                 </a>
               </Button>
               <Button variant="outline" size="icon" className="rounded-full border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/10 hover:text-primary transition-colors" asChild>
