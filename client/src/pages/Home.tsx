@@ -8,7 +8,7 @@ import Certifications from "@/components/sections/Certifications";
 
 export default function Home() {
   return (
-    <main className="min-h-screen selection:bg-primary selection:text-primary-foreground">
+    <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative z-10">
       <ScrollProgress />
       <Navbar />
       <Hero />
