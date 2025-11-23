@@ -16,10 +16,12 @@ export default function Hero() {
 
     typingIntervalRef.current = setInterval(() => {
       if (index < FULL_TEXT.length) {
-        setDisplayText((prev) => prev + FULL_TEXT[index]);
+        setDisplayText(FULL_TEXT.substring(0, index + 1));
         index++;
       } else {
-        clearInterval(typingIntervalRef.current!);
+        if (typingIntervalRef.current) {
+          clearInterval(typingIntervalRef.current);
+        }
       }
     }, TYPING_SPEED);
 
