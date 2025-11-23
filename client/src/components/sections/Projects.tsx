@@ -66,7 +66,7 @@ export default function Projects() {
                 </CardHeader>
                 
                 <CardContent className="relative z-10">
-                  <p className="mb-6 line-clamp-4 text-[#000000]">
+                  <p className="mb-6 line-clamp-4 text-foreground/80">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-auto">
