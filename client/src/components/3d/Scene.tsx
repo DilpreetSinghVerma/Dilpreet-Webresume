@@ -95,13 +95,11 @@ function FloatingFlare({ color, position, scale, speed }: { color: string, posit
 }
 
 export default function Scene() {
-  const isDarkMode = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
-  
   return (
     <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 2.5], fov: 60 }} gl={{ antialias: false, alpha: true }}>
-        {/* Transparent background in light mode, dark in dark mode */}
-        {isDarkMode && <color attach="background" args={['#020204']} />} 
+      <Canvas camera={{ position: [0, 0, 2.5], fov: 60 }} gl={{ antialias: false }}>
+        {/* Transparent background to let body gradients show through if needed, or deep space color */}
+        <color attach="background" args={['#020204']} /> 
         
         <Stars />
         
