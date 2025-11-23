@@ -84,10 +84,14 @@
   }
   html:not(.dark) body {
     background-color: #ffffff !important;
+    position: relative;
+    z-index: 0;
   }
   main {
     transition: background-color 0.4s ease, color 0.4s ease;
     will-change: background-color;
+    position: relative;
+    z-index: 0;
   }
   html:not(.dark) main {
     background-color: #ffffff !important;
@@ -155,9 +159,11 @@ html:not(.dark) .text-glow {
   text-shadow: none !important;
 }
 
-/* 3D orbs in bright mode - keep visible with opacity */
+/* 3D orbs in bright mode - keep visible */
 html:not(.dark) canvas {
-  opacity: 0.4 !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 1;
 }
 
 /* Bright mode - fix all text and background elements for readability */
