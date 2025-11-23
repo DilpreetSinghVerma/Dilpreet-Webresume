@@ -2,36 +2,65 @@ import { motion } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Hero() {
   const [displayText, setDisplayText] = useState("");
+  const [shouldRestart, setShouldRestart] = useState(false);
   const fullText = "DILPREET SINGH";
   const typingSpeed = 80;
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isTypingRef = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Reset typing on scroll
-      setDisplayText("");
+      // Clear existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      // Debounce scroll events - trigger after 300ms of no scrolling
+      scrollTimeoutRef.current = setTimeout(() => {
+        setShouldRestart((prev) => !prev);
+      }, 300);
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
     let index = 0;
-    const interval = setInterval(() => {
-      if (index < fullText.length) {
-        setDisplayText((prev) => prev + fullText[index]);
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, typingSpeed);
+    let interval: NodeJS.Timeout | null = null;
 
-    return () => clearInterval(interval);
-  }, [displayText === ""]);
+    // Start typing
+    isTypingRef.current = true;
+    setDisplayText("");
+
+    const startTyping = () => {
+      interval = setInterval(() => {
+        if (index < fullText.length) {
+          setDisplayText((prev) => prev + fullText[index]);
+          index++;
+        } else {
+          if (interval) clearInterval(interval);
+          isTypingRef.current = false;
+        }
+      }, typingSpeed);
+    };
+
+    startTyping();
+
+    return () => {
+      if (interval) clearInterval(interval);
+      isTypingRef.current = false;
+    };
+  }, [shouldRestart]);
 
   return (
     <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
