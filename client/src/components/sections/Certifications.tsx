@@ -6,6 +6,22 @@ import { useState } from "react";
 
 const certifications = [
   {
+    title: "10-Week AI-ML Virtual Internship",
+    issuer: "Gulzar Group of Institutions",
+    date: "July - September 2025",
+    icon: BrainCircuit,
+    featured: true,
+    description: "Completed a comprehensive 10-week AI-ML Virtual Internship journey supported by India Edu Program, Google for Developers, and EduSkills.",
+    details: [
+      "Hands-on experience in Artificial Intelligence and Machine Learning concepts",
+      "Guided by industry experts and academic mentors",
+      "Deepened understanding of AI/ML applications and best practices",
+      "Collaborative learning environment with peer developers"
+    ],
+    tags: ["AI/ML", "Virtual Internship", "EduSkills", "Google Developers"],
+    certificateImage: "/ai-ml-internship-certificate.jpg"
+  },
+  {
     title: "Tata Group Data Analytics Job Simulation",
     issuer: "Forage",
     date: "July 2025",
@@ -17,7 +33,8 @@ const certifications = [
       "Proposed a no-code predictive modeling framework to assess customer delinquency risk.",
       "Designed an AI-driven collections strategy leveraging agentic AI and automation."
     ],
-    tags: ["Data Analytics", "GenAI", "Predictive Modeling", "Strategy"]
+    tags: ["Data Analytics", "GenAI", "Predictive Modeling", "Strategy"],
+    certificateImage: "/tata-certificate.jpg"
   },
   {
     title: "Artificial Intelligence Fundamentals",
@@ -55,6 +72,12 @@ const certifications = [
 
 export default function Certifications() {
   const [showCertificate, setShowCertificate] = useState(false);
+  const [selectedCertImage, setSelectedCertImage] = useState<string>("");
+
+  const openCertificate = (imageUrl: string) => {
+    setSelectedCertImage(imageUrl);
+    setShowCertificate(true);
+  };
 
   return (
     <section id="certifications" className="py-24">
@@ -72,52 +95,55 @@ export default function Certifications() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Featured Certification */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: false, amount: 0.3 }}
-            className="lg:col-span-3 cursor-pointer"
-            onClick={() => setShowCertificate(true)}
-            data-testid="button-view-tata-certificate"
-          >
-            <Card className="bg-black/20 backdrop-blur-md border-primary/20 hover:border-primary/50 transition-all duration-300 overflow-hidden relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="p-3 rounded-lg bg-primary/10 text-primary">
-                      <TrendingUp className="h-8 w-8" />
+          {/* Featured Certifications */}
+          {certifications.filter(cert => cert.featured).map((cert, index) => (
+            <motion.div 
+              key={cert.title}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: false, amount: 0.3 }}
+              className="lg:col-span-3 cursor-pointer"
+              onClick={() => openCertificate((cert as any).certificateImage)}
+              data-testid={`button-view-${cert.title.toLowerCase().replace(/\s+/g, '-')}-certificate`}
+            >
+              <Card className="bg-black/20 backdrop-blur-md border-primary/20 hover:border-primary/50 transition-all duration-300 overflow-hidden relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <CardHeader>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-lg bg-primary/10 text-primary">
+                        <cert.icon className="h-8 w-8" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl md:text-2xl font-bold text-white leading-tight">{cert.title}</CardTitle>
+                        <p className="text-muted-foreground mt-1">{cert.issuer} • {cert.date}</p>
+                      </div>
                     </div>
-                    <div>
-                      <CardTitle className="text-xl md:text-2xl font-bold text-white leading-tight">{certifications[0].title}</CardTitle>
-                      <p className="text-muted-foreground mt-1">{certifications[0].issuer} • {certifications[0].date}</p>
-                    </div>
+                    <Badge variant="secondary" className="w-fit bg-primary/10 text-primary border-primary/20">Featured</Badge>
                   </div>
-                  <Badge variant="secondary" className="w-fit bg-primary/10 text-primary border-primary/20">Featured</Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-lg text-foreground/90">{certifications[0].description}</p>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {certifications[0].details?.map((detail, i) => (
-                    <li key={i} className="flex items-start gap-2 text-muted-foreground text-sm">
-                      <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                      {detail}
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex flex-wrap gap-2 pt-4">
-                  {certifications[0].tags.map(tag => (
-                    <Badge key={tag} variant="outline" className="bg-white/5 border-white/10">{tag}</Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-lg text-foreground/90">{cert.description}</p>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {cert.details?.map((detail, i) => (
+                      <li key={i} className="flex items-start gap-2 text-muted-foreground text-sm">
+                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                        {detail}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="flex flex-wrap gap-2 pt-4">
+                    {cert.tags.map(tag => (
+                      <Badge key={tag} variant="outline" className="bg-white/5 border-white/10">{tag}</Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
 
           {/* Other Certifications */}
-          {certifications.slice(1).map((cert, index) => (
+          {certifications.filter(cert => !cert.featured).map((cert, index) => (
             <motion.div
               key={cert.title}
               initial={{ opacity: 0, y: 20 }}
@@ -149,7 +175,7 @@ export default function Certifications() {
         </div>
 
         {/* Certificate Modal */}
-        {showCertificate && (
+        {showCertificate && selectedCertImage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -173,8 +199,8 @@ export default function Certifications() {
                 <X className="h-6 w-6 text-black" />
               </button>
               <img
-                src="/tata-certificate.jpg"
-                alt="Tata Group Data Analytics Job Simulation Certificate"
+                src={selectedCertImage}
+                alt="Certificate"
                 className="w-full h-auto"
               />
             </motion.div>
