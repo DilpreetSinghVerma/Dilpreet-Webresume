@@ -36,7 +36,6 @@ export default function Hero() {
     <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
       <Scene />
-      
       {/* Content Overlay */}
       <div className="container px-4 md:px-6 relative z-10 text-center">
         <motion.div
@@ -58,10 +57,7 @@ export default function Hero() {
             <span data-testid="text-typing-dilpreet">{displayText}</span>
           </h1>
           
-          <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">
-            Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning.
-            Turning data into intelligence and code into solutions.
-          </p>
+          <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.</p>
 
           <div className="flex gap-4 justify-center pt-4">
             <Button 
@@ -96,7 +92,6 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
-
       {/* Scroll Indicator */}
       <motion.div 
         initial={{ opacity: 0 }}
