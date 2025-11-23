@@ -2,25 +2,17 @@ import { motion } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram } from "lucide-react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const FULL_TEXT = "DILPREET SINGH";
 const TYPING_SPEED = 80;
 
 export default function Hero() {
-  const [displayText, setDisplayText] = useState(FULL_TEXT);
-  const [isTyping, setIsTyping] = useState(true);
+  const [displayText, setDisplayText] = useState("");
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const startTypingAnimation = useCallback(() => {
-    if (typingIntervalRef.current) {
-      clearInterval(typingIntervalRef.current);
-    }
-
+  useEffect(() => {
     let index = 0;
-    setDisplayText("");
-    setIsTyping(true);
 
     typingIntervalRef.current = setInterval(() => {
       if (index < FULL_TEXT.length) {
@@ -28,42 +20,15 @@ export default function Hero() {
         index++;
       } else {
         clearInterval(typingIntervalRef.current!);
-        setIsTyping(false);
       }
     }, TYPING_SPEED);
-  }, []);
-
-  useEffect(() => {
-    // Start animation on mount
-    startTypingAnimation();
 
     return () => {
       if (typingIntervalRef.current) {
         clearInterval(typingIntervalRef.current);
       }
     };
-  }, [startTypingAnimation]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-
-      scrollTimeoutRef.current = setTimeout(() => {
-        startTypingAnimation();
-      }, 300);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, [startTypingAnimation]);
+  }, []);
 
   return (
     <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
@@ -87,17 +52,8 @@ export default function Hero() {
             AIML Specialist & Python Developer
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 text-glow pb-2 min-h-[1.2em]">
+          <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 text-glow pb-2">
             <span data-testid="text-typing-dilpreet">{displayText}</span>
-            {isTyping && (
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ repeat: Infinity, duration: 0.5 }}
-                className="text-primary ml-1"
-              >
-                |
-              </motion.span>
-            )}
           </h1>
           
           <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">
