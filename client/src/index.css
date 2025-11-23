@@ -120,6 +120,13 @@
   color-scheme: dark;
 }
 
+.dark body {
+  background-color: transparent;
+  background-image: 
+    radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.15), transparent 50%),
+    radial-gradient(circle at 0% 50%, hsl(var(--accent) / 0.1), transparent 50%);
+}
+
 /* Light Mode Styles */
 html:not(.dark) {
   --background: 0 0% 100%;
@@ -142,6 +149,42 @@ html:not(.dark) {
   --input: 240 6% 90%;
   --ring: 190 100% 50%;
   color-scheme: light;
+}
+
+html:not(.dark) body {
+  background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 40%, #F0F8FF 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+html:not(.dark) body::before {
+  content: '';
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 200px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+html:not(.dark) body::after {
+  content: '';
+  position: fixed;
+  top: 20%;
+  right: 15%;
+  width: 180px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.6;
+  filter: blur(35px);
+  pointer-events: none;
+  z-index: -1;
 }
 
 html {
