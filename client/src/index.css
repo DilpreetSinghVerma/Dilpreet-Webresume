@@ -155,9 +155,63 @@ html:not(.dark) .text-glow {
   text-shadow: none !important;
 }
 
-/* Keep 3D orbs visible in bright mode */
+/* 3D orbs in bright mode - make them more visible with different styling */
 html:not(.dark) canvas {
-  opacity: 0.3 !important;
+  opacity: 1 !important;
+  mix-blend-mode: multiply;
+  filter: brightness(1.2) saturate(0.7);
+}
+
+/* Bright mode - fix all text and background elements */
+html:not(.dark) .bg-white\/5 {
+  background-color: rgba(200, 200, 200, 0.3) !important;
+}
+
+html:not(.dark) .border-white\/10 {
+  border-color: rgba(100, 100, 100, 0.3) !important;
+}
+
+html:not(.dark) .text-white {
+  color: #000000 !important;
+}
+
+html:not(.dark) .text-white\/60 {
+  color: #333333 !important;
+}
+
+html:not(.dark) .text-white\/10 {
+  color: #888888 !important;
+}
+
+html:not(.dark) .hover\:bg-white\/10:hover {
+  background-color: rgba(180, 180, 180, 0.3) !important;
+}
+
+html:not(.dark) .border-white\/20 {
+  border-color: rgba(100, 100, 100, 0.4) !important;
+}
+
+html:not(.dark) .border-white\/30 {
+  border-color: rgba(100, 100, 100, 0.5) !important;
+}
+
+html:not(.dark) h2, 
+html:not(.dark) h3, 
+html:not(.dark) h4, 
+html:not(.dark) h5 {
+  color: #000000 !important;
+}
+
+html:not(.dark) button {
+  transition: all 0.4s ease;
+}
+
+html:not(.dark) .bg-primary\/10 {
+  background-color: rgba(30, 144, 255, 0.1) !important;
+}
+
+html:not(.dark) .bg-secondary\/10 {
+  background-color: rgba(200, 200, 200, 0.3) !important;
 }
 
 @layer utilities {
