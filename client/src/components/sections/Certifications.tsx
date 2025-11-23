@@ -42,23 +42,26 @@ const certifications = [
     date: "October 2024",
     icon: BrainCircuit,
     featured: false,
-    tags: ["AI Basics", "Machine Learning"]
+    tags: ["AI Basics", "Machine Learning"],
+    certificateImage: "/ai-fundamentals-certificate.jpg"
   },
   {
-    title: "Adobe Designing Course",
-    issuer: "Chhatwal Education & Training Institute",
-    date: "Completed",
+    title: "Digital Logo Designing - GNE's ACME 2025",
+    issuer: "Guru Nanak Dev Engineering College",
+    date: "April 2025",
     icon: Award,
     featured: false,
-    tags: ["Photoshop", "Design Principles"]
+    tags: ["Digital Design", "Logo Design", "Second Position"],
+    certificateImage: "/gne-acme-certificate.jpg"
   },
   {
-    title: "Corel Draw Designing Course",
+    title: "Adobe Photoshop & Corel Draw Designing",
     issuer: "Chhatwal Education & Training Institute",
-    date: "Completed",
+    date: "July 2019",
     icon: Award,
     featured: false,
-    tags: ["Vector Graphics", "CorelDraw"]
+    tags: ["Photoshop", "CorelDraw", "Design Principles"],
+    certificateImage: "/adobe-corel-certificate.jpg"
   },
   {
     title: "Basics of Computer in MS Office",
@@ -150,6 +153,8 @@ export default function Certifications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.3 }}
               transition={{ delay: index * 0.1 }}
+              className={(cert as any).certificateImage ? "cursor-pointer" : ""}
+              onClick={() => (cert as any).certificateImage && openCertificate((cert as any).certificateImage)}
             >
               <Card className="h-full bg-black/20 backdrop-blur-md border-white/5 hover:border-white/20 transition-all duration-300 group">
                 <CardHeader>
@@ -189,20 +194,22 @@ export default function Certifications() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-4xl w-full bg-white rounded-lg overflow-hidden"
+              className="relative w-full max-h-[90vh] overflow-y-auto bg-white rounded-lg"
             >
               <button
                 onClick={() => setShowCertificate(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-200 rounded-full transition-colors z-10"
+                className="sticky top-0 right-0 float-right p-2 hover:bg-gray-200 rounded-full transition-colors z-10 m-2"
                 data-testid="button-close-certificate"
               >
                 <X className="h-6 w-6 text-black" />
               </button>
-              <img
-                src={selectedCertImage}
-                alt="Certificate"
-                className="w-full h-auto"
-              />
+              <div className="flex items-center justify-center p-4">
+                <img
+                  src={selectedCertImage}
+                  alt="Certificate"
+                  className="max-w-2xl w-full h-auto"
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}
