@@ -6,8 +6,9 @@ export default function BulbToggle() {
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-    const prefersDark = document.documentElement.classList.contains("dark");
-    setIsDark(prefersDark);
+    // Ensure dark mode is set on first load
+    document.documentElement.classList.add("dark");
+    setIsDark(true);
   }, []);
 
   const toggleDarkMode = () => {

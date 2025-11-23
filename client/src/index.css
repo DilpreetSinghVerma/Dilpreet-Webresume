@@ -155,11 +155,10 @@ html:not(.dark) .text-glow {
   text-shadow: none !important;
 }
 
-/* 3D orbs in bright mode - make them more visible with different styling */
+/* 3D orbs in bright mode - make them more visible */
 html:not(.dark) canvas {
   opacity: 1 !important;
-  mix-blend-mode: multiply;
-  filter: brightness(1.2) saturate(0.7);
+  filter: invert(0) brightness(0.6) saturate(1.5) hue-rotate(20deg);
 }
 
 /* Bright mode - fix all text and background elements */
