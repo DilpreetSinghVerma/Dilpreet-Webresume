@@ -1,5 +1,6 @@
 import Navbar from "@/components/layout/Navbar";
 import ScrollProgress from "@/components/ui/scroll-progress";
+import CursorTracker from "@/components/CursorTracker";
 import Hero from "@/components/sections/Hero";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
@@ -9,6 +10,7 @@ import Certifications from "@/components/sections/Certifications";
 export default function Home() {
   return (
     <main className="min-h-screen selection:bg-primary selection:text-primary-foreground">
+      <CursorTracker />
       <ScrollProgress />
       <Navbar />
       <Hero />
