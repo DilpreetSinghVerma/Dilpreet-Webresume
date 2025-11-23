@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import DarkModeToggle from "@/components/DarkModeToggle";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 
@@ -20,6 +21,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
+        <DarkModeToggle />
         <Router />
       </TooltipProvider>
     </QueryClientProvider>

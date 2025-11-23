@@ -95,3 +95,59 @@
     border-color: hsl(var(--primary) / 0.5);
   }
 }
+
+/* Dark Mode Styles */
+.dark {
+  --background: 240 10% 4%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 6%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 6%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 190 100% 50%;
+  --primary-foreground: 240 10% 4%;
+  --secondary: 240 6% 15%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 6% 15%;
+  --muted-foreground: 240 5% 65%;
+  --accent: 260 100% 60%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 6% 15%;
+  --input: 240 6% 15%;
+  --ring: 190 100% 50%;
+  color-scheme: dark;
+}
+
+/* Light Mode Styles */
+html:not(.dark) {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 3.6%;
+  --card: 0 0% 96%;
+  --card-foreground: 0 0% 3.6%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.6%;
+  --primary: 190 100% 50%;
+  --primary-foreground: 240 10% 4%;
+  --secondary: 240 6% 90%;
+  --secondary-foreground: 0 0% 3.6%;
+  --muted: 240 6% 85%;
+  --muted-foreground: 240 6% 45%;
+  --accent: 260 100% 60%;
+  --accent-foreground: 0 0% 3.6%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --ring: 190 100% 50%;
+  color-scheme: light;
+}
+
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
