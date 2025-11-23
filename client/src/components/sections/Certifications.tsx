@@ -164,7 +164,7 @@ export default function Certifications() {
                     </div>
                     <span className="text-xs text-muted-foreground font-mono">{cert.date}</span>
                   </div>
-                  <CardTitle className="text-lg font-bold group-hover:text-primary transition-colors">{cert.title}</CardTitle>
+                  <CardTitle className="text-lg font-bold text-white group-hover:text-primary transition-colors">{cert.title}</CardTitle>
                   <p className="text-sm text-muted-foreground">{cert.issuer}</p>
                 </CardHeader>
                 <CardContent>

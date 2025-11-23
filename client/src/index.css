@@ -222,6 +222,20 @@ html:not(.dark) .card {
   color: #000000 !important;
 }
 
+/* Bright mode - CardTitle and all titles should be black */
+html:not(.dark) .text-white {
+  color: #000000 !important;
+}
+
+html:not(.dark) h1,
+html:not(.dark) h2,
+html:not(.dark) h3,
+html:not(.dark) h4,
+html:not(.dark) h5,
+html:not(.dark) h6 {
+  color: #000000 !important;
+}
+
 @layer utilities {
   .text-glow {
     text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
