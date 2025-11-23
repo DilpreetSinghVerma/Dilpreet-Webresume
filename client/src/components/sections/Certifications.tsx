@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Award, FileCheck, TrendingUp, BrainCircuit } from "lucide-react";
+import { Award, FileCheck, TrendingUp, BrainCircuit, X } from "lucide-react";
+import { useState } from "react";
 
 const certifications = [
   {
@@ -53,6 +54,8 @@ const certifications = [
 ];
 
 export default function Certifications() {
+  const [showCertificate, setShowCertificate] = useState(false);
+
   return (
     <section id="certifications" className="py-24">
       <div className="container px-4 md:px-6">
@@ -74,7 +77,9 @@ export default function Certifications() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: false, amount: 0.3 }}
-            className="lg:col-span-3"
+            className="lg:col-span-3 cursor-pointer"
+            onClick={() => setShowCertificate(true)}
+            data-testid="button-view-tata-certificate"
           >
             <Card className="bg-black/20 backdrop-blur-md border-primary/20 hover:border-primary/50 transition-all duration-300 overflow-hidden relative group">
               <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -142,6 +147,39 @@ export default function Certifications() {
             </motion.div>
           ))}
         </div>
+
+        {/* Certificate Modal */}
+        {showCertificate && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowCertificate(false)}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            data-testid="modal-certificate"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl w-full bg-white rounded-lg overflow-hidden"
+            >
+              <button
+                onClick={() => setShowCertificate(false)}
+                className="absolute top-4 right-4 p-2 hover:bg-gray-200 rounded-full transition-colors z-10"
+                data-testid="button-close-certificate"
+              >
+                <X className="h-6 w-6 text-black" />
+              </button>
+              <img
+                src="/tata-certificate.jpg"
+                alt="Tata Group Data Analytics Job Simulation Certificate"
+                className="w-full h-auto"
+              />
+            </motion.div>
+          </motion.div>
+        )}
       </div>
     </section>
   );
