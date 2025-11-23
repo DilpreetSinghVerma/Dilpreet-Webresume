@@ -70,21 +70,24 @@
     @apply border-border;
   }
   html {
-    transition: background-color 1s ease, color 1s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    will-change: background-color;
   }
   html:not(.dark) {
     background-color: #ffffff !important;
   }
   body {
     @apply font-sans antialiased text-foreground;
-    transition: background-color 1s ease, color 1s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
     min-height: 100vh;
+    will-change: background-color;
   }
   html:not(.dark) body {
     background-color: #ffffff !important;
   }
   main {
-    transition: background-color 1s ease, color 1s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    will-change: background-color;
   }
   html:not(.dark) main {
     background-color: #ffffff !important;
@@ -152,9 +155,9 @@ html:not(.dark) .text-glow {
   text-shadow: none !important;
 }
 
-/* Hide 3D scene in bright mode */
+/* Keep 3D orbs visible in bright mode */
 html:not(.dark) canvas {
-  display: none !important;
+  opacity: 0.3 !important;
 }
 
 @layer utilities {

@@ -21,11 +21,11 @@ export default function BulbToggle() {
         document.documentElement.classList.remove("dark");
       }
       setIsDark(newDarkMode);
-    }, 500);
+    }, 250);
 
     setTimeout(() => {
       setShowOverlay(false);
-    }, 1500);
+    }, 800);
   };
 
   return (
@@ -89,18 +89,12 @@ export default function BulbToggle() {
             background: isDark
               ? "radial-gradient(circle at top right, #000, transparent)"
               : "radial-gradient(circle at top right, #fff, transparent)",
+            willChange: "opacity",
           }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          onAnimationComplete={() => {
-            if (showOverlay) {
-              setTimeout(() => {
-                setShowOverlay(false);
-              }, 1000);
-            }
-          }}
+          transition={{ duration: 0.25 }}
         />
       )}
     </>
