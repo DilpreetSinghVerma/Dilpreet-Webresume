@@ -159,11 +159,9 @@ html:not(.dark) .text-glow {
   text-shadow: none !important;
 }
 
-/* 3D orbs in bright mode - keep visible */
+/* 3D orbs in bright mode - transparent background, only show orbs */
 html:not(.dark) canvas {
   opacity: 1 !important;
-  position: relative;
-  z-index: 1;
 }
 
 /* Bright mode - fix all text and background elements for readability */
