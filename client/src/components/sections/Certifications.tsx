@@ -185,20 +185,22 @@ export default function Certifications() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             onClick={() => setShowCertificate(false)}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             data-testid="modal-certificate"
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.6, opacity: 0, y: 30 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.6, opacity: 0, y: 30 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-h-[90vh] overflow-y-auto bg-white rounded-lg"
+              className="relative w-full max-h-[85vh] overflow-y-auto bg-white rounded-xl shadow-2xl"
             >
               <button
                 onClick={() => setShowCertificate(false)}
-                className="sticky top-0 right-0 float-right p-2 hover:bg-gray-200 rounded-full transition-colors z-10 m-2"
+                className="sticky top-0 right-0 float-right p-2 hover:bg-gray-100 rounded-full transition-colors z-10 m-2 bg-white/90"
                 data-testid="button-close-certificate"
               >
                 <X className="h-6 w-6 text-black" />
@@ -207,7 +209,7 @@ export default function Certifications() {
                 <img
                   src={selectedCertImage}
                   alt="Certificate"
-                  className="max-w-2xl w-full h-auto"
+                  className="max-w-2xl w-full h-auto rounded"
                 />
               </div>
             </motion.div>
