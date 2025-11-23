@@ -245,6 +245,23 @@ html:not(.dark) .text-foreground\/80 {
   color: #333333 !important;
 }
 
+/* Bright mode - Badge styling for visibility */
+html:not(.dark) [class*="bg-white\/5"] {
+  background-color: #e0e7ff !important;
+}
+
+html:not(.dark) [class*="border-white\/10"] {
+  border-color: #c7d2fe !important;
+}
+
+html:not(.dark) .bg-primary\/20 {
+  background-color: #dbeafe !important;
+}
+
+html:not(.dark) .text-secondary-foreground {
+  color: #000000 !important;
+}
+
 @layer utilities {
   .text-glow {
     text-shadow: 0 0 20px hsl(var(--primary) / 0.5);

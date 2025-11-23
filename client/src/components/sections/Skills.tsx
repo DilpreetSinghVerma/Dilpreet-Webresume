@@ -67,7 +67,7 @@ export default function Skills() {
                   
                   <div className="flex flex-wrap gap-2">
                     {skill.items.map((item) => (
-                      <Badge key={item} variant="secondary" className="bg-white/5 hover:bg-primary/20 transition-colors border-white/10">
+                      <Badge key={item} variant="secondary" className="bg-white/5 hover:bg-primary/20 transition-colors border-white/10 dark:bg-white/5 dark:border-white/10">
                         {item}
                       </Badge>
                     ))}
