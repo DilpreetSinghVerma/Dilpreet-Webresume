@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Briefcase, GraduationCap, Award } from "lucide-react";
+import { Briefcase, GraduationCap, Award, Star } from "lucide-react";
 
 export default function Experience() {
   return (
@@ -25,6 +25,33 @@ export default function Experience() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{ delay: 0.2 }}
+                className="relative"
+              >
+                <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-blue-500 border-4 border-background" />
+                <div className="bg-gradient-to-r from-blue-500/10 to-primary/10 backdrop-blur-md p-6 rounded-lg border border-blue-400/30 hover:border-blue-400/60 transition-colors">
+                  <div className="flex items-start gap-2 mb-2">
+                    <Star className="h-4 w-4 text-blue-400 mt-1 shrink-0" />
+                    <span className="text-sm text-blue-400 font-mono">Current • 2025-2026</span>
+                  </div>
+                  <h3 className="text-xl font-bold">Google Student Ambassador</h3>
+                  <p className="text-muted-foreground mb-3">Gulzar Group of Institutes</p>
+                  <p className="text-sm text-foreground/90 mb-3">
+                    Selected as Google Student Ambassador to represent Google and foster a culture of innovation and learning. Bridging the gap between students and Google's ecosystem of tools, platforms, and opportunities.
+                  </p>
+                  <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+                    <li>Promoting Google technologies and developer programs across campus.</li>
+                    <li>Organizing workshops and events to enhance technical awareness.</li>
+                    <li>Connecting student community with industry resources and opportunities.</li>
+                    <li>Building a culture of continuous learning and technological innovation.</li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: false, amount: 0.3 }}
+                transition={{ delay: 0.3 }}
                 className="relative"
               >
                 <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
