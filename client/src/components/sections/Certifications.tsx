@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Award, FileCheck, TrendingUp, BrainCircuit, X } from "lucide-react";
+import { Award, FileCheck, TrendingUp, BrainCircuit, X, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
 
 const certifications = [
@@ -76,10 +76,20 @@ const certifications = [
 export default function Certifications() {
   const [showCertificate, setShowCertificate] = useState(false);
   const [selectedCertImage, setSelectedCertImage] = useState<string>("");
+  const [zoom, setZoom] = useState(1);
 
   const openCertificate = (imageUrl: string) => {
     setSelectedCertImage(imageUrl);
     setShowCertificate(true);
+    setZoom(1);
+  };
+
+  const handleZoomIn = () => {
+    setZoom(prev => Math.min(prev + 0.25, 3));
+  };
+
+  const handleZoomOut = () => {
+    setZoom(prev => Math.max(prev - 0.25, 1));
   };
 
   return (
@@ -196,21 +206,46 @@ export default function Certifications() {
               exit={{ scale: 0.6, opacity: 0, y: 30 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-h-[85vh] overflow-y-auto bg-white rounded-xl shadow-2xl"
+              className="relative w-full max-h-[85vh] bg-white rounded-xl shadow-2xl flex flex-col"
             >
-              <button
-                onClick={() => setShowCertificate(false)}
-                className="sticky top-0 right-0 float-right p-2 hover:bg-gray-100 rounded-full transition-colors z-10 m-2 bg-white/90"
-                data-testid="button-close-certificate"
-              >
-                <X className="h-6 w-6 text-black" />
-              </button>
-              <div className="flex items-center justify-center p-4">
-                <img
-                  src={selectedCertImage}
-                  alt="Certificate"
-                  className="max-w-2xl w-full h-auto rounded"
-                />
+              {/* Header with close and zoom buttons */}
+              <div className="sticky top-0 flex items-center justify-between p-4 bg-white border-b border-gray-100 rounded-t-xl z-10">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleZoomOut}
+                    disabled={zoom <= 1}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid="button-zoom-out"
+                  >
+                    <ZoomOut className="h-5 w-5 text-black" />
+                  </button>
+                  <span className="text-sm text-gray-600 font-medium min-w-[60px]">{Math.round(zoom * 100)}%</span>
+                  <button
+                    onClick={handleZoomIn}
+                    disabled={zoom >= 3}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-testid="button-zoom-in"
+                  >
+                    <ZoomIn className="h-5 w-5 text-black" />
+                  </button>
+                </div>
+                <button
+                  onClick={() => setShowCertificate(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  data-testid="button-close-certificate"
+                >
+                  <X className="h-6 w-6 text-black" />
+                </button>
+              </div>
+              {/* Image container with overflow */}
+              <div className="flex-1 overflow-auto flex items-center justify-center p-4">
+                <div style={{ transform: `scale(${zoom})`, transformOrigin: 'center' }} className="transition-transform duration-200">
+                  <img
+                    src={selectedCertImage}
+                    alt="Certificate"
+                    className="max-w-2xl w-full h-auto rounded"
+                  />
+                </div>
               </div>
             </motion.div>
           </motion.div>
