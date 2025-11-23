@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bulb Dark/Bright Mode Switch</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    transition: background-color 1s ease, color 1s ease;
+    background-color: #121212;
+    color: white;
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Bulb container */
+  .bulb-container {
+    position: fixed;
+    top: 0;
+    right: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  /* Wire */
+  .wire {
+    width: 2px;
+    height: 80px;
+    background: #333;
+  }
+
+  /* Bulb */
+  .bulb {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #444;
+    position: relative;
+    box-shadow: 0 0 20px rgba(255,255,150,0.8);
+    transition: background 1s ease, box-shadow 1s ease;
+  }
+
+  /* Bulb glow in dark mode */
+  body.dark .bulb {
+    background: #ffeb3b;
+    box-shadow: 0 0 40px rgba(255,255,150,1);
+  }
+
+  /* Bulb off in bright mode */
+  body.bright .bulb {
+    background: #ccc;
+    box-shadow: none;
+  }
+
+  /* Overlay animation */
+  .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  body.dark .overlay {
+    background: radial-gradient(circle at top right, #000, transparent);
+  }
+  body.bright .overlay {
+    background: radial-gradient(circle at top right, #fff, transparent);
+  }
+
+  /* Swing animation for bulb */
+  @keyframes swing {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(5deg); }
+    50% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+    100% { transform: rotate(0deg); }
+  }
+  .bulb-container {
+    animation: swing 3s infinite ease-in-out;
+    transform-origin: top center;
+  }
+</style>
+</head>
+<body class="dark">
+<div class="bulb-container" id="bulbSwitch">
+  <div class="wire"></div>
+  <div class="bulb"></div>
+</div>
+<div class="overlay"></div>
+
+<script>
+  const body = document.body;
+  const bulbSwitch = document.getElementById('bulbSwitch');
+  const overlay = document.querySelector('.overlay');
+
+  bulbSwitch.addEventListener('click', () => {
+    overlay.style.opacity = 1;
+
+    setTimeout(() => {
+      body.classList.toggle('bright');
+      body.classList.toggle('dark');
+    }, 500);
+
+    setTimeout(() => {
+      overlay.style.opacity = 0;
+    }, 1500);
+  });
+</script>
+</body>
+</html>
