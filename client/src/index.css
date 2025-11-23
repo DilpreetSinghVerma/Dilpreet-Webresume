@@ -103,7 +103,7 @@ html:not(.dark) {
 }
 
 html:not(.dark) body {
-  background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 40%, #F0F8FF 100%);
+  background: linear-gradient(135deg, #E8F4F8 0%, #F0F9FC 50%, #FFFFFF 100%);
   background-attachment: fixed;
   position: relative;
   color: #0a0a0a;
