@@ -1,16 +1,16 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Points, PointMaterial, Float } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState, useEffect } from "react";
 import * as THREE from "three";
 
-function Stars(props: any) {
+function Stars({ count = 2000, ...props }: { count?: number } & any) {
   const ref = useRef<THREE.Points>(null);
   const { mouse } = useThree(); // Access mouse from R3F
   
   const sphere = useMemo(() => {
-    const temp = new Float32Array(2000 * 3);
-    for (let i = 0; i < 2000; i++) {
+    const temp = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
       const u = Math.random();
       const v = Math.random();
       const theta = 2 * Math.PI * u;
@@ -95,28 +95,44 @@ function FloatingFlare({ color, position, scale, speed }: { color: string, posit
 }
 
 export default function Scene() {
+  const isDarkMode = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none">
-      <Canvas camera={{ position: [0, 0, 2.5], fov: 60 }} gl={{ antialias: false }}>
-        {/* Transparent background to let body gradients show through if needed, or deep space color */}
-        <color attach="background" args={['#020204']} /> 
+      <Canvas 
+        camera={{ position: [0, 0, 2.5], fov: 60 }} 
+        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
+        dpr={isMobile ? [1, 1.2] : [1, 2]}
+      >
+        {isDarkMode && <color attach="background" args={['#020204']} />} 
         
-        <Stars />
+        <Stars count={isMobile ? 500 : 2000} />
         
-        {/* Floating "Lens Flares" / Orbs */}
         <FloatingFlare color="#00e5ff" position={[-1.2, 0.5, 0]} scale={0.3} speed={1.5} />
         <FloatingFlare color="#7c3aed" position={[1.5, -0.8, 0.5]} scale={0.4} speed={1.2} />
-        <FloatingFlare color="#ec4899" position={[0, 1.2, -0.5]} scale={0.2} speed={2} />
+        {!isMobile && <FloatingFlare color="#ec4899" position={[0, 1.2, -0.5]} scale={0.2} speed={2} />}
 
-        <EffectComposer disableNormalPass>
-          <Bloom 
-            luminanceThreshold={0} 
-            mipmapBlur 
-            intensity={2.0} 
-            radius={0.6}
-          />
-          <Vignette eskil={false} offset={0.1} darkness={1.3} />
-        </EffectComposer>
+        {!isMobile && (
+          <EffectComposer disableNormalPass>
+            <Bloom 
+              luminanceThreshold={0} 
+              mipmapBlur 
+              intensity={2.0} 
+              radius={0.6}
+            />
+            <Vignette eskil={false} offset={0.1} darkness={1.3} />
+          </EffectComposer>
+        )}
       </Canvas>
     </div>
   );
