@@ -74,21 +74,19 @@ function FloatingFlare({ color, position, scale, speed }: { color: string, posit
       const time = state.clock.getElapsedTime();
       const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
       
-      // Move flares based on scroll AND mouse parallax
       const parallaxX = mouse.x * 0.5;
       const parallaxY = mouse.y * 0.5;
 
       meshRef.current.position.x = position[0] + Math.cos(time * speed * 0.5) * 0.1 + parallaxX;
       meshRef.current.position.y = position[1] + Math.sin(time * speed) * 0.2 + (scrollY * 0.001) + parallaxY;
-      meshRef.current.rotation.z = time * 0.1;
     }
   });
 
   return (
-    <Float speed={speed} rotationIntensity={0.5} floatIntensity={1}>
+    <Float speed={speed} rotationIntensity={0.2} floatIntensity={0.5}>
       <mesh ref={meshRef} position={position}>
-        <sphereGeometry args={[scale, 32, 32]} />
-        <meshBasicMaterial color={color} transparent opacity={0.08} blending={THREE.AdditiveBlending} depthWrite={false} />
+        <sphereGeometry args={[scale, 16, 16]} />
+        <meshBasicMaterial color={color} transparent opacity={0.05} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
     </Float>
   );
@@ -111,26 +109,32 @@ export default function Scene() {
     <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none">
       <Canvas 
         camera={{ position: [0, 0, 2.5], fov: 60 }} 
-        gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
-        dpr={isMobile ? [1, 1.2] : [1, 2]}
+        gl={{ 
+          antialias: false, 
+          alpha: true, 
+          powerPreference: "high-performance",
+          stencil: false,
+          depth: false
+        }}
+        dpr={isMobile ? [1, 1] : [1, 1.5]}
+        performance={{ min: 0.5 }}
       >
         {isDarkMode && <color attach="background" args={['#020204']} />} 
         
-        <Stars count={isMobile ? 500 : 2000} />
+        <Stars count={isMobile ? 300 : 1200} />
         
-        <FloatingFlare color="#00e5ff" position={[-1.2, 0.5, 0]} scale={0.3} speed={1.5} />
-        <FloatingFlare color="#7c3aed" position={[1.5, -0.8, 0.5]} scale={0.4} speed={1.2} />
-        {!isMobile && <FloatingFlare color="#ec4899" position={[0, 1.2, -0.5]} scale={0.2} speed={2} />}
+        <FloatingFlare color="#00e5ff" position={[-1.2, 0.5, 0]} scale={0.3} speed={1} />
+        <FloatingFlare color="#7c3aed" position={[1.5, -0.8, 0.5]} scale={0.4} speed={0.8} />
+        {!isMobile && <FloatingFlare color="#ec4899" position={[0, 1.2, -0.5]} scale={0.2} speed={1.2} />}
 
         {!isMobile && (
-          <EffectComposer disableNormalPass>
+          <EffectComposer disableNormalPass multisampling={0}>
             <Bloom 
-              luminanceThreshold={0} 
+              luminanceThreshold={0.2} 
               mipmapBlur 
-              intensity={2.0} 
-              radius={0.6}
+              intensity={1.5} 
+              radius={0.4}
             />
-            <Vignette eskil={false} offset={0.1} darkness={1.3} />
           </EffectComposer>
         )}
       </Canvas>
