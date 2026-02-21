@@ -4,54 +4,79 @@ import { MessageSquare, X, Send, Bot, Sparkles, User, ChevronRight } from 'lucid
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 
+interface Intent {
+    keywords: string[];
+    response: string;
+}
+
+interface KnowledgeBase {
+    profile: {
+        name: string;
+        role: string;
+        location: string;
+        education: string;
+        philosophy: string;
+    };
+    intents: Intent[];
+}
+
 // The "Brain" - Knowledge base for the AI
-const KNOWLEDGE_BASE = {
+const KNOWLEDGE_BASE: KnowledgeBase = {
     profile: {
         name: "Dilpreet Singh",
         role: "Python Developer & AIML Specialist",
         location: "Ludhiana, India",
-        education: "Bachelors in Computer Science at Gulzar Group of Institutions (GGI)"
+        education: "B.Tech in Computer Science at Gulzar Group of Institutions (GGI), Batch of 2026",
+        philosophy: "Merging technical precision with creative design to solve real-world problems."
     },
-    skills: [
-        "Python (Core/Advanced)",
-        "Machine Learning & AI",
-        "OpenAI Integration",
-        "React.js & Tailwind CSS",
-        "Linux Administration",
-        "Data Structures & Algorithms",
-        "Graphic Design (Photoshop/CorelDraw)"
-    ],
-    hackathon: {
-        name: "Prompt The Future (Next Quantum 3.0)",
-        achievement: "Top 30 Finalist",
-        project: "Silent Coders Sign-Translator",
-        tech: "Python, TensorFlow, NLP, Blender",
-        description: "Built a real-time system that translates speech and text into 3D sign language animations in just 24 hours."
-    },
-    projects: [
-        { title: "Jarvis", desc: "Voice-controlled virtual assistant with OpenAI brain." },
-        { title: "Silent Coders", desc: "AI-based sign language translator for social impact." },
-        { title: "Perfect Guess", desc: "Algorithmic number-matching game using Python logic." }
-    ],
-    contact: {
-        email: "dilpreetsinghverma@gmail.com",
-        github: "github.com/DilpreetSinghVerma",
-        linkedin: "Search for Dilpreet Singh"
-    }
+    intents: [
+        {
+            keywords: ["hackathon", "competition", "quant", "future", "silent", "coders", "win", "achievement"],
+            response: "Dilpreet recently made waves at the 'Prompt The Future' Next Quantum 3.0 Hackathon! Out of numerous teams, his team 'Silent Coders' secured a spot in the Top 30. They built an AI-powered sign language translator that works in real-time, converting speech to 3D avatars. It was a rigorous 24-hour sprint that proved their ability to deliver under pressure."
+        },
+        {
+            keywords: ["skill", "tech", "stack", "language", "python", "machine", "learning", "ai", "react", "tailwind"],
+            response: "Dilpreet's technical arsenal is deep. He is a specialist in Python (both core and advanced) and AI/ML. For logic, he uses TensorFlow and OpenAI APIs. For the web, he builds with React 19 and Tailwind CSS. He's also proficient in Linux systems, Data Structures (DSA), and professional design tools like Photoshop."
+        },
+        {
+            keywords: ["jarvis", "assistant", "voice", "openai", "project"],
+            response: "Jarvis is a premier project in Dilpreet's portfolio. It's a sophisticated virtual assistant built in Python. Unlike basic scripts, it integrates OpenAI's powerful logic to understand complex voice commands, making it a true demonstration of his AI integration skills."
+        },
+        {
+            keywords: ["contact", "email", "hire", "talk", "reach", "social", "github", "linkedin", "instagram"],
+            response: "You can reach Dilpreet via email at dilpreetsinghverma@gmail.com. You can also track his production code on GitHub (DilpreetSinghVerma) or connect on LinkedIn. He's currently open to collaborations and new career opportunities!"
+        },
+        {
+            keywords: ["who", "dilpreet", "background", "about", "story"],
+            response: "Dilpreet Singh is a Ludhiana-based developer who specializes in the intersection of Python and Machine Learning. With a strong foundation in Computer Science from GGI, he consistently pushes the boundaries of UI/UX while keeping the backend logic robust and intelligent."
+        },
+        {
+            keywords: ["sign", "language", "translator", "3d", "avatar", "deaf"],
+            response: "The Sign Language Translator was Dilpreet's Hackathon masterpiece. It bridges the gap for the hearing and speech impaired by using AI to convert spoken words into clear, accurate 3D animations of Sign Language (supporting ASL and ISL) in real-time."
+        },
+        {
+            keywords: ["experience", "work", "job", "intern", "aiesec", "ggi"],
+            response: "Dilpreet has diverse experience, including a Google Student Ambassador role at GGI and an Ambassador Internship at AIESEC in Patiala. He has also worked as a Graphic Designer and provided technical support in photography studios, showing his versatility."
+        },
+        {
+            keywords: ["why", "purpose", "mission", "goal"],
+            response: "Dilpreet's mission is to build software that has social impact. Whether it's helping the deaf community through sign language translation or making daily life easier with AI assistants, he aims to use his Python and ML skills for good."
+        }
+    ]
 };
 
 const INITIAL_MESSAGE = {
     id: 'init',
     type: 'ai',
-    text: "Hello! I'm Dilpreet's Neural Assistant. I've been indexed with his full technical profile. Ask me anything about his projects, skills, or that recent Hackathon win!",
+    text: "Neural engine synchronized. I am Dilpreet's technical representative. Ask me anything about his Top 30 Hackathon win, his AI architectures, or his vision as a developer.",
     timestamp: new Date()
 };
 
 const SUGGESTIONS = [
     "Tell me about the Hackathon win",
-    "What are your Python skills?",
-    "Tell me about Jarvis",
-    "How can I contact you?"
+    "What is your technical stack?",
+    "Show me your AI projects",
+    "How can I hire you?"
 ];
 
 export function NeuralAssistant() {
@@ -69,22 +94,34 @@ export function NeuralAssistant() {
 
     const processMessage = (input: string) => {
         const text = input.toLowerCase();
+        let bestMatch: Intent | null = null;
+        let highestScore = 0;
+
+        // "Smart" Intent Matching Algorithm
+        KNOWLEDGE_BASE.intents.forEach(intent => {
+            let score = 0;
+            intent.keywords.forEach(keyword => {
+                if (text.includes(keyword)) {
+                    score += 1;
+                }
+            });
+
+            if (score > highestScore) {
+                highestScore = score;
+                bestMatch = intent;
+            }
+        });
+
         let response = "";
 
-        if (text.includes('hackathon') || text.includes('top 30') || text.includes('silent coders')) {
-            response = `Dilpreet recently competed in the "Prompt The Future" Hackathon at GGI. His team, "Silent Coders", placed in the Top 30! They built a system that translates text/speech into sign language using AI and 3D avatars.`;
-        } else if (text.includes('skills') || text.includes('tech') || text.includes('know')) {
-            response = `Dilpreet is a specialist in Python and AIML. His stack includes TensorFlow, OpenAI API, React, and Linux. He's also strong in DSA and graphic design.`;
-        } else if (text.includes('jarvis')) {
-            response = `Jarvis is one of his favorite projects! It's a voice-controlled assistant built in Python that uses OpenAI's logic to handle tasks and conversations.`;
-        } else if (text.includes('contact') || text.includes('email') || text.includes('hire')) {
-            response = `You can reach Dilpreet directly at ${KNOWLEDGE_BASE.contact.email} or find him on GitHub. He's currently open to new opportunities!`;
-        } else if (text.includes('who') || text.includes('about')) {
-            response = `Dilpreet Singh is an AIML Specialist and Python Developer currently studying at GGI. He focuses on building high-impact AI solutions, like his recent work on sign language translation.`;
-        } else if (text.includes('hello') || text.includes('hi')) {
-            response = `Hi there! Hope you're enjoying the portfolio. What would you like to know about Dilpreet's work?`;
+        if (highestScore > 0 && bestMatch) {
+            response = bestMatch.response;
+        } else if (text.length < 3) {
+            response = "I'm ready when you are. Ask me about Dilpreet's work!";
+        } else if (text.includes('hello') || text.includes('hi') || text.includes('hey')) {
+            response = "Greetings. I'm the Neural Assistant for Dilpreet's portfolio. I can provide detailed insights into his projects, his hackathon success, and his technical expertise. What would you like to explore?";
         } else {
-            response = `That's interesting! While I'm still indexing some details, I can tell you all about Dilpreet's Python work, his Top 30 Hackathon achievement, or his AI projects like Jarvis. Try asking about those!`;
+            response = "That inquiry requires a deeper search of my records. While I refine that, I can tell you about his 'Silent Coders' AI project, his Top 30 Hackathon achievement at GGI, or his advanced Python skills. Which of these interests you?";
         }
 
         setIsTyping(true);
@@ -96,7 +133,7 @@ export function NeuralAssistant() {
                 timestamp: new Date()
             }]);
             setIsTyping(false);
-        }, 1000);
+        }, 1200);
     };
 
     const handleSend = (e?: React.FormEvent) => {
@@ -168,8 +205,8 @@ export function NeuralAssistant() {
                                                 {msg.type === 'ai' ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
                                             </div>
                                             <div className={`p-3 rounded-2xl text-sm leading-relaxed ${msg.type === 'ai'
-                                                    ? 'bg-foreground/5 rounded-tl-none border border-foreground/5 shadow-sm'
-                                                    : 'bg-primary text-primary-foreground rounded-tr-none shadow-md'
+                                                ? 'bg-foreground/5 rounded-tl-none border border-foreground/5 shadow-sm'
+                                                : 'bg-primary text-primary-foreground rounded-tr-none shadow-md'
                                                 }`}>
                                                 {msg.text}
                                             </div>
