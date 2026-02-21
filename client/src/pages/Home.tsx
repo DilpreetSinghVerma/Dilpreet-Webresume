@@ -3,7 +3,9 @@ import ScrollProgress from "@/components/ui/scroll-progress";
 import Hero from "@/components/sections/Hero";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
+import AIPlayground from "@/components/sections/AIPlayground";
 import Projects from "@/components/sections/Projects";
+import Growth from "@/components/sections/Growth";
 import Certifications from "@/components/sections/Certifications";
 import Contact from "@/components/sections/Contact";
 import CursorGlow from "@/components/ui/cursor-glow";
@@ -29,12 +31,20 @@ export default function Home() {
         <Experience />
       </div>
 
+      <div id="playground">
+        <AIPlayground />
+      </div>
+
       <div id="certifications">
         <Certifications />
       </div>
 
       <div id="projects">
         <Projects />
+      </div>
+
+      <div id="growth">
+        <Growth />
       </div>
 
       <div id="contact">
