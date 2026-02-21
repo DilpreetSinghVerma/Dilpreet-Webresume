@@ -42,7 +42,7 @@ const tools = ["Python", "Machine Learning", "OpenAI", "React", "Linux", "Git", 
 
 export default function Skills() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-16 md:py-24 relative overflow-hidden">
       <div className="container px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -58,7 +58,7 @@ export default function Skills() {
           <div className="h-1 w-20 bg-primary rounded-full" />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
           {skills.map((skill, index) => (
             <motion.div
               key={skill.category}

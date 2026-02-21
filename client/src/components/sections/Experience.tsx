@@ -6,9 +6,9 @@ import { RevealText } from "@/components/ui/reveal-text";
 export default function Experience() {
   const [showAmbassadorModal, setShowAmbassadorModal] = useState(false);
   return (
-    <section className="py-24">
+    <section className="py-16 md:py-24">
       <div className="container px-4 md:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
 
           {/* Experience Column */}
           <div>
@@ -24,7 +24,7 @@ export default function Experience() {
               </h2>
             </motion.div>
 
-            <div className="relative pl-8 border-l border-foreground/10 space-y-12">
+            <div className="relative pl-6 sm:pl-8 border-l border-foreground/10 space-y-12">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -32,7 +32,7 @@ export default function Experience() {
                 transition={{ delay: 0.2 }}
                 className="relative"
               >
-                <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-blue-500 border-4 border-background" />
+                <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-blue-500 border-4 border-background" />
                 <div
                   onClick={() => setShowAmbassadorModal(true)}
                   className="bg-gradient-to-r from-blue-500/10 to-primary/10 backdrop-blur-md p-6 rounded-lg border border-blue-400/30 hover:border-blue-400/60 transition-colors cursor-pointer hover:shadow-lg hover:shadow-blue-400/20"
@@ -63,7 +63,7 @@ export default function Experience() {
                 transition={{ delay: 0.3 }}
                 className="relative"
               >
-                <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
+                <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
                 <div className="bg-background/40 backdrop-blur-md p-6 rounded-lg border border-foreground/5 hover:border-foreground/10 transition-colors">
                   <span className="text-sm text-primary font-mono mb-2 block">01/2018 - 07/2025</span>
                   <h3 className="text-xl font-bold">Technical Support & Assistance</h3>
@@ -93,7 +93,7 @@ export default function Experience() {
               </h2>
             </motion.div>
 
-            <div className="relative pl-8 border-l border-foreground/10 space-y-8 mb-12">
+            <div className="relative pl-6 sm:pl-8 border-l border-foreground/10 space-y-8 mb-12">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -101,7 +101,7 @@ export default function Experience() {
                 transition={{ delay: 0.2 }}
                 className="relative"
               >
-                <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-accent border-4 border-background" />
+                <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-accent border-4 border-background" />
                 <h3 className="text-lg font-bold">B.Tech in Computer Science (AIML)</h3>
                 <p className="text-muted-foreground">Gulzar Group of Institutes, Khanna</p>
                 <span className="text-sm text-accent font-mono">Expected 01/2028</span>
@@ -114,7 +114,7 @@ export default function Experience() {
                 transition={{ delay: 0.3 }}
                 className="relative"
               >
-                <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-muted border-4 border-background" />
+                <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-muted border-4 border-background" />
                 <h3 className="text-lg font-bold">12th Grade (90.2%)</h3>
                 <p className="text-muted-foreground">Teja Singh Sutantar Memorial Sr. Sec. School</p>
               </motion.div>
@@ -126,7 +126,7 @@ export default function Experience() {
                 transition={{ delay: 0.4 }}
                 className="relative"
               >
-                <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-muted border-4 border-background" />
+                <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-muted border-4 border-background" />
                 <h3 className="text-lg font-bold">10th Grade (74.9%)</h3>
                 <p className="text-muted-foreground">Baba Nand Singh Convent Sr. Sec. School</p>
               </motion.div>

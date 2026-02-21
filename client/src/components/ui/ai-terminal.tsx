@@ -48,7 +48,7 @@ export default function AITerminal() {
                 onClick={() => setIsOpen(true)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="fixed bottom-6 left-6 z-50 p-4 bg-primary text-primary-foreground rounded-full shadow-lg shadow-primary/20 flex items-center gap-2 font-mono text-sm font-bold"
+                className="fixed bottom-6 left-4 sm:left-6 z-50 p-4 bg-primary text-primary-foreground rounded-full shadow-lg shadow-primary/20 flex items-center gap-2 font-mono text-sm font-bold"
             >
                 <TerminalIcon className="h-5 w-5" />
                 <span className="hidden md:inline">TERMINAL</span>
@@ -60,7 +60,7 @@ export default function AITerminal() {
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="fixed bottom-24 left-6 z-50 w-[90vw] md:w-[450px] aspect-video md:aspect-auto md:h-[350px] bg-black/90 backdrop-blur-xl border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col font-mono"
+                        className="fixed bottom-24 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] md:w-[450px] aspect-video md:aspect-auto md:h-[350px] bg-black/90 backdrop-blur-xl border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col font-mono"
                     >
                         {/* Header */}
                         <div className="bg-primary/10 px-4 py-2 flex items-center justify-between border-b border-primary/20">

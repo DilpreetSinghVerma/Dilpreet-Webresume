@@ -34,7 +34,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
       <Scene />
       {/* Content Overlay */}
@@ -54,7 +54,7 @@ export default function Hero() {
             AIML Specialist & Python Developer
           </motion.div>
 
-          <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
             <span data-testid="text-typing-dilpreet">{displayText}</span>
             <motion.span
               animate={{ opacity: [1, 0] }}

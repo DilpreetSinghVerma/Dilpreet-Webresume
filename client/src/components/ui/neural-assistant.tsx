@@ -157,7 +157,7 @@ export function NeuralAssistant() {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+        <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end">
             {/* Chat Window */}
             <AnimatePresence>
                 {isOpen && (
@@ -165,7 +165,7 @@ export function NeuralAssistant() {
                         initial={{ opacity: 0, scale: 0.8, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.8, y: 20 }}
-                        className="mb-4 w-[350px] sm:w-[400px]"
+                        className="mb-4 w-[calc(100vw-2rem)] max-w-[400px]"
                     >
                         <Card className="flex flex-col h-[500px] bg-background/80 backdrop-blur-2xl border-primary/20 shadow-2xl overflow-hidden">
                             {/* Header */}
