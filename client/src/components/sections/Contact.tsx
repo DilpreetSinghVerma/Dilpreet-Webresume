@@ -18,20 +18,34 @@ export default function Contact() {
 
     const mutation = useMutation({
         mutationFn: async (data: ContactMessage) => {
-            const res = await apiRequest("POST", "/api/contact", data);
+            // Using FormSubmit AJAX endpoint - 100% Free & No Registration needed
+            const res = await fetch("https://formsubmit.co/ajax/dilpreetsinghverma@gmail.com", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    ...data,
+                    _subject: `New Portfolio Message from ${data.name}`,
+                    _template: "table" // Makes the email look professional
+                }),
+            });
+
+            if (!res.ok) throw new Error("Failed to send message");
             return res.json();
         },
         onSuccess: () => {
             toast({
                 title: "Message Sent! 🚀",
-                description: "Thank you for reaching out. I'll get back to you shortly.",
+                description: "Check your inbox! I'll get back to you shortly.",
             });
             reset();
         },
         onError: (error: Error) => {
             toast({
                 title: "Error",
-                description: error.message || "Something went wrong. Please try again.",
+                description: "Service temporarily busy. Please try dilpreetsinghverma@gmail.com directly.",
                 variant: "destructive",
             });
         }
