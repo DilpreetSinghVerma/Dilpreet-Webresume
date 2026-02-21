@@ -7,8 +7,8 @@ import { RevealText } from "@/components/ui/reveal-text";
 const projects = [
   {
     title: "Jarvis Virtual Assistant",
-    description: "Voice-controlled logic with OpenAI integration for automated tasks.",
-    tech: ["Python", "OpenAI", "Speech", "TTS"],
+    description: "A high-level voice-controlled assistant integrating OpenAI for intelligent task automation and natural conversation.",
+    tech: ["Python", "OpenAI", "Speech Recognition", "TTS"],
     icon: Bot,
     gradient: "from-cyan-500/20 to-blue-500/20",
     span: "md:col-span-2 md:row-span-2",
@@ -16,7 +16,7 @@ const projects = [
   },
   {
     title: "Perfect Guess",
-    description: "Algorithmic number-guessing game with logical feedback.",
+    description: "Compact algorithmic game using Python logic.",
     tech: ["Python", "Logic"],
     icon: Gamepad2,
     gradient: "from-purple-500/20 to-pink-500/20",
@@ -24,7 +24,7 @@ const projects = [
   },
   {
     title: "Snake Water Gun",
-    description: "Classic RPS-logic game implementation in Python.",
+    description: "Quick Python logic game implementation.",
     tech: ["Logic", "Random"],
     icon: ShieldAlert,
     gradient: "from-emerald-500/20 to-green-500/20",
@@ -32,12 +32,13 @@ const projects = [
   },
   {
     title: "Silent Coders Sign-Translator",
-    description: "AI system converting speech/text into real-time 3D sign language animations (ASL/ISL). Built in 24 hours.",
+    description: "Top 30 Hackathon project: Real-time 3D sign language animation system providing accessibility for the hearing impaired.",
     tech: ["Python", "TensorFlow", "NLP", "Blender"],
     icon: Languages,
     gradient: "from-amber-500/20 to-orange-500/20",
     span: "md:col-span-2 md:row-span-1",
-    isHackathon: true
+    isHackathon: true,
+    featured: false // Keep it 2x1 but more descriptive
   }
 ];
 
