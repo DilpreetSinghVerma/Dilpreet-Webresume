@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Award, FileCheck, TrendingUp, BrainCircuit, X, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
+import { RevealText } from "@/components/ui/reveal-text";
 
 const certifications = [
   {
@@ -95,14 +96,16 @@ export default function Certifications() {
   return (
     <section id="certifications" className="py-24">
       <div className="container px-4 md:px-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.3 }}
           className="mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Licenses & <span className="text-primary">Certifications</span>
+            Licenses & <span className="text-primary truncate inline-block">
+              <RevealText text="Certifications" />
+            </span>
           </h2>
           <div className="h-1 w-20 bg-primary rounded-full" />
         </motion.div>
@@ -110,7 +113,7 @@ export default function Certifications() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Featured Certifications */}
           {certifications.filter(cert => cert.featured).map((cert, index) => (
-            <motion.div 
+            <motion.div
               key={cert.title}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -119,7 +122,7 @@ export default function Certifications() {
               onClick={() => openCertificate((cert as any).certificateImage)}
               data-testid={`button-view-${cert.title.toLowerCase().replace(/\s+/g, '-')}-certificate`}
             >
-              <Card className="bg-black/20 backdrop-blur-md border-primary/20 hover:border-primary/50 transition-all duration-300 overflow-hidden relative group">
+              <Card className="bg-background/40 backdrop-blur-md border-primary/20 hover:border-primary/50 transition-all duration-300 overflow-hidden relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <CardHeader>
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -128,7 +131,7 @@ export default function Certifications() {
                         <cert.icon className="h-8 w-8" />
                       </div>
                       <div>
-                        <CardTitle className="text-xl md:text-2xl font-bold text-white leading-tight">{cert.title}</CardTitle>
+                        <CardTitle className="text-xl md:text-2xl font-bold text-foreground leading-tight">{cert.title}</CardTitle>
                         <p className="text-muted-foreground mt-1">{cert.issuer} • {cert.date}</p>
                       </div>
                     </div>
@@ -147,7 +150,7 @@ export default function Certifications() {
                   </ul>
                   <div className="flex flex-wrap gap-2 pt-4">
                     {cert.tags.map(tag => (
-                      <Badge key={tag} variant="outline" className="bg-white/5 border-white/10">{tag}</Badge>
+                      <Badge key={tag} variant="outline" className="bg-foreground/5 border-foreground/10">{tag}</Badge>
                     ))}
                   </div>
                 </CardContent>
@@ -166,21 +169,21 @@ export default function Certifications() {
               className={(cert as any).certificateImage ? "cursor-pointer" : ""}
               onClick={() => (cert as any).certificateImage && openCertificate((cert as any).certificateImage)}
             >
-              <Card className="h-full bg-black/20 backdrop-blur-md border-white/5 hover:border-white/20 transition-all duration-300 group">
+              <Card className="h-full bg-background/40 backdrop-blur-md border-foreground/5 hover:border-foreground/20 transition-all duration-300 group">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 rounded-md bg-white/5 text-muted-foreground group-hover:text-primary transition-colors">
+                    <div className="p-2 rounded-md bg-foreground/5 text-muted-foreground group-hover:text-primary transition-colors">
                       <cert.icon className="h-5 w-5" />
                     </div>
                     <span className="text-xs text-muted-foreground font-mono">{cert.date}</span>
                   </div>
-                  <CardTitle className="text-lg font-bold text-white group-hover:text-primary transition-colors">{cert.title}</CardTitle>
+                  <CardTitle className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">{cert.title}</CardTitle>
                   <p className="text-sm text-muted-foreground">{cert.issuer}</p>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
                     {cert.tags.map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-xs bg-white/5 hover:bg-white/10 text-muted-foreground">{tag}</Badge>
+                      <Badge key={tag} variant="secondary" className="text-xs bg-foreground/5 hover:bg-foreground/10 text-muted-foreground">{tag}</Badge>
                     ))}
                   </div>
                 </CardContent>
@@ -197,7 +200,7 @@ export default function Certifications() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={() => setShowCertificate(false)}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             data-testid="modal-certificate"
           >
             <motion.div
@@ -206,10 +209,10 @@ export default function Certifications() {
               exit={{ scale: 0.6, opacity: 0, y: 30 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-h-[85vh] bg-white rounded-xl shadow-2xl flex flex-col"
+              className="relative w-full max-h-[85vh] bg-card rounded-xl shadow-2xl flex flex-col border border-border/50"
             >
               {/* Header with close and zoom buttons */}
-              <div className="sticky top-0 flex items-center justify-between p-4 bg-white border-b border-gray-100 rounded-t-xl z-10">
+              <div className="sticky top-0 flex items-center justify-between p-4 bg-background border-b border-border/50 rounded-t-xl z-10">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleZoomOut}
@@ -217,24 +220,24 @@ export default function Certifications() {
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="button-zoom-out"
                   >
-                    <ZoomOut className="h-5 w-5 text-black" />
+                    <ZoomOut className="h-5 w-5 text-foreground" />
                   </button>
-                  <span className="text-sm text-gray-600 font-medium min-w-[60px]">{Math.round(zoom * 100)}%</span>
+                  <span className="text-sm text-muted-foreground font-medium min-w-[60px]">{Math.round(zoom * 100)}%</span>
                   <button
                     onClick={handleZoomIn}
                     disabled={zoom >= 3}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     data-testid="button-zoom-in"
                   >
-                    <ZoomIn className="h-5 w-5 text-black" />
+                    <ZoomIn className="h-5 w-5 text-foreground" />
                   </button>
                 </div>
                 <button
                   onClick={() => setShowCertificate(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:bg-muted rounded-full transition-colors"
                   data-testid="button-close-certificate"
                 >
-                  <X className="h-6 w-6 text-black" />
+                  <X className="h-6 w-6 text-foreground" />
                 </button>
               </div>
               {/* Image container with overflow */}

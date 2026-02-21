@@ -23,259 +23,135 @@
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  
+
   --font-sans: "Inter", sans-serif;
   --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
-  
+
   --radius: 0.5rem;
 }
 
 :root {
+  /* Default Light Mode */
+  --background: 0 0% 100%;
+  --foreground: 240 10% 4%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 4%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 4%;
+
+  /* A deeper, more legible Cyan for Light Mode */
+  --primary: 190 100% 35%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 240 6% 95%;
+  --secondary-foreground: 240 10% 4%;
+
+  --muted: 240 6% 95%;
+  --muted-foreground: 240 5% 35%;
+
+  --accent: 260 100% 40%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --ring: 190 100% 35%;
+
+  --radius: 0.5rem;
+}
+
+.dark {
   /* Dark Mode Default for Cyberpunk feel */
   --background: 240 10% 4%;
   --foreground: 0 0% 98%;
-  
+
   --card: 240 10% 6%;
   --card-foreground: 0 0% 98%;
-  
+
   --popover: 240 10% 6%;
   --popover-foreground: 0 0% 98%;
-  
+
   /* Electric Cyan / Neon Blue */
-  --primary: 190 100% 50%; 
+  --primary: 190 100% 50%;
   --primary-foreground: 240 10% 4%;
-  
+
   --secondary: 240 6% 15%;
   --secondary-foreground: 0 0% 98%;
-  
+
   --muted: 240 6% 15%;
   --muted-foreground: 240 5% 65%;
-  
-  --accent: 260 100% 60%; /* Electric Purple */
+
+  --accent: 260 100% 60%;
+  /* Electric Purple */
   --accent-foreground: 0 0% 98%;
-  
+
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 98%;
 
   --border: 240 6% 15%;
   --input: 240 6% 15%;
   --ring: 190 100% 50%;
-  
-  --radius: 0.5rem;
 }
+
 
 @layer base {
   * {
     @apply border-border;
   }
+
   html {
     transition: background-color 0.4s ease, color 0.4s ease;
     will-change: background-color;
   }
-  html:not(.dark) {
-    background-color: #ffffff !important;
-  }
+
   body {
     @apply font-sans antialiased text-foreground;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    background-color: transparent;
+    transition: color 0.4s ease;
     min-height: 100vh;
-    will-change: background-color;
+    position: relative;
+    overflow-x: hidden;
   }
-  html:not(.dark) body {
-    background-color: #ffffff !important;
+
+  /* Premium Noise Overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.03;
+    z-index: 100;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
   }
-  main {
-    transition: background-color 0.4s ease, color 0.4s ease;
-    will-change: background-color;
-  }
-  html:not(.dark) main {
-    background-color: #ffffff !important;
-  }
-}
-
-:root {
-  --background: 240 10% 4%;
-  --foreground: 0 0% 98%;
-}
-
-.dark {
-  --background: 240 10% 4%;
-  --foreground: 0 0% 98%;
-}
-
-.dark body {
-  background-color: #121212;
-  background-image: 
-    radial-gradient(circle at 50% 0%, hsl(var(--primary) / 0.15), transparent 50%),
-    radial-gradient(circle at 0% 50%, hsl(var(--accent) / 0.1), transparent 50%);
-  color: white;
-}
-
-html:not(.dark) {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.6%;
-}
-
-html:not(.dark) body {
-  background: #ffffff !important;
-  background-attachment: fixed;
-  position: relative;
-  color: #0a0a0a;
-}
-
-html:not(.dark) * {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 3.6%;
-}
-
-/* Hero section bright mode */
-html:not(.dark) #hero {
-  background-color: #ffffff !important;
-}
-
-html:not(.dark) #hero h1 {
-  color: #000000 !important;
-  text-shadow: none !important;
-}
-
-html:not(.dark) #hero p {
-  color: #333333 !important;
-}
-
-html:not(.dark) .text-primary {
-  color: #1e40af !important;
-}
-
-html:not(.dark) .text-muted-foreground {
-  color: #666666 !important;
-}
-
-html:not(.dark) .text-glow {
-  text-shadow: none !important;
-}
-
-/* 3D orbs in bright mode - keep visible with opacity */
-html:not(.dark) canvas {
-  opacity: 0.4 !important;
-}
-
-/* Bright mode - fix all text and background elements for readability */
-html:not(.dark) .bg-white\/5 {
-  background-color: #f0f0f0 !important;
-}
-
-html:not(.dark) .border-white\/10 {
-  border-color: rgba(100, 100, 100, 0.2) !important;
-}
-
-html:not(.dark) .text-white {
-  color: #000000 !important;
-}
-
-html:not(.dark) .text-white\/60 {
-  color: #222222 !important;
-}
-
-html:not(.dark) .text-white\/10 {
-  color: #555555 !important;
-}
-
-html:not(.dark) .hover\:bg-white\/10:hover {
-  background-color: #e0e0e0 !important;
-}
-
-html:not(.dark) .border-white\/20 {
-  border-color: rgba(100, 100, 100, 0.25) !important;
-}
-
-html:not(.dark) .border-white\/30 {
-  border-color: rgba(100, 100, 100, 0.3) !important;
-}
-
-html:not(.dark) h2, 
-html:not(.dark) h3, 
-html:not(.dark) h4, 
-html:not(.dark) h5 {
-  color: #000000 !important;
-}
-
-html:not(.dark) button {
-  transition: all 0.4s ease;
-}
-
-html:not(.dark) .bg-primary\/10 {
-  background-color: #e6f2ff !important;
-}
-
-html:not(.dark) .bg-secondary\/10 {
-  background-color: #f5f5f5 !important;
-}
-
-html:not(.dark) .bg-card {
-  background-color: #f8f8f8 !important;
-  color: #000000 !important;
-}
-
-html:not(.dark) .card {
-  background-color: #f5f5f5 !important;
-  color: #000000 !important;
-}
-
-/* Bright mode - CardTitle and all titles should be black */
-html:not(.dark) .text-white {
-  color: #000000 !important;
-}
-
-html:not(.dark) h1,
-html:not(.dark) h2,
-html:not(.dark) h3,
-html:not(.dark) h4,
-html:not(.dark) h5,
-html:not(.dark) h6 {
-  color: #000000 !important;
-}
-
-/* Bright mode - paragraphs and descriptions should be dark gray */
-html:not(.dark) p {
-  color: #333333 !important;
-}
-
-html:not(.dark) .text-foreground\/80 {
-  color: #333333 !important;
-}
-
-/* Bright mode - Badge styling for visibility */
-html:not(.dark) [class*="bg-white\/5"] {
-  background-color: #e0e7ff !important;
-}
-
-html:not(.dark) [class*="border-white\/10"] {
-  border-color: #c7d2fe !important;
-}
-
-html:not(.dark) .bg-primary\/20 {
-  background-color: #dbeafe !important;
-}
-
-html:not(.dark) .text-secondary-foreground {
-  color: #000000 !important;
 }
 
 @layer utilities {
   .text-glow {
     text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
   }
+
   .border-glow {
     box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
   }
-  .card-hover {
-    transition: all 0.3s ease;
+
+  .glass {
+    @apply bg-foreground/5 backdrop-blur-md border border-foreground/10;
   }
-  .card-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px -10px hsl(var(--primary) / 0.2);
-    border-color: hsl(var(--primary) / 0.5);
+
+  .glass-dark {
+    @apply bg-background/60 backdrop-blur-xl border border-foreground/10;
+  }
+
+  .section-gradient {
+    background: radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.05) 0%, transparent 70%);
   }
 }
-

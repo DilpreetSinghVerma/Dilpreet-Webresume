@@ -2,86 +2,115 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Gamepad2, ShieldAlert } from "lucide-react";
+import { RevealText } from "@/components/ui/reveal-text";
 
 const projects = [
   {
     title: "Jarvis Virtual Assistant",
-    description: "Voice-controlled personal assistant capable of voice recognition, text-to-speech, web browsing, music playback, and OpenAI integration for intelligent responses.",
-    tech: ["Python", "OpenAI API", "Speech Recognition", "TTS"],
+    description: "Voice-controlled logic with OpenAI integration for automated tasks.",
+    tech: ["Python", "OpenAI", "Speech", "TTS"],
     icon: Bot,
-    gradient: "from-cyan-500/20 to-blue-500/20"
+    gradient: "from-cyan-500/20 to-blue-500/20",
+    span: "md:col-span-2 md:row-span-2",
+    featured: true
   },
   {
-    title: "The Perfect Guess Game",
-    description: "Interactive number-guessing game that provides intelligent feedback on player's guesses and tracks attempts for optimal performance analysis.",
-    tech: ["Python", "Logic", "Game Loop"],
+    title: "Perfect Guess",
+    description: "Algorithmic number-guessing game with logical feedback.",
+    tech: ["Python", "Logic"],
     icon: Gamepad2,
-    gradient: "from-purple-500/20 to-pink-500/20"
+    gradient: "from-purple-500/20 to-pink-500/20",
+    span: "md:col-span-1 md:row-span-1"
   },
   {
-    title: "Snake Water Gun Game",
-    description: "A classic implementation of the 'Snake Water Gun' game logic in Python, featuring randomized computer moves and score tracking.",
-    tech: ["Python", "Randomization", "CLI"],
+    title: "Snake Water Gun",
+    description: "Classic RPS-logic game implementation in Python.",
+    tech: ["Logic", "Random"],
     icon: ShieldAlert,
-    gradient: "from-emerald-500/20 to-green-500/20"
+    gradient: "from-emerald-500/20 to-green-500/20",
+    span: "md:col-span-1 md:row-span-1"
   }
 ];
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-24 bg-secondary/20">
+    <section id="projects" className="py-24 relative overflow-hidden">
       <div className="container px-4 md:px-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: false, amount: 0.3 }}
-          className="mb-12 text-right"
+          className="mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Featured <span className="text-accent">Projects</span>
+            Production <span className="text-primary truncate inline-block italic">
+              <RevealText text="Showcase" />
+            </span>
           </h2>
-          <div className="h-1 w-20 bg-accent rounded-full ml-auto" />
+          <div className="h-1 w-20 bg-primary rounded-full" />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ delay: index * 0.2 }}
-              className="group"
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: index * 0.1 }}
+              className={`${project.span} group relative`}
             >
-              <Card className="h-full bg-black/20 backdrop-blur-md border-white/5 overflow-hidden relative hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 hover:-translate-y-2">
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                
-                <CardHeader className="relative z-10">
-                  <div className="mb-4 w-12 h-12 rounded-lg bg-white/5 backdrop-blur flex items-center justify-center border border-white/10">
-                    <project.icon className="h-6 w-6 text-foreground" />
+              <Card className="h-full bg-background/40 backdrop-blur-xl border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
+                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+
+                {/* Visual Accent */}
+                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                  <project.icon className="w-24 h-24" />
+                </div>
+
+                <CardHeader className={`${project.featured ? 'pt-10' : 'pt-6'} relative z-10`}>
+                  <div className={`mb-4 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500`}>
+                    <project.icon className="h-6 w-6" />
                   </div>
-                  <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
+                  <CardTitle className={`${project.featured ? 'text-3xl' : 'text-xl'} font-bold tracking-tight`}>
                     {project.title}
                   </CardTitle>
                 </CardHeader>
-                
-                <CardContent className="relative z-10">
-                  <p className="mb-6 line-clamp-4 text-foreground/80">
+
+                <CardContent className="relative z-10 flex-1 flex flex-col justify-between">
+                  <p className={`text-muted-foreground leading-relaxed ${project.featured ? 'text-lg mb-6' : 'text-sm mb-4'}`}>
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mt-auto">
+
+                  <div className="flex flex-wrap gap-2">
                     {project.tech.map((t) => (
-                      <Badge key={t} variant="outline" className="bg-white/5 backdrop-blur border-white/10">
+                      <Badge key={t} variant="secondary" className="bg-foreground/5 border-foreground/10 text-[10px] uppercase font-mono group-hover:border-primary/40 transition-colors">
                         {t}
                       </Badge>
                     ))}
                   </div>
                 </CardContent>
+
+                {/* Bottom Border Glow */}
+                <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-primary group-hover:w-full transition-all duration-700 shadow-[0_0_15px_rgba(var(--primary),0.8)]" />
               </Card>
             </motion.div>
           ))}
+
+          {/* Decorative Placeholder for Bento Consistency */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="md:col-span-2 hidden md:flex rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-foreground/5 items-center justify-center p-8 text-center"
+          >
+            <div>
+              <p className="text-sm font-mono text-primary/40 uppercase tracking-[0.2em] mb-2">System Status</p>
+              <p className="text-xl font-display font-medium text-foreground/20 italic">"The best way to predict the future is to create it."</p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
   );
 }
+

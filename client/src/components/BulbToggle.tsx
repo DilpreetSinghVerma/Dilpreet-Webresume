@@ -58,8 +58,8 @@ export default function BulbToggle() {
           onClick={toggleDarkMode}
           className="relative w-16 h-16 rounded-full focus:outline-none cursor-pointer transition-all duration-1000"
           style={{
-            background: isDark ? "#ffeb3b" : "#ccc",
-            boxShadow: isDark ? "0 0 40px rgba(255,255,150,1)" : "none",
+            background: isDark ? "#ffeb3b" : "#e0e0e0",
+            boxShadow: isDark ? "0 0 40px rgba(255,235,59,0.8)" : "0 0 10px rgba(0,0,0,0.1)",
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

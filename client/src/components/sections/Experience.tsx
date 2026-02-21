@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Briefcase, GraduationCap, Award, Star, X } from "lucide-react";
 import { useState } from "react";
+import { RevealText } from "@/components/ui/reveal-text";
 
 export default function Experience() {
   const [showAmbassadorModal, setShowAmbassadorModal] = useState(false);
@@ -8,21 +9,23 @@ export default function Experience() {
     <section className="py-24">
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
+
           {/* Experience Column */}
           <div>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.3 }}
               className="mb-8 flex items-center gap-3"
             >
               <Briefcase className="h-6 w-6 text-primary" />
-              <h2 className="text-2xl font-display font-bold">Experience</h2>
+              <h2 className="text-2xl font-display font-bold">
+                <RevealText text="Experience" />
+              </h2>
             </motion.div>
 
-            <div className="relative pl-8 border-l border-white/10 space-y-12">
-              <motion.div 
+            <div className="relative pl-8 border-l border-foreground/10 space-y-12">
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -30,7 +33,7 @@ export default function Experience() {
                 className="relative"
               >
                 <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-blue-500 border-4 border-background" />
-                <div 
+                <div
                   onClick={() => setShowAmbassadorModal(true)}
                   className="bg-gradient-to-r from-blue-500/10 to-primary/10 backdrop-blur-md p-6 rounded-lg border border-blue-400/30 hover:border-blue-400/60 transition-colors cursor-pointer hover:shadow-lg hover:shadow-blue-400/20"
                   data-testid="button-view-ambassador-badge"
@@ -53,7 +56,7 @@ export default function Experience() {
                 </div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -61,7 +64,7 @@ export default function Experience() {
                 className="relative"
               >
                 <div className="absolute -left-[37px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
-                <div className="bg-black/20 backdrop-blur-md p-6 rounded-lg border border-white/5 hover:border-white/10 transition-colors">
+                <div className="bg-background/40 backdrop-blur-md p-6 rounded-lg border border-foreground/5 hover:border-foreground/10 transition-colors">
                   <span className="text-sm text-primary font-mono mb-2 block">01/2018 - 07/2025</span>
                   <h3 className="text-xl font-bold">Technical Support & Assistance</h3>
                   <p className="text-muted-foreground mb-2">Photography and Videography Studio • Ludhiana</p>
@@ -78,18 +81,20 @@ export default function Experience() {
 
           {/* Education & Awards Column */}
           <div>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: false, amount: 0.3 }}
               className="mb-8 flex items-center gap-3"
             >
               <GraduationCap className="h-6 w-6 text-accent" />
-              <h2 className="text-2xl font-display font-bold">Education</h2>
+              <h2 className="text-2xl font-display font-bold">
+                <RevealText text="Education" />
+              </h2>
             </motion.div>
 
-            <div className="relative pl-8 border-l border-white/10 space-y-8 mb-12">
-              <motion.div 
+            <div className="relative pl-8 border-l border-foreground/10 space-y-8 mb-12">
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -102,7 +107,7 @@ export default function Experience() {
                 <span className="text-sm text-accent font-mono">Expected 01/2028</span>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -114,7 +119,7 @@ export default function Experience() {
                 <p className="text-muted-foreground">Teja Singh Sutantar Memorial Sr. Sec. School</p>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
@@ -128,11 +133,11 @@ export default function Experience() {
             </div>
 
             {/* Awards */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.3 }}
-              className="bg-gradient-to-r from-primary/10 to-accent/10 p-6 rounded-lg border border-white/10"
+              className="bg-gradient-to-r from-primary/10 to-accent/10 p-6 rounded-lg border border-foreground/10"
             >
               <div className="flex items-start gap-4">
                 <Award className="h-8 w-8 text-yellow-400 shrink-0" />
@@ -156,7 +161,7 @@ export default function Experience() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setShowAmbassadorModal(false)}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             data-testid="modal-ambassador"
           >
             <motion.div
@@ -165,14 +170,14 @@ export default function Experience() {
               exit={{ scale: 0.7, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-white rounded-xl overflow-hidden shadow-2xl max-w-lg w-full"
+              className="relative bg-card rounded-xl overflow-hidden shadow-2xl max-w-lg w-full"
             >
               <button
                 onClick={() => setShowAmbassadorModal(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-10 bg-white/90"
+                className="absolute top-4 right-4 p-2 hover:bg-muted rounded-full transition-colors z-10 bg-background border border-border/50"
                 data-testid="button-close-ambassador"
               >
-                <X className="h-5 w-5 text-black" />
+                <X className="h-5 w-5 text-foreground" />
               </button>
               <img
                 src="/gap-badge-full.jpg"

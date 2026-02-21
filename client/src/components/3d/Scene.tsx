@@ -1,61 +1,41 @@
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Points, PointMaterial, Float } from "@react-three/drei";
-import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Points, PointMaterial } from "@react-three/drei";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useRef, useMemo, useState, useEffect } from "react";
 import * as THREE from "three";
 
-function Stars({ count = 2000, ...props }: { count?: number } & any) {
+function Stars({ count = 1000, color = "#00e5ff" }: { count?: number, color?: string }) {
   const ref = useRef<THREE.Points>(null);
-  const { mouse } = useThree(); // Access mouse from R3F
-  
+
   const sphere = useMemo(() => {
     const temp = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      const u = Math.random();
-      const v = Math.random();
-      const theta = 2 * Math.PI * u;
-      const phi = Math.acos(2 * v - 1);
-      const r = 1.2 * Math.cbrt(Math.random()) + 0.5; // Hollower center
-      
-      const x = r * Math.sin(phi) * Math.cos(theta);
-      const y = r * Math.sin(phi) * Math.sin(theta);
-      const z = r * Math.cos(phi);
-      
-      temp[i * 3] = x;
-      temp[i * 3 + 1] = y;
-      temp[i * 3 + 2] = z;
+      const r = 2 * Math.cbrt(Math.random());
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+
+      temp[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      temp[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      temp[i * 3 + 2] = r * Math.cos(phi);
     }
     return temp;
-  }, []);
+  }, [count]);
 
   useFrame((state) => {
     if (ref.current) {
-      const time = state.clock.getElapsedTime();
-      const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-      const maxScroll = typeof window !== 'undefined' ? document.body.scrollHeight - window.innerHeight : 1000;
-      const scrollProgress = scrollY / maxScroll;
-
-      // Dynamic rotation based on scroll AND mouse
-      // Mouse influence is subtle but adds "feel"
-      const mouseX = mouse.x * 0.8; // Increased sensitivity from 0.2
-      const mouseY = mouse.y * 0.8; // Increased sensitivity from 0.2
-
-      ref.current.rotation.x = -(time * 0.05) - (scrollY * 0.0005) + mouseY;
-      ref.current.rotation.y = -(time * 0.03) - (scrollY * 0.0005) + mouseX;
-      
-      // Slight zoom effect on scroll
-      ref.current.scale.setScalar(1 + scrollProgress * 0.2);
+      ref.current.rotation.y = state.clock.getElapsedTime() * 0.05;
+      ref.current.rotation.x = Math.sin(state.clock.getElapsedTime() * 0.1) * 0.1;
     }
   });
 
   return (
     <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
         <PointMaterial
           transparent
-          opacity={0.8}
-          color="#00e5ff"
-          size={0.002}
+          opacity={0.6}
+          color={color}
+          size={0.003}
           sizeAttenuation={true}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
@@ -65,79 +45,107 @@ function Stars({ count = 2000, ...props }: { count?: number } & any) {
   );
 }
 
-function FloatingFlare({ color, position, scale, speed }: { color: string, position: [number, number, number], scale: number, speed: number }) {
+function AmbientGlow({ color, position }: { color: string, position: [number, number, number] }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const { mouse } = useThree();
-  
+
   useFrame((state) => {
     if (meshRef.current) {
       const time = state.clock.getElapsedTime();
-      const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-      
-      const parallaxX = mouse.x * 0.5;
-      const parallaxY = mouse.y * 0.5;
-
-      meshRef.current.position.x = position[0] + Math.cos(time * speed * 0.5) * 0.1 + parallaxX;
-      meshRef.current.position.y = position[1] + Math.sin(time * speed) * 0.2 + (scrollY * 0.001) + parallaxY;
+      meshRef.current.position.y = position[1] + Math.sin(time * 0.5) * 0.1;
+      meshRef.current.scale.setScalar(1 + Math.sin(time * 0.3) * 0.05);
     }
   });
 
   return (
-    <Float speed={speed} rotationIntensity={0.2} floatIntensity={0.5}>
-      <mesh ref={meshRef} position={position}>
-        <sphereGeometry args={[scale, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={0.05} blending={THREE.AdditiveBlending} depthWrite={false} />
-      </mesh>
-    </Float>
+    <mesh ref={meshRef} position={position}>
+      <sphereGeometry args={[0.5, 32, 32]} />
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={0.03}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
   );
 }
 
 export default function Scene() {
-  const isDarkMode = typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+  const [isDark, setIsDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeColor, setActiveColor] = useState("#00e5ff"); // Default Cyan
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
     };
+
+    checkTheme();
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const height = window.innerHeight;
+
+      // Dynamic color shifts based on scroll position
+      if (scrollY < height * 0.8) {
+        setActiveColor("#00e5ff"); // Hero - Cyan
+      } else if (scrollY < height * 1.8) {
+        setActiveColor("#10b981"); // Skills - Emerald
+      } else if (scrollY < height * 2.8) {
+        setActiveColor("#8b5cf6"); // Experience - Violet
+      } else if (scrollY < height * 3.8) {
+        setActiveColor("#f43f5e"); // Projects - Rose
+      } else {
+        setActiveColor("#f59e0b"); // Contact - Amber
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", checkMobile);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
-  return (
-    <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none">
-      <Canvas 
-        camera={{ position: [0, 0, 2.5], fov: 60 }} 
-        gl={{ 
-          antialias: false, 
-          alpha: true, 
-          powerPreference: "high-performance",
-          stencil: false,
-          depth: false
-        }}
-        dpr={isMobile ? [1, 1] : [1, 1.5]}
-        performance={{ min: 0.5 }}
-      >
-        {isDarkMode && <color attach="background" args={['#020204']} />} 
-        
-        <Stars count={isMobile ? 300 : 1200} />
-        
-        <FloatingFlare color="#00e5ff" position={[-1.2, 0.5, 0]} scale={0.3} speed={1} />
-        <FloatingFlare color="#7c3aed" position={[1.5, -0.8, 0.5]} scale={0.4} speed={0.8} />
-        {!isMobile && <FloatingFlare color="#ec4899" position={[0, 1.2, -0.5]} scale={0.2} speed={1.2} />}
+  // Performance-focused GL settings
+  const glConfig = useMemo(() => ({
+    antialias: false,
+    alpha: true,
+    powerPreference: "high-performance" as const,
+    stencil: false,
+    depth: false,
+  }), []);
 
-        {!isMobile && (
-          <EffectComposer disableNormalPass multisampling={0}>
-            <Bloom 
-              luminanceThreshold={0.2} 
-              mipmapBlur 
-              intensity={1.5} 
-              radius={0.4}
-            />
+  const starColor = isDark ? activeColor : "#005a66";
+
+  return (
+    <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none transition-colors duration-1000"
+      style={{ background: isDark ? "#020204" : "#ffffff" }}>
+      <Canvas
+        camera={{ position: [0, 0, 2], fov: 45 }}
+        gl={glConfig}
+        dpr={[1, 1.2]}
+      >
+        <Stars count={isMobile ? 200 : 800} color={starColor} />
+        <AmbientGlow color={activeColor} position={[-1.5, 0.5, -1]} />
+        <AmbientGlow color={isDark ? "#7c3aed" : "#8b5cf6"} position={[1.5, -0.5, -1]} />
+
+        {isDark && (
+          <EffectComposer multisampling={0}>
+            <Bloom luminanceThreshold={0.5} intensity={1} radius={0.3} />
           </EffectComposer>
         )}
       </Canvas>
     </div>
   );
 }
+
+
