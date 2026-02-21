@@ -1,10 +1,46 @@
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Instagram, Send, Download } from "lucide-react";
+import { Mail, Github, Linkedin, Instagram, Send, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RevealText } from "@/components/ui/reveal-text";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { contactSchema, type ContactMessage } from "@shared/schema";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Contact() {
+    const { toast } = useToast();
+    const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactMessage>({
+        resolver: zodResolver(contactSchema)
+    });
+
+    const mutation = useMutation({
+        mutationFn: async (data: ContactMessage) => {
+            const res = await apiRequest("POST", "/api/contact", data);
+            return res.json();
+        },
+        onSuccess: () => {
+            toast({
+                title: "Message Sent! 🚀",
+                description: "Thank you for reaching out. I'll get back to you shortly.",
+            });
+            reset();
+        },
+        onError: (error: Error) => {
+            toast({
+                title: "Error",
+                description: error.message || "Something went wrong. Please try again.",
+                variant: "destructive",
+            });
+        }
+    });
+
+    const onSubmit = (data: ContactMessage) => {
+        mutation.mutate(data);
+    };
+
     return (
         <section id="contact" className="py-16 md:py-24 relative overflow-hidden">
             <div className="container px-4 md:px-6 relative z-10">
@@ -81,35 +117,55 @@ export default function Contact() {
                                 <Send className="h-32 w-32 rotate-12" />
                             </div>
                             <CardContent className="p-8">
-                                <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                                <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium">Name</label>
                                             <input
+                                                {...register("name")}
                                                 type="text"
                                                 placeholder="John Doe"
-                                                className="w-full px-4 py-3 rounded-lg bg-foreground/5 border border-foreground/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all"
+                                                className={`w-full px-4 py-3 rounded-lg bg-foreground/5 border ${errors.name ? 'border-destructive' : 'border-foreground/10'} focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all`}
                                             />
+                                            {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-sm font-medium">Email</label>
                                             <input
+                                                {...register("email")}
                                                 type="email"
                                                 placeholder="john@example.com"
-                                                className="w-full px-4 py-3 rounded-lg bg-foreground/5 border border-foreground/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all"
+                                                className={`w-full px-4 py-3 rounded-lg bg-foreground/5 border ${errors.email ? 'border-destructive' : 'border-foreground/10'} focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all`}
                                             />
+                                            {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
                                         </div>
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-sm font-medium">Message</label>
                                         <textarea
+                                            {...register("message")}
                                             rows={4}
                                             placeholder="Your message here..."
-                                            className="w-full px-4 py-3 rounded-lg bg-foreground/5 border border-foreground/10 focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all resize-none"
+                                            className={`w-full px-4 py-3 rounded-lg bg-foreground/5 border ${errors.message ? 'border-destructive' : 'border-foreground/10'} focus:border-primary/50 focus:ring-1 focus:ring-primary/50 outline-none transition-all resize-none`}
                                         />
+                                        {errors.message && <p className="text-xs text-destructive">{errors.message.message}</p>}
                                     </div>
-                                    <Button className="w-full py-6 text-lg font-bold shadow-[0_0_20px_-5px_hsl(var(--primary))]">
-                                        Send Message
+                                    <Button
+                                        type="submit"
+                                        disabled={mutation.isPending}
+                                        className="w-full py-6 text-lg font-bold shadow-[0_0_20px_-5px_hsl(var(--primary))] flex items-center gap-2"
+                                    >
+                                        {mutation.isPending ? (
+                                            <>
+                                                <Loader2 className="h-5 w-5 animate-spin" />
+                                                Sending...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send className="h-5 w-5" />
+                                                Send Message
+                                            </>
+                                        )}
                                     </Button>
                                 </form>
                             </CardContent>
