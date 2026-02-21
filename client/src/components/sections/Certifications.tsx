@@ -7,6 +7,22 @@ import { RevealText } from "@/components/ui/reveal-text";
 
 const certifications = [
   {
+    title: "Top 30 Finalist - Prompt The Future Hackathon",
+    issuer: "Gulzar Group of Institutions (GGI)",
+    date: "February 2026",
+    icon: Award,
+    featured: true,
+    description: "Placed in the Top 30 teams out of all participants in the 24-hour 'Prompt The Future' Next Quantum 3.0 Hackathon.",
+    details: [
+      "Developed a real-time AI-based translation system for sign language.",
+      "Competed in the 'Open Innovation' software category.",
+      "Collaborated in a high-pressure 24-hour development sprint.",
+      "Recognized for technical approach and social impact potential."
+    ],
+    tags: ["Hackathon", "Top 30", "AI Innovation", "GGI"],
+    certificateImage: "" // Add image if available later
+  },
+  {
     title: "10-Week AI-ML Virtual Internship",
     issuer: "Gulzar Group of Institutions",
     date: "July - September 2025",

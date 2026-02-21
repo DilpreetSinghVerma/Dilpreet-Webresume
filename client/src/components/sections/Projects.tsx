@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Gamepad2, ShieldAlert } from "lucide-react";
+import { Bot, Gamepad2, ShieldAlert, Languages } from "lucide-react";
 import { RevealText } from "@/components/ui/reveal-text";
 
 const projects = [
@@ -29,6 +29,15 @@ const projects = [
     icon: ShieldAlert,
     gradient: "from-emerald-500/20 to-green-500/20",
     span: "md:col-span-1 md:row-span-1"
+  },
+  {
+    title: "Silent Coders Sign-Translator",
+    description: "AI system converting speech/text into real-time 3D sign language animations (ASL/ISL). Built in 24 hours.",
+    tech: ["Python", "TensorFlow", "NLP", "Blender"],
+    icon: Languages,
+    gradient: "from-amber-500/20 to-orange-500/20",
+    span: "md:col-span-2 md:row-span-1",
+    isHackathon: true
   }
 ];
 
@@ -72,8 +81,11 @@ export default function Projects() {
                   <div className={`mb-4 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500`}>
                     <project.icon className="h-6 w-6" />
                   </div>
-                  <CardTitle className={`${project.featured ? 'text-3xl' : 'text-xl'} font-bold tracking-tight`}>
+                  <CardTitle className={`${project.featured ? 'text-3xl' : 'text-xl'} font-bold tracking-tight flex items-center gap-2`}>
                     {project.title}
+                    {(project as any).isHackathon && (
+                      <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/20">Hackathon</Badge>
+                    )}
                   </CardTitle>
                 </CardHeader>
 
