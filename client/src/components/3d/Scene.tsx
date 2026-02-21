@@ -45,7 +45,7 @@ function Stars({ count = 1000, color = "#00e5ff" }: { count?: number, color?: st
   );
 }
 
-function AmbientGlow({ color, position }: { color: string, position: [number, number, number] }) {
+function AmbientGlow({ color, position, isMobile }: { color: string, position: [number, number, number], isMobile?: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
@@ -58,7 +58,7 @@ function AmbientGlow({ color, position }: { color: string, position: [number, nu
 
   return (
     <mesh ref={meshRef} position={position}>
-      <sphereGeometry args={[0.5, 32, 32]} />
+      <sphereGeometry args={[0.5, isMobile ? 16 : 32, isMobile ? 16 : 32]} />
       <meshBasicMaterial
         color={color}
         transparent
@@ -132,13 +132,13 @@ export default function Scene() {
       <Canvas
         camera={{ position: [0, 0, 2], fov: 45 }}
         gl={glConfig}
-        dpr={[1, 1.2]}
+        dpr={isMobile ? [1, 1] : [1, 1.2]}
       >
-        <Stars count={isMobile ? 200 : 800} color={starColor} />
-        <AmbientGlow color={activeColor} position={[-1.5, 0.5, -1]} />
-        <AmbientGlow color={isDark ? "#7c3aed" : "#8b5cf6"} position={[1.5, -0.5, -1]} />
+        <Stars count={isMobile ? 150 : 800} color={starColor} />
+        <AmbientGlow color={activeColor} position={[-1.5, 0.5, -1]} isMobile={isMobile} />
+        <AmbientGlow color={isDark ? "#7c3aed" : "#8b5cf6"} position={[1.5, -0.5, -1]} isMobile={isMobile} />
 
-        {isDark && (
+        {isDark && !isMobile && (
           <EffectComposer multisampling={0}>
             <Bloom luminanceThreshold={0.5} intensity={1} radius={0.3} />
           </EffectComposer>

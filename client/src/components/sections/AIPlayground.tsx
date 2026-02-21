@@ -63,7 +63,7 @@ export default function AIPlayground() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <Card className="h-full bg-background/40 backdrop-blur-xl border-primary/20 shadow-2xl overflow-hidden group">
+                        <Card className="h-full bg-background/95 md:bg-background/40 md:backdrop-blur-xl border-primary/20 shadow-2xl overflow-hidden group">
                             <div className="p-6 border-b border-foreground/5 bg-primary/5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Brain className="h-5 w-5 text-primary" />
@@ -136,7 +136,7 @@ export default function AIPlayground() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                     >
-                        <Card className="h-full bg-background/40 backdrop-blur-xl border-primary/20 shadow-2xl overflow-hidden group">
+                        <Card className="h-full bg-background/95 md:bg-background/40 md:backdrop-blur-xl border-primary/20 shadow-2xl overflow-hidden group">
                             <div className="p-6 border-b border-foreground/5 bg-primary/5 flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <Target className="h-5 w-5 text-primary" />

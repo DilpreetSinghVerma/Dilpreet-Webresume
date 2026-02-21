@@ -78,14 +78,14 @@ export default function Projects() {
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ delay: index * 0.05 }}
               className={`${project.span} group relative cursor-pointer`}
               onClick={() => project.longDescription && setSelectedProject(project)}
             >
-              <Card className="h-full bg-background/40 backdrop-blur-xl border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
+              <Card className="h-full bg-background/90 md:bg-background/40 md:backdrop-blur-xl border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
 
                 {/* Visual Accent */}
@@ -151,7 +151,7 @@ export default function Projects() {
       <AnimatePresence>
         {selectedProject && (
           <div
-            className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-background/90 backdrop-blur-md"
+            className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-background/95 md:bg-background/90 md:backdrop-blur-md"
             onClick={() => setSelectedProject(null)}
           >
             <motion.div

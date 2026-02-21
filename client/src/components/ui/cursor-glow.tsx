@@ -11,7 +11,15 @@ export default function CursorGlow() {
     const cursorX = useSpring(mouseX, springConfig);
     const cursorY = useSpring(mouseY, springConfig);
 
+    const [isMobile, setIsMobile] = useState(false);
+
     useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+
+        if (window.innerWidth < 768) return;
+
         const moveMouse = (e: MouseEvent) => {
             mouseX.set(e.clientX);
             mouseY.set(e.clientY);
@@ -26,16 +34,18 @@ export default function CursorGlow() {
         document.addEventListener("mouseenter", handleMouseIn);
 
         return () => {
+            window.removeEventListener("resize", checkMobile);
             window.removeEventListener("mousemove", moveMouse);
             document.removeEventListener("mouseleave", handleMouseOut);
             document.removeEventListener("mouseenter", handleMouseIn);
         };
     }, [mouseX, mouseY, isVisible]);
 
+    if (isMobile) return null;
+
     return (
         <motion.div
             className="fixed inset-0 pointer-events-none z-50 overflow-hidden"
-            initial={{ opacity: 0 }}
             animate={{ opacity: isVisible ? 1 : 0 }}
         >
             <motion.div

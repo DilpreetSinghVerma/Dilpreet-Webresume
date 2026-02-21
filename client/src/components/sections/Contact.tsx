@@ -126,7 +126,7 @@ export default function Contact() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: false, amount: 0.3 }}
                     >
-                        <Card className="bg-background/60 backdrop-blur-xl border-foreground/5 shadow-2xl relative overflow-hidden">
+                        <Card className="bg-background/95 md:bg-background/60 md:backdrop-blur-xl border-foreground/5 shadow-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-8 opacity-10">
                                 <Send className="h-32 w-32 rotate-12" />
                             </div>

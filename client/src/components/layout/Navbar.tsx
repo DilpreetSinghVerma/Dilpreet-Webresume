@@ -31,7 +31,7 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? "bg-background/80 backdrop-blur-md border-b border-foreground/10 py-4" : "py-6 bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? "bg-background/95 md:bg-background/80 md:backdrop-blur-md border-b border-foreground/10 py-4" : "py-6 bg-transparent"
         }`}
     >
       <div className="container px-4 md:px-6 flex items-center justify-between">

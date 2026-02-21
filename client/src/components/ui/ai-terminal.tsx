@@ -60,7 +60,7 @@ export default function AITerminal() {
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="fixed bottom-24 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] md:w-[450px] aspect-video md:aspect-auto md:h-[350px] bg-black/90 backdrop-blur-xl border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col font-mono"
+                        className="fixed bottom-24 left-4 sm:left-6 z-50 w-[calc(100vw-2rem)] md:w-[450px] aspect-video md:aspect-auto md:h-[350px] bg-black/95 md:bg-black/90 md:backdrop-blur-xl border border-primary/30 rounded-xl shadow-2xl overflow-hidden flex flex-col font-mono"
                     >
                         {/* Header */}
                         <div className="bg-primary/10 px-4 py-2 flex items-center justify-between border-b border-primary/20">

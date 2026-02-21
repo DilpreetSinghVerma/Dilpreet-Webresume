@@ -167,7 +167,7 @@ export function NeuralAssistant() {
                         exit={{ opacity: 0, scale: 0.8, y: 20 }}
                         className="mb-4 w-[calc(100vw-2rem)] max-w-[400px]"
                     >
-                        <Card className="flex flex-col h-[500px] bg-background/80 backdrop-blur-2xl border-primary/20 shadow-2xl overflow-hidden">
+                        <Card className="flex flex-col h-[500px] bg-background/95 md:bg-background/80 md:backdrop-blur-2xl border-primary/20 shadow-2xl overflow-hidden">
                             {/* Header */}
                             <div className="p-4 bg-primary flex items-center justify-between text-primary-foreground">
                                 <div className="flex items-center gap-3">

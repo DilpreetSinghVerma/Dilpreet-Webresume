@@ -35,7 +35,7 @@ export default function Experience() {
                 <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-blue-500 border-4 border-background" />
                 <div
                   onClick={() => setShowAmbassadorModal(true)}
-                  className="bg-gradient-to-r from-blue-500/10 to-primary/10 backdrop-blur-md p-6 rounded-lg border border-blue-400/30 hover:border-blue-400/60 transition-colors cursor-pointer hover:shadow-lg hover:shadow-blue-400/20"
+                  className="bg-background/95 md:bg-gradient-to-r md:from-blue-500/10 md:to-primary/10 md:backdrop-blur-md p-6 rounded-lg border border-blue-400/30 hover:border-blue-400/60 transition-colors cursor-pointer hover:shadow-lg hover:shadow-blue-400/20"
                   data-testid="button-view-ambassador-badge"
                 >
                   <div className="flex items-start gap-2 mb-2">
@@ -64,7 +64,7 @@ export default function Experience() {
                 className="relative"
               >
                 <div className="absolute -left-[29px] sm:-left-[37px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
-                <div className="bg-background/40 backdrop-blur-md p-6 rounded-lg border border-foreground/5 hover:border-foreground/10 transition-colors">
+                <div className="bg-background/95 md:bg-background/40 md:backdrop-blur-md p-6 rounded-lg border border-foreground/5 hover:border-foreground/10 transition-colors">
                   <span className="text-sm text-primary font-mono mb-2 block">01/2018 - 07/2025</span>
                   <h3 className="text-xl font-bold">Technical Support & Assistance</h3>
                   <p className="text-muted-foreground mb-2">Photography and Videography Studio • Ludhiana</p>

@@ -68,7 +68,7 @@ export default function Skills() {
               transition={{ delay: index * 0.1 }}
             >
               <Magnetic>
-                <Card className="bg-background/60 backdrop-blur-xl border-foreground/5 hover:border-primary/50 transition-all duration-500 h-full group overflow-hidden relative shadow-xl hover:shadow-primary/5">
+                <Card className="bg-background/95 md:bg-background/60 md:backdrop-blur-xl border-foreground/5 hover:border-primary/50 transition-all duration-500 h-full group overflow-hidden relative shadow-xl hover:shadow-primary/5">
                   <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                   <CardContent className="p-6 relative z-10">
