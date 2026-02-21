@@ -8,12 +8,14 @@ import Certifications from "@/components/sections/Certifications";
 import Contact from "@/components/sections/Contact";
 import CursorGlow from "@/components/ui/cursor-glow";
 import AITerminal from "@/components/ui/ai-terminal";
+import { NeuralAssistant } from "@/components/ui/neural-assistant";
 
 export default function Home() {
   return (
     <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative">
       <CursorGlow />
       <AITerminal />
+      <NeuralAssistant />
       <ScrollProgress />
       <Navbar />
 
