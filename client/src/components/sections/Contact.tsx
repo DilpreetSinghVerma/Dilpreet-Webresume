@@ -37,8 +37,8 @@ export default function Contact() {
         },
         onSuccess: () => {
             toast({
-                title: "Message Sent! 🚀",
-                description: "Check your inbox! I'll get back to you shortly.",
+                title: "Mail Sent Successfully! 🚀",
+                description: "I've received your request and will get back to you shortly.",
             });
             reset();
         },
@@ -134,7 +134,7 @@ export default function Contact() {
                                 <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium">Name</label>
+                                            <label className="text-sm font-medium">Your Name</label>
                                             <input
                                                 {...register("name")}
                                                 type="text"
@@ -144,7 +144,7 @@ export default function Contact() {
                                             {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-sm font-medium">Email</label>
+                                            <label className="text-sm font-medium">Your Email Address</label>
                                             <input
                                                 {...register("email")}
                                                 type="email"
