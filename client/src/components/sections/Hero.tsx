@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Github, Linkedin, Mail, Instagram } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Instagram, Download } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Magnetic from "@/components/ui/magnetic";
 
@@ -65,18 +65,34 @@ export default function Hero() {
 
           <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.</p>
 
-          <div className="flex gap-4 justify-center pt-4 flex-wrap">
-            <Magnetic>
-              <Button
-                size="lg"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 shadow-[0_0_20px_-5px_hsl(var(--primary))]"
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                View Projects
-              </Button>
-            </Magnetic>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">
+            <div className="flex gap-4 flex-wrap justify-center">
+              <Magnetic>
+                <Button
+                  size="lg"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 shadow-[0_0_20px_-5px_hsl(var(--primary))]"
+                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  View Projects
+                </Button>
+              </Magnetic>
 
-            <div className="flex gap-2">
+              <Magnetic>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2"
+                  asChild
+                >
+                  <a href="/Dilpreet_Singh_Resume.pdf" download>
+                    <Download className="h-4 w-4 animate-bounce" />
+                    Resume
+                  </a>
+                </Button>
+              </Magnetic>
+            </div>
+
+            <div className="flex gap-3 mt-4 sm:mt-0 sm:ml-4 border-l border-foreground/10 pl-4">
               {[
                 { icon: Github, href: "https://github.com/DilpreetSinghVerma" },
                 { icon: Linkedin, href: "https://www.linkedin.com/in/dilpreet-singh-709b35310/" },
@@ -84,7 +100,7 @@ export default function Hero() {
                 { icon: Mail, href: "mailto:dilpreetsinghverma@gmail.com" }
               ].map((item, i) => (
                 <Magnetic key={i}>
-                  <Button variant="outline" size="icon" className="rounded-full border-foreground/10 bg-foreground/5 backdrop-blur-sm hover:bg-foreground/10 hover:text-primary transition-colors" asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10 hover:text-primary transition-colors h-10 w-10" asChild>
                     <a href={item.href} target={item.href.startsWith('mailto') ? undefined : "_blank"} rel="noopener noreferrer">
                       <item.icon className="h-5 w-5" />
                     </a>
