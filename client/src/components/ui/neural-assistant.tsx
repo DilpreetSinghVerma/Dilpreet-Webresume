@@ -63,8 +63,8 @@ const KNOWLEDGE_BASE: KnowledgeBase = {
             response: "Dilpreet's mission is to build software that has social impact. Whether it's helping the deaf community through sign language translation or making daily life easier with AI assistants, he aims to use his Python and ML skills for good."
         },
         {
-            keywords: ["name", "meaning", "kushreet", "origin"],
-            response: "The name 'KushReet' is deeply personal to Dilpreet. It is a fusion of two names he holds dear for the future: 'Khushman' (representing a happy mind) and 'Mehreet' (representing the tradition of love). It symbolizes his vision of technology that is both intelligent and heart-centered."
+            keywords: ["name", "meaning", "reet", "origin"],
+            response: "The name 'REET' is deeply significant to Dilpreet. It represents a tradition of love and wisdom (inspired by the name Mehreet). It symbolizes his vision of technology that is both intelligent and heart-centered."
         }
     ]
 };
@@ -72,7 +72,7 @@ const KNOWLEDGE_BASE: KnowledgeBase = {
 const INITIAL_MESSAGE = {
     id: 'init',
     type: 'ai',
-    text: "Neural engine synchronized. I am KushReet, Dilpreet's AI digital twin. Ask me anything about his Top 30 Hackathon win, his AI architectures, or his vision as a developer.",
+    text: "Neural engine synchronized. I am REET, Dilpreet's AI digital twin. Ask me anything about his Top 100 Hackathon win, his AI architectures, or his vision as a developer.",
     timestamp: new Date()
 };
 
@@ -123,7 +123,7 @@ export function NeuralAssistant() {
         } else if (text.length < 3) {
             response = "I'm ready when you are. Ask me about Dilpreet's work!";
         } else if (text.includes('hello') || text.includes('hi') || text.includes('hey')) {
-            response = "Greetings. I'm KushReet, the intelligence core for Dilpreet's portfolio. I can provide detailed insights into his projects, his hackathon success, and his technical expertise. What would you like to explore?";
+            response = "Greetings. I'm REET, the intelligence core for Dilpreet's portfolio. I can provide detailed insights into his projects, his hackathon success, and his technical expertise. What would you like to explore?";
         } else {
             response = "That inquiry requires a deeper search of my records. While I refine that, I can tell you about his 'Silent Coders' AI project, his Top 30 Hackathon achievement at GGI, or his advanced Python skills. Which of these interests you?";
         }
@@ -175,7 +175,7 @@ export function NeuralAssistant() {
                                         <Sparkles className="h-5 w-5" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-sm tracking-wider">KushReet AI</h3>
+                                        <h3 className="font-bold text-sm tracking-widest uppercase">REET AI</h3>
                                         <div className="flex items-center gap-1.5">
                                             <div className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
                                             <span className="text-[10px] opacity-80 uppercase font-mono">Core Intelligence</span>
