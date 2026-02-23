@@ -64,25 +64,6 @@ const SUGGESTIONS = [
     "How can I reach Dilpreet? 📬",
 ];
 
-// ─── Behind the Name Card ──────────────────────────────────────────────────
-function NameOriginCard() {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mx-4 p-4 rounded-2xl bg-gradient-to-br from-pink-500/10 via-primary/5 to-transparent border border-pink-500/20 shadow-lg shadow-pink-500/5 mb-4"
-        >
-            <div className="flex items-center gap-2 mb-2">
-                <Heart className="h-3.5 w-3.5 text-pink-500 fill-pink-500/20" />
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink-500/80">Behind the Name</span>
-            </div>
-            <p className="text-xs text-foreground/80 leading-relaxed italic">
-                "REET isn't just code. I'm a blend of **Mehak** + **Dilpreet** (**Meh** + **reet** = **Mehreet**). Dilpreet named me after his vision for his future daughter—a mix of two hearts and two minds."
-            </p>
-        </motion.div>
-    );
-}
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Message {
     id: string;
@@ -334,7 +315,6 @@ export function NeuralAssistant() {
                         <div ref={scrollRef}
                             className="flex-1 overflow-y-auto p-4 space-y-5 bg-background/95 backdrop-blur-xl">
                             {messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)}
-                            {messages.length > 1 && <NameOriginCard />}
                             {isTyping && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                     className="flex gap-2 items-start justify-start">
