@@ -198,36 +198,63 @@ export function NeuralAssistant() {
         }
     }, [isOpen]);
 
-    const respond = useCallback((text: string) => {
+    const respond = useCallback(async (text: string, currentMessages: Message[]) => {
         setIsTyping(true);
-        const response = matchIntent(text);
-        const delay = 600 + Math.min(response.length * 1.5, 1400);
 
-        setTimeout(() => {
+        // Build history from all messages EXCEPT the system init message
+        const history = currentMessages
+            .filter(m => m.id !== 'init')
+            .map(m => ({ role: m.type, text: m.text }));
+
+        try {
+            const res = await fetch('/api/reet', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text, history }),
+                signal: AbortSignal.timeout(15000), // 15s timeout
+            });
+
+            const data = await res.json() as { response?: string; error?: string };
+
+            const replyText = res.ok && data.response
+                ? data.response
+                : (data.error ?? matchIntent(text)); // fallback to local if API fails
+
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
                 type: 'ai',
-                text: response,
+                text: replyText,
                 timestamp: new Date()
             }]);
+        } catch {
+            // Network error — use local fallback silently
+            setMessages(prev => [...prev, {
+                id: Date.now().toString(),
+                type: 'ai',
+                text: matchIntent(text),
+                timestamp: new Date()
+            }]);
+        } finally {
             setIsTyping(false);
             if (!isOpen) setHasNewMsg(true);
-        }, delay);
+        }
     }, [isOpen]);
+
 
     const handleSend = (e?: React.FormEvent, override?: string) => {
         e?.preventDefault();
         const text = (override ?? inputValue).trim();
         if (!text || isTyping) return;
 
-        setMessages(prev => [...prev, {
+        const newMessages = [...messages, {
             id: Date.now().toString(),
-            type: 'user',
+            type: 'user' as const,
             text,
             timestamp: new Date()
-        }]);
+        }];
+        setMessages(newMessages);
         setInputValue('');
-        respond(text);
+        respond(text, newMessages);
     };
 
     return (
