@@ -163,7 +163,7 @@ function MessageBubble({ msg }: { msg: Message }) {
 
             <div className={`group relative max-w-[85%]`}>
                 <div className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${isAI
-                    ? 'bg-foreground/5 border border-foreground/8 rounded-tl-sm text-foreground/90'
+                    ? 'bg-gradient-to-br from-pink-500/10 via-primary/5 to-background/5 border border-pink-500/20 rounded-tl-sm text-foreground/90 shadow-sm shadow-pink-500/5'
                     : 'bg-primary text-primary-foreground rounded-tr-sm shadow-md shadow-primary/20'
                     }`}>
                     {isAI ? renderText(msg.text) : msg.text}
@@ -341,7 +341,7 @@ export function NeuralAssistant() {
                                     <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
                                         <Heart className="h-3.5 w-3.5 fill-primary/10" />
                                     </div>
-                                    <div className="bg-foreground/5 border border-foreground/8 rounded-2xl rounded-tl-sm">
+                                    <div className="bg-gradient-to-br from-pink-500/10 via-primary/5 to-background/5 border border-pink-500/20 rounded-2xl rounded-tl-sm">
                                         <TypingDots />
                                     </div>
                                 </motion.div>
