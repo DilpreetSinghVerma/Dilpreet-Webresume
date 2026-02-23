@@ -211,14 +211,16 @@ export function NeuralAssistant() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: text, history }),
-                signal: AbortSignal.timeout(15000), // 15s timeout
+                signal: AbortSignal.timeout(15000),
             });
 
             const data = await res.json() as { response?: string; error?: string };
 
-            const replyText = res.ok && data.response
+            // Only use the API response if it returned a real answer
+            // Otherwise silently fall back to local knowledge base
+            const replyText = (res.ok && data.response)
                 ? data.response
-                : (data.error ?? matchIntent(text)); // fallback to local if API fails
+                : matchIntent(text);
 
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
@@ -227,7 +229,7 @@ export function NeuralAssistant() {
                 timestamp: new Date()
             }]);
         } catch {
-            // Network error — use local fallback silently
+            // Network error or timeout — use local fallback silently
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
                 type: 'ai',
