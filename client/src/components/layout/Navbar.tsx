@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/sheet";
 import { useState, useEffect } from "react";
 import Magnetic from "@/components/ui/magnetic";
+import MusicPlayer from "@/components/ui/music-player";
+
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -89,10 +91,13 @@ export default function Navbar() {
             </button>
           ))}
 
-          {/* IST Clock */}
-          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/10 bg-foreground/5 text-xs font-mono text-muted-foreground select-none">
-            <span>{isDay ? "☀️" : "🌙"}</span>
-            <span>{clockTime} IST</span>
+          {/* Music Player & IST Clock */}
+          <div className="hidden lg:flex items-center gap-3">
+            <MusicPlayer />
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/10 bg-foreground/5 text-xs font-mono text-muted-foreground select-none">
+              <span>{isDay ? "☀️" : "🌙"}</span>
+              <span>{clockTime} IST</span>
+            </div>
           </div>
 
           {/* Theme Toggle */}

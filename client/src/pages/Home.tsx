@@ -10,7 +10,6 @@ import Contact from "@/components/sections/Contact";
 import CursorGlow from "@/components/ui/cursor-glow";
 import AITerminal from "@/components/ui/ai-terminal";
 import { NeuralAssistant } from "@/components/ui/neural-assistant";
-import MusicPlayer from "@/components/ui/music-player";
 import EasterEgg from "@/components/ui/easter-egg";
 import TechStackBadge from "@/components/ui/tech-stack-badge";
 
@@ -21,7 +20,6 @@ export default function Home() {
       <CursorGlow />
       <AITerminal />
       <NeuralAssistant />
-      <MusicPlayer />
       <EasterEgg />
       <ScrollProgress />
       <Navbar />
