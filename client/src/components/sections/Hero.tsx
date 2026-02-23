@@ -12,26 +12,40 @@ export default function Hero() {
   const [displayText, setDisplayText] = useState("");
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    let index = 0;
+  const startTyping = () => {
+    // Clear any existing interval
+    if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+    setDisplayText("");
 
+    let index = 0;
     typingIntervalRef.current = setInterval(() => {
       if (index < FULL_TEXT.length) {
         setDisplayText(FULL_TEXT.substring(0, index + 1));
         index++;
       } else {
-        if (typingIntervalRef.current) {
-          clearInterval(typingIntervalRef.current);
-        }
+        if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
       }
     }, TYPING_SPEED);
+  };
 
+  // Start typing on first load
+  useEffect(() => {
+    startTyping();
     return () => {
-      if (typingIntervalRef.current) {
-        clearInterval(typingIntervalRef.current);
-      }
+      if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
     };
   }, []);
+
+  // Restart typing every time theme is toggled
+  useEffect(() => {
+    const handleThemeToggle = () => {
+      // Small delay so the transition animation finishes first
+      setTimeout(() => startTyping(), 300);
+    };
+    window.addEventListener("themeToggled", handleThemeToggle);
+    return () => window.removeEventListener("themeToggled", handleThemeToggle);
+  }, []);
+
 
   return (
     <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">

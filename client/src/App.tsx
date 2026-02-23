@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import SplashScreen from "@/components/SplashScreen";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function Router() {
   return (
@@ -19,13 +19,6 @@ function Router() {
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-
-  // Replay splash screen every time the theme is toggled
-  useEffect(() => {
-    const handleThemeToggle = () => setShowSplash(true);
-    window.addEventListener("themeToggled", handleThemeToggle);
-    return () => window.removeEventListener("themeToggled", handleThemeToggle);
-  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
