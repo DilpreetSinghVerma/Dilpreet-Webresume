@@ -41,7 +41,7 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {['skills', 'experience', 'playground', 'certifications', 'projects'].map((item) => (
+          {['skills', 'experience', 'certifications', 'projects'].map((item) => (
             <button
               key={item}
               onClick={() => scrollTo(item)}
@@ -70,7 +70,6 @@ export default function Navbar() {
               <div className="flex flex-col gap-6 mt-10">
                 <button onClick={() => scrollTo('skills')} className="text-lg font-medium hover:text-primary text-left">Skills</button>
                 <button onClick={() => scrollTo('experience')} className="text-lg font-medium hover:text-primary text-left">Experience</button>
-                <button onClick={() => scrollTo('playground')} className="text-lg font-medium hover:text-primary text-left">Playground</button>
                 <button onClick={() => scrollTo('certifications')} className="text-lg font-medium hover:text-primary text-left">Certifications</button>
                 <button onClick={() => scrollTo('projects')} className="text-lg font-medium hover:text-primary text-left">Projects</button>
                 <Button className="w-full mt-4" onClick={() => window.location.href = 'mailto:dilpreetsinghverma@gmail.com'}>Contact Me</Button>

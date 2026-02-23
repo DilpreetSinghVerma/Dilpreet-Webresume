@@ -3,7 +3,6 @@ import ScrollProgress from "@/components/ui/scroll-progress";
 import Hero from "@/components/sections/Hero";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
-import AIPlayground from "@/components/sections/AIPlayground";
 import Projects from "@/components/sections/Projects";
 import Growth from "@/components/sections/Growth";
 import Certifications from "@/components/sections/Certifications";
@@ -29,10 +28,6 @@ export default function Home() {
 
       <div id="experience">
         <Experience />
-      </div>
-
-      <div id="playground">
-        <AIPlayground />
       </div>
 
       <div id="certifications">
