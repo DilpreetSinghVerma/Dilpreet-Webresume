@@ -14,8 +14,9 @@ export default function Navbar() {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    // Sync initial state with DOM
-    setIsDark(document.documentElement.classList.contains("dark"));
+    // Always start in dark mode
+    document.documentElement.classList.add("dark");
+    setIsDark(true);
 
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -34,27 +35,13 @@ export default function Navbar() {
   const toggleTheme = () => {
     const newDark = !isDark;
     setIsDark(newDark);
-
-    // Flash transition overlay
-    const overlay = document.createElement("div");
-    overlay.style.cssText = `
-      position:fixed;inset:0;z-index:9998;pointer-events:none;
-      background:${newDark ? "#000" : "#fff"};
-      opacity:0;transition:opacity 0.15s ease;
-    `;
-    document.body.appendChild(overlay);
-    requestAnimationFrame(() => {
-      overlay.style.opacity = "0.25";
-      setTimeout(() => {
-        if (newDark) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-        overlay.style.opacity = "0";
-        setTimeout(() => overlay.remove(), 200);
-      }, 150);
-    });
+    if (newDark) {
+      document.documentElement.classList.add("dark");
+      document.documentElement.style.colorScheme = "dark";
+    } else {
+      document.documentElement.classList.remove("dark");
+      document.documentElement.style.colorScheme = "light";
+    }
   };
 
   const navItems = ['skills', 'experience', 'certifications', 'projects'];
@@ -64,8 +51,8 @@ export default function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled
-          ? "bg-background/95 md:bg-background/80 md:backdrop-blur-md border-b border-foreground/10 py-4"
-          : "py-6 bg-transparent"
+        ? "bg-background/95 md:bg-background/80 md:backdrop-blur-md border-b border-foreground/10 py-4"
+        : "py-6 bg-transparent"
         }`}
     >
       <div className="container px-4 md:px-6 flex items-center justify-between">

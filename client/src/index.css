@@ -100,19 +100,30 @@
 
 
 @layer base {
-  * {
+  /* Smooth theme transition on ALL elements */
+  *, *::before, *::after {
     @apply border-border;
+    transition:
+      background-color 0.45s ease,
+      color 0.35s ease,
+      border-color 0.45s ease,
+      box-shadow 0.45s ease,
+      fill 0.35s ease,
+      stroke 0.35s ease;
+  }
+
+  /* Exclude transitions that break animations */
+  .no-transition, .no-transition * {
+    transition: none !important;
   }
 
   html {
-    transition: background-color 0.4s ease, color 0.4s ease;
-    will-change: background-color;
+    color-scheme: dark;
   }
 
   body {
     @apply font-sans antialiased text-foreground;
-    background-color: transparent;
-    transition: color 0.4s ease;
+    background-color: hsl(var(--background));
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
@@ -129,6 +140,7 @@
     opacity: 0.03;
     z-index: 100;
     pointer-events: none;
+    transition: none;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     background-repeat: repeat;
   }

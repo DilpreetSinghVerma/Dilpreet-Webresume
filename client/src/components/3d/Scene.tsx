@@ -127,8 +127,11 @@ export default function Scene() {
   const starColor = isDark ? activeColor : "#005a66";
 
   return (
-    <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none transition-colors duration-1000"
-      style={{ background: isDark ? "#020204" : "#ffffff" }}>
+    <div className="fixed inset-0 -z-10 h-full w-full pointer-events-none"
+      style={{
+        background: isDark ? "#020204" : "#ffffff",
+        transition: "background 0.45s ease",
+      }}>
       <Canvas
         camera={{ position: [0, 0, 2], fov: 45 }}
         gl={glConfig}
