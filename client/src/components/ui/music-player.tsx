@@ -1,93 +1,35 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Pause, Music2 } from "lucide-react";
-
-type AudioState = { ctx: AudioContext; master: GainNode } | null;
-
-function createAmbientMusic(ctx: AudioContext): GainNode {
-    const master = ctx.createGain();
-    master.gain.setValueAtTime(0, ctx.currentTime);
-    master.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 2.5);
-    master.connect(ctx.destination);
-
-    // Delay/reverb chain
-    const delay = ctx.createDelay(1.0);
-    const delayGain = ctx.createGain();
-    delay.delayTime.value = 0.45;
-    delayGain.gain.value = 0.3;
-    delay.connect(delayGain);
-    delayGain.connect(delay);
-    delayGain.connect(master);
-
-    // Low-pass filter for warmth
-    const filter = ctx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 900;
-    filter.connect(master);
-    filter.connect(delay);
-
-    // Slow LFO to modulate filter
-    const lfo = ctx.createOscillator();
-    const lfoGain = ctx.createGain();
-    lfo.frequency.value = 0.06;
-    lfoGain.gain.value = 250;
-    lfo.connect(lfoGain);
-    lfoGain.connect(filter.frequency);
-    lfo.start();
-
-    // Cmaj7 chord: C3, E3, G3, B3, C4
-    const notes = [130.81, 164.81, 196.00, 246.94, 261.63];
-    notes.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const pan = ctx.createStereoPanner();
-        osc.type = "sine";
-        osc.frequency.value = freq;
-        osc.detune.value = (i - 2) * 6; // gentle chorus detuning
-        gain.gain.value = 0.038;
-        pan.pan.value = (i - 2) * 0.28;
-        osc.connect(gain);
-        gain.connect(pan);
-        pan.connect(filter);
-        osc.start();
-    });
-
-    // Sub bass: C2
-    const bass = ctx.createOscillator();
-    const bassGain = ctx.createGain();
-    bass.type = "sine";
-    bass.frequency.value = 65.41;
-    bassGain.gain.value = 0.06;
-    bass.connect(bassGain);
-    bassGain.connect(master);
-    bass.start();
-
-    return master;
-}
+import { Play, Pause, Music2, Volume2 } from "lucide-react";
 
 export default function MusicPlayer() {
     const [playing, setPlaying] = useState(false);
-    const [vol, setVol] = useState(0.18);
-    const audioRef = useRef<AudioState>(null);
+    const [loaded, setLoaded] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        const audio = new Audio("/music.mp3");
+        audio.loop = true;
+        audio.volume = 0.25; // low volume
+        audio.preload = "metadata";
+        audio.addEventListener("canplaythrough", () => setLoaded(true));
+        audioRef.current = audio;
+
+        return () => {
+            audio.pause();
+            audio.src = "";
+        };
+    }, []);
 
     const toggle = async () => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
         if (playing) {
-            // Fade out then suspend
-            if (audioRef.current) {
-                audioRef.current.master.gain.linearRampToValueAtTime(0, audioRef.current.ctx.currentTime + 1.2);
-                setTimeout(() => audioRef.current?.ctx.suspend(), 1300);
-            }
+            audio.pause();
             setPlaying(false);
         } else {
-            if (!audioRef.current) {
-                const ctx = new AudioContext();
-                const master = createAmbientMusic(ctx);
-                audioRef.current = { ctx, master };
-            } else {
-                await audioRef.current.ctx.resume();
-                audioRef.current.master.gain.cancelScheduledValues(audioRef.current.ctx.currentTime);
-                audioRef.current.master.gain.linearRampToValueAtTime(vol, audioRef.current.ctx.currentTime + 1.5);
-            }
+            await audio.play();
             setPlaying(true);
         }
     };
@@ -97,33 +39,60 @@ export default function MusicPlayer() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.5, duration: 0.5 }}
-            className="fixed bottom-20 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-xl border border-primary/15 bg-background/70 backdrop-blur-md shadow-lg"
+            className="fixed bottom-6 left-4 z-50 flex items-center gap-2.5 px-3 py-2 rounded-xl border border-primary/15 bg-background/80 backdrop-blur-md shadow-lg"
         >
+            {/* Play / Pause */}
             <button
                 onClick={toggle}
-                className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 hover:bg-primary/30 transition-colors text-primary"
-                title={playing ? "Pause ambient music" : "Play ambient music"}
+                disabled={!loaded}
+                className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 hover:bg-primary/30 disabled:opacity-40 transition-colors text-primary"
+                title={playing ? "Pause" : "Play music"}
             >
                 {playing ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
             </button>
+
+            {/* Info */}
             <div className="flex items-center gap-1.5">
-                <Music2 className="h-3 w-3 text-muted-foreground" />
-                <div className="flex flex-col">
-                    <span className="text-[10px] font-mono text-foreground leading-tight">Ambient Synth</span>
-                    <span className="text-[9px] text-muted-foreground leading-tight">
+                <Music2 className="h-3 w-3 text-muted-foreground shrink-0" />
+                <div className="flex flex-col leading-none">
+                    <span className="text-[10px] font-mono text-foreground">Ambient Mix</span>
+                    <span className="text-[9px] text-muted-foreground flex items-center gap-1 mt-0.5">
                         {playing ? (
-                            <span className="flex items-center gap-1">
+                            <>
                                 <motion.span
-                                    className="inline-block w-1 h-1 rounded-full bg-primary"
-                                    animate={{ scale: [1, 1.5, 1] }}
-                                    transition={{ repeat: Infinity, duration: 1.2 }}
+                                    className="inline-block w-1.5 h-1.5 rounded-full bg-primary"
+                                    animate={{ scale: [1, 1.6, 1], opacity: [1, 0.5, 1] }}
+                                    transition={{ repeat: Infinity, duration: 1 }}
                                 />
-                                playing
-                            </span>
-                        ) : "paused"}
+                                <span>playing</span>
+                            </>
+                        ) : loaded ? (
+                            "paused"
+                        ) : (
+                            "loading..."
+                        )}
                     </span>
                 </div>
             </div>
+
+            {/* Volume indicator */}
+            {playing && (
+                <motion.div
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    className="flex items-center gap-0.5 overflow-hidden"
+                >
+                    <Volume2 className="h-2.5 w-2.5 text-primary/60" />
+                    {[1, 2, 3].map((i) => (
+                        <motion.div
+                            key={i}
+                            className="w-0.5 bg-primary/60 rounded-full"
+                            animate={{ height: ["4px", `${4 + i * 4}px`, "4px"] }}
+                            transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15, ease: "easeInOut" }}
+                        />
+                    ))}
+                </motion.div>
+            )}
         </motion.div>
     );
 }
