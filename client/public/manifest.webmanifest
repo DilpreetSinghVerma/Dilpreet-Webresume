@@ -1,0 +1,30 @@
+{
+    "name": "Dilpreet Singh | AIML Engineer & Developer",
+    "short_name": "DS Portfolio",
+    "description": "Portfolio of Dilpreet Singh — B.Tech CSE Student specializing in AI/ML, Python Developer, and Creative Tech Enthusiast.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#020204",
+    "theme_color": "#00e5ff",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/site-logo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/site-logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "portfolio",
+        "technology",
+        "education"
+    ],
+    "lang": "en"
+}
