@@ -9,7 +9,8 @@ const FULL_TEXT = "DILPREET SINGH";
 const TYPING_SPEED = 80;
 
 export default function Hero() {
-  const [displayText, setDisplayText] = useState("");
+  const [displayText, setDisplayText] = useState("DILPREET SINGH");
+  const [heroVisible, setHeroVisible] = useState(false);
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTyping = () => {
@@ -27,12 +28,20 @@ export default function Hero() {
   };
 
   useEffect(() => {
-    // Start typing when splash background fades (morph begins)
-    const handleReveal = () => startTyping();
+    const handleReveal = () => {
+      // Step 1: Fade hero in showing full text (cross-fade with splash)
+      setHeroVisible(true);
+      // Step 2: After cross-fade, clear and start typewriting
+      setTimeout(() => startTyping(), 550);
+    };
+
     window.addEventListener("splashRevealing", handleReveal);
 
-    // Fallback: if splash event never fires (e.g. page reload mid-session)
-    const fallback = setTimeout(() => startTyping(), 3200);
+    // Fallback if splash never fires (e.g. hot reload)
+    const fallback = setTimeout(() => {
+      setHeroVisible(true);
+      startTyping();
+    }, 3500);
 
     return () => {
       window.removeEventListener("splashRevealing", handleReveal);
@@ -41,12 +50,14 @@ export default function Hero() {
     };
   }, []);
 
-  // Restart typing every time theme is toggled
+  // Restart typing on theme toggle
   useEffect(() => {
     const handleThemeToggle = () => setTimeout(() => startTyping(), 300);
     window.addEventListener("themeToggled", handleThemeToggle);
     return () => window.removeEventListener("themeToggled", handleThemeToggle);
   }, []);
+
+
   return (
     <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
@@ -68,14 +79,18 @@ export default function Hero() {
             AIML Specialist & Python Developer
           </motion.div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
+          <motion.h1
+            className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2"
+            animate={{ opacity: heroVisible ? 1 : 0 }}
+            transition={{ duration: 0.35 }}
+          >
             <span data-testid="text-typing-dilpreet">{displayText}</span>
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
               className={`inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle ${displayText.length === FULL_TEXT.length ? 'hidden' : ''}`}
             />
-          </h1>
+          </motion.h1>
 
           <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.</p>
 
