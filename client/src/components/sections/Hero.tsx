@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram, Download } from "lucide-react";
@@ -12,6 +12,13 @@ export default function Hero() {
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+
+  // Parallax on scroll
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, -80]);   // text moves up
+  const y2 = useTransform(scrollY, [0, 500], [0, -40]);   // badge moves up slower
+  const opacity = useTransform(scrollY, [0, 300], [1, 0]); // fades on scroll
 
   const startTyping = () => {
     if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
@@ -29,38 +36,59 @@ export default function Hero() {
     }, TYPING_SPEED);
   };
 
-  // Start typewriter on page load
   useEffect(() => {
     startTyping();
     return () => { if (typingIntervalRef.current) clearInterval(typingIntervalRef.current); };
   }, []);
 
-  // Replay typewriter on dark/light mode switch
+  // Replay typewriter on theme toggle
   useEffect(() => {
-    const handleThemeToggle = () => setTimeout(() => startTyping(), 350);
-    window.addEventListener("themeToggled", handleThemeToggle);
-    return () => window.removeEventListener("themeToggled", handleThemeToggle);
+    const handle = () => setTimeout(() => startTyping(), 350);
+    window.addEventListener("themeToggled", handle);
+    return () => window.removeEventListener("themeToggled", handle);
   }, []);
 
+  // AI-powered CV download — opens REET with a message
+  const handleResumeDownload = () => {
+    window.dispatchEvent(new CustomEvent("reetCVDownload"));
+  };
+
   return (
-    <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
+    <section
+      ref={containerRef}
+      id="hero"
+      className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden"
+    >
       <Scene />
+
       <div className="container px-4 md:px-6 relative z-10 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-6"
-        >
+        <motion.div style={{ y: y1, opacity }} className="space-y-6">
+
+          {/* ── Open to Work Badge ── */}
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
+            style={{ y: y2 }}
+            initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary border border-primary/20 backdrop-blur-md mb-4"
+            transition={{ delay: 0.1, duration: 0.5, type: "spring" }}
+            className="flex items-center justify-center gap-3 mb-2 flex-wrap"
           >
-            AIML Specialist &amp; Python Developer
+            {/* Availability */}
+            <div className="flex items-center gap-2 rounded-full px-3 py-1 border border-green-500/30 bg-green-500/10 backdrop-blur-md">
+              <motion.span
+                className="w-2 h-2 rounded-full bg-green-400"
+                animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
+                transition={{ repeat: Infinity, duration: 1.8 }}
+              />
+              <span className="text-xs font-mono text-green-400">Available for Internships 2026</span>
+            </div>
+
+            {/* Role pill */}
+            <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary border border-primary/20 backdrop-blur-md">
+              AIML Specialist &amp; Python Developer
+            </div>
           </motion.div>
 
+          {/* ── Name with Typewriter ── */}
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
             <span data-testid="text-typing-dilpreet">{displayText}</span>
             {isTyping && (
@@ -87,9 +115,20 @@ export default function Hero() {
                   View Projects
                 </Button>
               </Magnetic>
+
+              {/* AI-powered Resume download */}
               <Magnetic>
-                <Button variant="outline" size="lg" className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2" asChild>
-                  <a href="/Dilpreet_Singh_Resume.pdf" download>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2"
+                  asChild
+                >
+                  <a
+                    href="/Dilpreet_Singh_Resume.pdf"
+                    download
+                    onClick={handleResumeDownload}
+                  >
                     <Download className="h-4 w-4 animate-bounce" />
                     Resume
                   </a>
@@ -117,8 +156,11 @@ export default function Hero() {
         </motion.div>
       </div>
 
+      {/* Scroll Indicator */}
       <motion.div
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+        style={{ opacity }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-muted-foreground"
       >

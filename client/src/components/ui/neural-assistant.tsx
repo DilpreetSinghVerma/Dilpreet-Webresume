@@ -191,12 +191,31 @@ export function NeuralAssistant() {
         scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
     }, [messages, isTyping]);
 
+    // AI-powered CV download greeting
+    useEffect(() => {
+        const handleCVDownload = () => {
+            setIsOpen(true);
+            setHasNewMsg(false);
+            setTimeout(() => {
+                setMessages(prev => [...prev, {
+                    id: Date.now().toString(),
+                    type: 'ai',
+                    text: "Great choice! 📄 Dilpreet's resume is downloading now.\n\nJust so you know — he's **actively seeking AI/ML internships for 2026** and is excited to bring his skills in Python, TensorFlow, and React to a real-world team.\n\nFeel free to reach out at **dilpreetsinghverma@gmail.com** 🚀",
+                    timestamp: new Date()
+                }]);
+            }, 500);
+        };
+        window.addEventListener("reetCVDownload", handleCVDownload);
+        return () => window.removeEventListener("reetCVDownload", handleCVDownload);
+    }, []);
+
     useEffect(() => {
         if (isOpen) {
             setHasNewMsg(false);
             setTimeout(() => inputRef.current?.focus(), 300);
         }
     }, [isOpen]);
+
 
     const respond = useCallback(async (text: string, currentMessages: Message[]) => {
         setIsTyping(true);
