@@ -42,6 +42,8 @@ export default function Navbar() {
       document.documentElement.classList.remove("dark");
       document.documentElement.style.colorScheme = "light";
     }
+    // Replay Hero typewriter on theme switch
+    window.dispatchEvent(new CustomEvent("themeToggled"));
   };
 
   const navItems = ['skills', 'experience', 'certifications', 'projects'];

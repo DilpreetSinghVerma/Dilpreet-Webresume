@@ -2,16 +2,49 @@ import { motion } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram, Download } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
 import Magnetic from "@/components/ui/magnetic";
 
 const FULL_TEXT = "DILPREET SINGH";
+const TYPING_SPEED = 80;
 
 export default function Hero() {
+  const [displayText, setDisplayText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startTyping = () => {
+    if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+    setIsTyping(true);
+    setDisplayText("");
+    let index = 0;
+    typingIntervalRef.current = setInterval(() => {
+      if (index < FULL_TEXT.length) {
+        setDisplayText(FULL_TEXT.substring(0, index + 1));
+        index++;
+      } else {
+        if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
+        setIsTyping(false);
+      }
+    }, TYPING_SPEED);
+  };
+
+  // Start typewriter on page load
+  useEffect(() => {
+    startTyping();
+    return () => { if (typingIntervalRef.current) clearInterval(typingIntervalRef.current); };
+  }, []);
+
+  // Replay typewriter on dark/light mode switch
+  useEffect(() => {
+    const handleThemeToggle = () => setTimeout(() => startTyping(), 350);
+    window.addEventListener("themeToggled", handleThemeToggle);
+    return () => window.removeEventListener("themeToggled", handleThemeToggle);
+  }, []);
+
   return (
     <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
       <Scene />
-      {/* Content Overlay */}
       <div className="container px-4 md:px-6 relative z-10 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -29,10 +62,19 @@ export default function Hero() {
           </motion.div>
 
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
-            {FULL_TEXT}
+            <span data-testid="text-typing-dilpreet">{displayText}</span>
+            {isTyping && (
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
+                className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle"
+              />
+            )}
           </h1>
 
-          <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.</p>
+          <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">
+            Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.
+          </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">
             <div className="flex gap-4 flex-wrap justify-center">
@@ -45,14 +87,8 @@ export default function Hero() {
                   View Projects
                 </Button>
               </Magnetic>
-
               <Magnetic>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2"
-                  asChild
-                >
+                <Button variant="outline" size="lg" className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2" asChild>
                   <a href="/Dilpreet_Singh_Resume.pdf" download>
                     <Download className="h-4 w-4 animate-bounce" />
                     Resume
@@ -81,10 +117,8 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll Indicator */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-muted-foreground"
       >
