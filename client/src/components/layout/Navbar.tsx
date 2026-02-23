@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import { Menu, Sun, Moon } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -11,8 +11,12 @@ import Magnetic from "@/components/ui/magnetic";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
+    // Sync initial state with DOM
+    setIsDark(document.documentElement.classList.contains("dark"));
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
@@ -27,11 +31,41 @@ export default function Navbar() {
     }
   };
 
+  const toggleTheme = () => {
+    const newDark = !isDark;
+    setIsDark(newDark);
+
+    // Flash transition overlay
+    const overlay = document.createElement("div");
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:9998;pointer-events:none;
+      background:${newDark ? "#000" : "#fff"};
+      opacity:0;transition:opacity 0.15s ease;
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => {
+      overlay.style.opacity = "0.25";
+      setTimeout(() => {
+        if (newDark) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+        overlay.style.opacity = "0";
+        setTimeout(() => overlay.remove(), 200);
+      }, 150);
+    });
+  };
+
+  const navItems = ['skills', 'experience', 'certifications', 'projects'];
+
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled ? "bg-background/95 md:bg-background/80 md:backdrop-blur-md border-b border-foreground/10 py-4" : "py-6 bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrolled
+          ? "bg-background/95 md:bg-background/80 md:backdrop-blur-md border-b border-foreground/10 py-4"
+          : "py-6 bg-transparent"
         }`}
     >
       <div className="container px-4 md:px-6 flex items-center justify-between">
@@ -41,7 +75,7 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {['skills', 'experience', 'certifications', 'projects'].map((item) => (
+          {navItems.map((item) => (
             <button
               key={item}
               onClick={() => scrollTo(item)}
@@ -51,15 +85,86 @@ export default function Navbar() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
             </button>
           ))}
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+            className="relative w-9 h-9 rounded-full flex items-center justify-center border border-foreground/10 hover:border-primary/40 bg-foreground/5 hover:bg-primary/10 transition-all duration-300"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isDark ? (
+                <motion.span
+                  key="sun"
+                  initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="absolute"
+                >
+                  <Sun className="h-4 w-4 text-yellow-400" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon"
+                  initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="absolute"
+                >
+                  <Moon className="h-4 w-4 text-cyan-400" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+
           <Magnetic>
-            <Button variant="outline" className="rounded-full border-primary/50 hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/10" onClick={() => scrollTo('contact')}>
+            <Button
+              variant="outline"
+              className="rounded-full border-primary/50 hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/10"
+              onClick={() => scrollTo('contact')}
+            >
               Connect
             </Button>
           </Magnetic>
         </div>
 
         {/* Mobile Nav */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-3">
+          {/* Mobile theme toggle */}
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle dark mode"
+            className="relative w-9 h-9 rounded-full flex items-center justify-center border border-foreground/10 hover:border-primary/40 bg-foreground/5 transition-all duration-300"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isDark ? (
+                <motion.span
+                  key="sun-m"
+                  initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute"
+                >
+                  <Sun className="h-4 w-4 text-yellow-400" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="moon-m"
+                  initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.25 }}
+                  className="absolute"
+                >
+                  <Moon className="h-4 w-4 text-cyan-400" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -68,11 +173,21 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent className="bg-background/95 backdrop-blur-xl border-foreground/10">
               <div className="flex flex-col gap-6 mt-10">
-                <button onClick={() => scrollTo('skills')} className="text-lg font-medium hover:text-primary text-left">Skills</button>
-                <button onClick={() => scrollTo('experience')} className="text-lg font-medium hover:text-primary text-left">Experience</button>
-                <button onClick={() => scrollTo('certifications')} className="text-lg font-medium hover:text-primary text-left">Certifications</button>
-                <button onClick={() => scrollTo('projects')} className="text-lg font-medium hover:text-primary text-left">Projects</button>
-                <Button className="w-full mt-4" onClick={() => window.location.href = 'mailto:dilpreetsinghverma@gmail.com'}>Contact Me</Button>
+                {navItems.map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollTo(item)}
+                    className="text-lg font-medium hover:text-primary text-left capitalize"
+                  >
+                    {item}
+                  </button>
+                ))}
+                <Button
+                  className="w-full mt-4"
+                  onClick={() => scrollTo('contact')}
+                >
+                  Connect
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
