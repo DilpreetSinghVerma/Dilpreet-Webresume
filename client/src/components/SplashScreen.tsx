@@ -4,80 +4,57 @@ import { Volume2, VolumeX } from "lucide-react";
 
 const LETTERS = "DILPREET SINGH".split("");
 
-// ── Cyberpunk boot chime synthesizer ──────────────────────────────────────────
+// ── Premium 3-note ascending chime (pure sine — clean & musical) ──────────────
 function playBootSound() {
     try {
         const ctx = new AudioContext();
 
         const master = ctx.createGain();
-        master.gain.setValueAtTime(0.18, ctx.currentTime);
+        master.gain.setValueAtTime(0.0, ctx.currentTime);
+        master.gain.linearRampToValueAtTime(0.22, ctx.currentTime + 0.05);
         master.connect(ctx.destination);
 
-        // 1. Low power-on hum sweep (80Hz → 320Hz over 0.8s)
-        const sweep = ctx.createOscillator();
-        const sweepGain = ctx.createGain();
-        sweep.type = "sawtooth";
-        sweep.frequency.setValueAtTime(80, ctx.currentTime);
-        sweep.frequency.exponentialRampToValueAtTime(320, ctx.currentTime + 0.8);
-        sweepGain.gain.setValueAtTime(0.4, ctx.currentTime);
-        sweepGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.9);
-        sweep.connect(sweepGain);
-        sweepGain.connect(master);
-        sweep.start(ctx.currentTime);
-        sweep.stop(ctx.currentTime + 0.9);
+        // Reverb-like effect using a convolver simulation (delay + feedback)
+        const delay = ctx.createDelay(0.4);
+        const delayGain = ctx.createGain();
+        delay.delayTime.value = 0.18;
+        delayGain.gain.value = 0.18;
+        delay.connect(delayGain);
+        delayGain.connect(delay);
+        delayGain.connect(master);
 
-        // 2. Data-stream glitch (white noise burst)
-        const bufferSize = ctx.sampleRate * 0.08;
-        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = noiseBuffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-        const noise = ctx.createBufferSource();
-        const noiseGain = ctx.createGain();
-        const noiseFilter = ctx.createBiquadFilter();
-        noiseFilter.type = "bandpass";
-        noiseFilter.frequency.value = 2400;
-        noiseFilter.Q.value = 0.8;
-        noise.buffer = noiseBuffer;
-        noiseGain.gain.setValueAtTime(0.3, ctx.currentTime + 0.1);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
-        noise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(master);
-        noise.start(ctx.currentTime + 0.1);
+        // Helper: play one pure sine note
+        const note = (freq: number, startTime: number, duration: number, volume: number) => {
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.value = freq;
 
-        // 3. Rising tone chime (confirmation ping — 440Hz → 880Hz)
-        const ping = ctx.createOscillator();
-        const pingGain = ctx.createGain();
-        ping.type = "sine";
-        ping.frequency.setValueAtTime(440, ctx.currentTime + 0.85);
-        ping.frequency.exponentialRampToValueAtTime(920, ctx.currentTime + 1.15);
-        pingGain.gain.setValueAtTime(0.0, ctx.currentTime + 0.85);
-        pingGain.gain.linearRampToValueAtTime(0.35, ctx.currentTime + 0.9);
-        pingGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.4);
-        ping.connect(pingGain);
-        pingGain.connect(master);
-        ping.start(ctx.currentTime + 0.85);
-        ping.stop(ctx.currentTime + 1.45);
+            gainNode.gain.setValueAtTime(0, startTime);
+            gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.04); // soft attack
+            gainNode.gain.setValueAtTime(volume, startTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration); // smooth decay
 
-        // 4. Soft harmonic overtone on the ping
-        const overtone = ctx.createOscillator();
-        const overtoneGain = ctx.createGain();
-        overtone.type = "sine";
-        overtone.frequency.setValueAtTime(880, ctx.currentTime + 0.9);
-        overtone.frequency.exponentialRampToValueAtTime(1840, ctx.currentTime + 1.15);
-        overtoneGain.gain.setValueAtTime(0.0, ctx.currentTime + 0.9);
-        overtoneGain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.95);
-        overtoneGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.4);
-        overtone.connect(overtoneGain);
-        overtoneGain.connect(master);
-        overtone.start(ctx.currentTime + 0.9);
-        overtone.stop(ctx.currentTime + 1.45);
+            osc.connect(gainNode);
+            gainNode.connect(master);
+            gainNode.connect(delay); // add subtle reverb tail
+            osc.start(startTime);
+            osc.stop(startTime + duration + 0.05);
+        };
+
+        const t = ctx.currentTime;
+        // A clean ascending major 7th arpeggio: D5 → F#5 → A5 → D6
+        note(587.33, t + 0.00, 0.7, 0.28); // D5
+        note(739.99, t + 0.18, 0.7, 0.24); // F#5
+        note(880.00, t + 0.36, 0.8, 0.20); // A5
+        note(1174.7, t + 0.56, 1.1, 0.15); // D6 — high sparkle
 
         return ctx;
     } catch {
         return null;
     }
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 export default function SplashScreen({ onDone }: { onDone: () => void }) {
