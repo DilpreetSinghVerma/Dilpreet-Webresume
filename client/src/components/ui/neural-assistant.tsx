@@ -90,14 +90,19 @@ function matchIntent(input: string): string {
     return best ? best.response : FALLBACK;
 }
 
-// Render **bold** markdown-lite
+// Render **bold** and *italic* markdown-lite
 function renderText(text: string) {
-    const parts = text.split(/(\*\*[^*]+\*\*)/g);
-    return parts.map((part, i) =>
-        part.startsWith('**') && part.endsWith('**')
-            ? <strong key={i} className="text-foreground font-semibold">{part.slice(2, -2)}</strong>
-            : <span key={i}>{part}</span>
-    );
+    // Split on **bold** first, then *italic* — order matters
+    const parts = text.split(/(\*\*[^*]+\*\*|\*[^*\n]+\*)/g);
+    return parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+            return <strong key={i} className="text-foreground font-semibold">{part.slice(2, -2)}</strong>;
+        }
+        if (part.startsWith('*') && part.endsWith('*') && part.length > 2) {
+            return <em key={i} className="italic text-primary/90">{part.slice(1, -1)}</em>;
+        }
+        return <span key={i}>{part}</span>;
+    });
 }
 
 // ─── Typing indicator ─────────────────────────────────────────────────────────
@@ -139,8 +144,8 @@ function MessageBubble({ msg }: { msg: Message }) {
 
             <div className={`group relative max-w-[85%]`}>
                 <div className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${isAI
-                        ? 'bg-foreground/5 border border-foreground/8 rounded-tl-sm text-foreground/90'
-                        : 'bg-primary text-primary-foreground rounded-tr-sm shadow-md shadow-primary/20'
+                    ? 'bg-foreground/5 border border-foreground/8 rounded-tl-sm text-foreground/90'
+                    : 'bg-primary text-primary-foreground rounded-tr-sm shadow-md shadow-primary/20'
                     }`}>
                     {isAI ? renderText(msg.text) : msg.text}
                 </div>
@@ -320,8 +325,8 @@ export function NeuralAssistant() {
                 <span className="absolute -inset-3 rounded-full bg-primary/20 blur-xl group-hover:bg-primary/35 transition-all duration-500 animate-pulse pointer-events-none" />
 
                 <span className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 shadow-2xl transition-all duration-300 ${isOpen
-                        ? 'bg-background border-foreground/20 text-foreground'
-                        : 'bg-primary border-white/20 text-primary-foreground'
+                    ? 'bg-background border-foreground/20 text-foreground'
+                    : 'bg-primary border-white/20 text-primary-foreground'
                     }`}>
                     <AnimatePresence mode="wait">
                         {isOpen ? (
