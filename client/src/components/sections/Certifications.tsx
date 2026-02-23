@@ -20,7 +20,7 @@ const certifications = [
       "Recognized for technical approach and social impact potential."
     ],
     tags: ["Hackathon", "Top 30", "AI Innovation", "GGI"],
-    certificateImage: "" // Add image if available later
+    certificateImage: "/quantum-hackathon-participation.jpg"
   },
   {
     title: "10-Week AI-ML Virtual Internship",
@@ -81,12 +81,22 @@ const certifications = [
     certificateImage: "/adobe-corel-certificate.jpg"
   },
   {
-    title: "Basics of Computer in MS Office",
-    issuer: "KCC Computer Center",
-    date: "Completed",
+    title: "Computer Basic with MS Office & Internet",
+    issuer: "Kalgidhar Computer Centre (KCC)",
+    date: "June 2018",
     icon: FileCheck,
     featured: false,
-    tags: ["MS Office", "Internet Proficiency"]
+    tags: ["MS Office", "Internet Proficiency", "ISO 9001:2015"],
+    certificateImage: "/kcc-computer-diploma.jpg"
+  },
+  {
+    title: "Google Student Ambassador Program",
+    issuer: "Google Gemini / Communiqe",
+    date: "December 2025",
+    icon: Award,
+    featured: false,
+    tags: ["Google Ambassador", "Leadership", "Participation"],
+    certificateImage: "/google-ambassador-participation.jpg"
   }
 ];
 
