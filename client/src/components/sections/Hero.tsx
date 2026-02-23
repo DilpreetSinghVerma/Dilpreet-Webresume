@@ -13,10 +13,8 @@ export default function Hero() {
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startTyping = () => {
-    // Clear any existing interval
     if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
     setDisplayText("");
-
     let index = 0;
     typingIntervalRef.current = setInterval(() => {
       if (index < FULL_TEXT.length) {
@@ -28,25 +26,27 @@ export default function Hero() {
     }, TYPING_SPEED);
   };
 
-  // Start typing on first load
   useEffect(() => {
-    startTyping();
+    // Start typing when splash background fades (morph begins)
+    const handleReveal = () => startTyping();
+    window.addEventListener("splashRevealing", handleReveal);
+
+    // Fallback: if splash event never fires (e.g. page reload mid-session)
+    const fallback = setTimeout(() => startTyping(), 3200);
+
     return () => {
+      window.removeEventListener("splashRevealing", handleReveal);
+      clearTimeout(fallback);
       if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
     };
   }, []);
 
   // Restart typing every time theme is toggled
   useEffect(() => {
-    const handleThemeToggle = () => {
-      // Small delay so the transition animation finishes first
-      setTimeout(() => startTyping(), 300);
-    };
+    const handleThemeToggle = () => setTimeout(() => startTyping(), 300);
     window.addEventListener("themeToggled", handleThemeToggle);
     return () => window.removeEventListener("themeToggled", handleThemeToggle);
   }, []);
-
-
   return (
     <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
