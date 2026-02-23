@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Sparkles, User, ChevronRight, Copy, Check, Zap } from 'lucide-react';
+import { MessageSquare, X, Send, Sparkles, User, ChevronRight, Copy, Check, Zap, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // ─── Knowledge Base ───────────────────────────────────────────────────────────
@@ -14,8 +14,8 @@ const INTENTS = [
         response: "⚡ Dilpreet's core tech stack:\n\n**AI / ML:** Python, TensorFlow, OpenAI API, NLP\n**Web:** React 19, Tailwind CSS 4, Three.js\n**Tools:** Photoshop, CorelDraw, Linux\n**Concepts:** DSA, System Design, REST APIs\n\nHis superpower is bridging *intelligent backends* with *stunning frontends*."
     },
     {
-        keywords: ["jarvis", "assistant", "voice", "openai", "project", "virtual"],
-        response: "🤖 **Jarvis** is Dilpreet's flagship AI project — a Python-powered voice assistant that goes far beyond basic commands.\n\nIt integrates **OpenAI GPT** for intelligent conversation, **Speech Recognition** for voice input, and custom **TTS** for natural voice responses. It can control system tasks, retrieve real-time info, and hold context-aware conversations."
+        keywords: ["jarvis", "assistant", "voice", "dual", "brain", "project", "virtual", "0.2"],
+        response: "🤖 **Jarvis-0.2** is Dilpreet's flagship AI project — a high-end, HUD-based voice assistant using **dual-brain logic** (Gemini 2.0 & Llama 3.3).\n\nIt features **biometric security** via facial recognition, real-time hardware monitoring, and an immersive sci-fi interface. It's built with Python, MediaPipe, and OpenCV, bridging advanced AI with a stunning futuristic HUD."
     },
     {
         keywords: ["sign", "language", "translator", "3d", "avatar", "deaf", "isl", "asl", "accessibility"],
@@ -39,11 +39,11 @@ const INTENTS = [
     },
     {
         keywords: ["project", "portfolio", "work", "build", "code", "github"],
-        response: "🚀 Dilpreet's key projects:\n\n1️⃣ **Jarvis AI** — Python voice assistant with OpenAI GPT integration\n2️⃣ **Silent Coders Translator** — Real-time AI sign language → 3D avatar\n3️⃣ **Perfect Guess** — Algorithmic number game in Python\n4️⃣ **Snake Water Gun** — Python logic game\n5️⃣ **This Portfolio** — Built with React 19, Three.js & Tailwind CSS 4\n\nClick any project card on the site for a full case study!"
+        response: "🚀 Dilpreet's key projects:\n\n1️⃣ **Jarvis-0.2 AI** — Dual-brain voice assistant with biometric security\n2️⃣ **Silent Coders Translator** — Real-time AI sign language → 3D avatar\n3️⃣ **This Portfolio** — Built with React 19, Three.js & Tailwind CSS 4\n\nClick any project card on the site for a full case study!"
     },
     {
-        keywords: ["reet", "name", "meaning", "why", "ai"],
-        response: "💫 **REET** is deeply personal to Dilpreet — it's inspired by *Mehreet*, symbolizing a tradition of love and wisdom.\n\nAs his AI, REET represents technology that is both *intelligent* and *heart-centered* — just like Dilpreet's philosophy of building software that truly helps people."
+        keywords: ["reet", "name", "meaning", "why", "ai", "origin"],
+        response: "💫 **REET** is deeply personal to Dilpreet. The name is a combination of **Mehak** (his GF's name) and **Dilpreet** (**Meh** + **reet** = **Mehreet**).\n\nIt's named after his vision for his future daughter, symbolizing a blend of their hearts. As his AI, REET represents technology that is both *intelligent* and *full of soul*."
     },
     {
         keywords: ["education", "college", "university", "ggi", "gulzar", "btech", "degree"],
@@ -59,10 +59,29 @@ const FALLBACK = "🤔 I'm still learning! But I can tell you about Dilpreet's *
 
 const SUGGESTIONS = [
     "Tell me about the hackathon win 🏆",
-    "What's his tech stack? ⚡",
-    "Show me his projects 🚀",
-    "How can I hire him? 📬",
+    "What's your tech stack? ⚡",
+    "Show me the projects 🚀",
+    "How can I reach Dilpreet? 📬",
 ];
+
+// ─── Behind the Name Card ──────────────────────────────────────────────────
+function NameOriginCard() {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mx-4 p-4 rounded-2xl bg-gradient-to-br from-pink-500/10 via-primary/5 to-transparent border border-pink-500/20 shadow-lg shadow-pink-500/5 mb-4"
+        >
+            <div className="flex items-center gap-2 mb-2">
+                <Heart className="h-3.5 w-3.5 text-pink-500 fill-pink-500/20" />
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-pink-500/80">Behind the Name</span>
+            </div>
+            <p className="text-xs text-foreground/80 leading-relaxed italic">
+                "REET isn't just code. I'm a blend of **Mehak** + **Dilpreet** (**Meh** + **reet** = **Mehreet**). Dilpreet named me after his vision for his future daughter—a mix of two hearts and two minds."
+            </p>
+        </motion.div>
+    );
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Message {
@@ -137,8 +156,8 @@ function MessageBubble({ msg }: { msg: Message }) {
             className={`flex gap-2 ${isAI ? 'justify-start' : 'justify-end'}`}
         >
             {isAI && (
-                <div className="mt-1 p-1.5 rounded-lg h-fit bg-primary/15 text-primary shrink-0">
-                    <Sparkles className="h-3.5 w-3.5" />
+                <div className="mt-1 p-1.5 rounded-lg h-fit bg-primary/10 text-primary shrink-0">
+                    <Heart className="h-3.5 w-3.5 fill-primary/10" />
                 </div>
             )}
 
@@ -178,7 +197,7 @@ export function NeuralAssistant() {
     const [messages, setMessages] = useState<Message[]>([{
         id: 'init',
         type: 'ai',
-        text: "Neural engine synchronized. I'm **REET** — Dilpreet's AI digital twin.\n\nAsk me about his hackathon win, Jarvis AI, tech stack, certifications, or how to hire him! 💫",
+        text: "System sync complete. I'm **REET** — Dilpreet's AI twin, built with a bit of code and a lot of heart.\n\nAsk me anything about his work, his vision, or how he's building the future! 💫",
         timestamp: new Date()
     }]);
     const [inputValue, setInputValue] = useState('');
@@ -315,11 +334,12 @@ export function NeuralAssistant() {
                         <div ref={scrollRef}
                             className="flex-1 overflow-y-auto p-4 space-y-5 bg-background/95 backdrop-blur-xl">
                             {messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)}
+                            {messages.length > 1 && <NameOriginCard />}
                             {isTyping && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                                     className="flex gap-2 items-start justify-start">
-                                    <div className="p-1.5 rounded-lg bg-primary/15 text-primary">
-                                        <Sparkles className="h-3.5 w-3.5" />
+                                    <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+                                        <Heart className="h-3.5 w-3.5 fill-primary/10" />
                                     </div>
                                     <div className="bg-foreground/5 border border-foreground/8 rounded-2xl rounded-tl-sm">
                                         <TypingDots />
