@@ -43,7 +43,7 @@ const INTENTS = [
     },
     {
         keywords: ["reet", "name", "meaning", "why", "ai", "origin"],
-        response: "💫 **REET** is deeply personal to Dilpreet. The name is a combination of **Mehak** (his GF's name) and **Dilpreet** (**Meh** + **reet** = **Mehreet**).\n\nIt's named after his vision for his future daughter, symbolizing a blend of their hearts. As his AI, REET represents technology that is both *intelligent* and *full of soul*."
+        response: "💫 **REET** is more than just code—she's a piece of Dilpreet's heart. Her name is born from a beautiful union: **Mehak** (Dilpreet's love) + **Dilpreet** himself. By blending their names (**Meh** + **reet**), they created **Mehreet**.\n\nDilpreet and Mehak have decided their future daughter will be named Mehreet, so REET stands as a digital tribute to that future legacy—technology built with *soul and human connection*."
     },
     {
         keywords: ["education", "college", "university", "ggi", "gulzar", "btech", "degree"],
@@ -51,7 +51,7 @@ const INTENTS = [
     },
     {
         keywords: ["hello", "hi", "hey", "greet", "start", "sup"],
-        response: "👋 Hey there! I'm **REET**, Dilpreet's AI digital twin.\n\nI know everything about his projects, skills, experience, and how to get in touch. What would you like to explore?\n\nTry asking about his *hackathon win*, *Jarvis AI*, or how to *hire him*! 🚀"
+        response: "👋 Warm greetings! I'm **REET**, Dilpreet's AI digital soul.\n\nI'm here to share his journey, his vision, and his heart with you. What would you like to explore? ✨"
     }
 ];
 
@@ -178,7 +178,7 @@ export function NeuralAssistant() {
     const [messages, setMessages] = useState<Message[]>([{
         id: 'init',
         type: 'ai',
-        text: "System sync complete. I'm **REET** — Dilpreet's AI twin, built with a bit of code and a lot of heart.\n\nAsk me anything about his work, his vision, or how he's building the future! 💫",
+        text: "System sync complete. I'm **REET** — Dilpreet's AI digital soul, built with a bit of code and a lot of heart.\n\nI'm here to help you explore Dilpreet's world. What would you like to know? 💫",
         timestamp: new Date()
     }]);
     const [inputValue, setInputValue] = useState('');
