@@ -12,17 +12,31 @@ import Magnetic from "@/components/ui/magnetic";
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isDark, setIsDark] = useState(true);
+  const [clockTime, setClockTime] = useState("");
+  const [isDay, setIsDay] = useState(true);
 
   useEffect(() => {
-    // Always start in dark mode
     document.documentElement.classList.add("dark");
     setIsDark(true);
 
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const updateClock = () => {
+      const now = new Date();
+      const ist = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 5.5 * 3600000);
+      const h = ist.getHours();
+      const m = ist.getMinutes().toString().padStart(2, "0");
+      const ampm = h >= 12 ? "PM" : "AM";
+      setClockTime(`${h % 12 || 12}:${m} ${ampm}`);
+      setIsDay(h >= 6 && h < 20);
     };
+    updateClock();
+    const clockId = setInterval(updateClock, 1000);
+
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      clearInterval(clockId);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const scrollTo = (id: string) => {
@@ -74,6 +88,12 @@ export default function Navbar() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
             </button>
           ))}
+
+          {/* IST Clock */}
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/10 bg-foreground/5 text-xs font-mono text-muted-foreground select-none">
+            <span>{isDay ? "☀️" : "🌙"}</span>
+            <span>{clockTime} IST</span>
+          </div>
 
           {/* Theme Toggle */}
           <button

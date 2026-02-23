@@ -10,7 +10,6 @@ import Contact from "@/components/sections/Contact";
 import CursorGlow from "@/components/ui/cursor-glow";
 import AITerminal from "@/components/ui/ai-terminal";
 import { NeuralAssistant } from "@/components/ui/neural-assistant";
-import FloatingClock from "@/components/ui/floating-clock";
 import MusicPlayer from "@/components/ui/music-player";
 import EasterEgg from "@/components/ui/easter-egg";
 import TechStackBadge from "@/components/ui/tech-stack-badge";
@@ -18,47 +17,32 @@ import TechStackBadge from "@/components/ui/tech-stack-badge";
 export default function Home() {
   return (
     <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative">
+      {/* Fixed overlays */}
       <CursorGlow />
       <AITerminal />
       <NeuralAssistant />
-      <FloatingClock />
       <MusicPlayer />
       <EasterEgg />
-      <TechStackBadge />
       <ScrollProgress />
       <Navbar />
 
+      {/* Page sections */}
       <Hero />
 
-      <div id="skills">
-        <Skills />
-      </div>
+      <div id="skills"><Skills /></div>
+      <div id="experience"><Experience /></div>
+      <div id="certifications"><Certifications /></div>
+      <div id="projects"><Projects /></div>
+      <div id="growth"><Growth /></div>
+      <div id="contact"><Contact /></div>
 
-      <div id="experience">
-        <Experience />
-      </div>
-
-      <div id="certifications">
-        <Certifications />
-      </div>
-
-      <div id="projects">
-        <Projects />
-      </div>
-
-      <div id="growth">
-        <Growth />
-      </div>
-
-      <div id="contact">
-        <Contact />
-      </div>
-
-      <footer className="py-12 border-t border-foreground/10 text-center text-sm text-muted-foreground bg-background/40 backdrop-blur-sm">
-        <div className="container px-4">
+      {/* Footer */}
+      <footer className="border-t border-foreground/10 text-center text-sm text-muted-foreground bg-background/40 backdrop-blur-sm">
+        {/* Built with badge — in-page, not floating */}
+        <TechStackBadge />
+        <div className="container px-4 pb-10">
           <p className="mb-2 font-display font-medium text-foreground">DILPREET SINGH</p>
-          <p>© 2025 • Designed with precision and crafted with passion.</p>
-          <p className="mt-4 text-xs opacity-50">Built with React 19, Tailwind CSS 4 & Three.js</p>
+          <p>© 2026 • Designed with precision and crafted with passion.</p>
         </div>
       </footer>
     </main>
