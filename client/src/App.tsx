@@ -5,8 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
-import SplashScreen from "@/components/SplashScreen";
-import { useState } from "react";
 
 function Router() {
   return (
@@ -18,12 +16,9 @@ function Router() {
 }
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
         <Toaster />
         <Router />
       </TooltipProvider>

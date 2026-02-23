@@ -2,45 +2,12 @@ import { motion } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram, Download } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
 import Magnetic from "@/components/ui/magnetic";
 
 const FULL_TEXT = "DILPREET SINGH";
-const TYPING_SPEED = 80;
 
 export default function Hero() {
-  const [displayText, setDisplayText] = useState(FULL_TEXT);
-  const [isTyping, setIsTyping] = useState(false);
-  const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const startTyping = () => {
-    if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
-    setIsTyping(true);
-    setDisplayText("");
-    let index = 0;
-    typingIntervalRef.current = setInterval(() => {
-      if (index < FULL_TEXT.length) {
-        setDisplayText(FULL_TEXT.substring(0, index + 1));
-        index++;
-      } else {
-        if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
-        setIsTyping(false);
-      }
-    }, TYPING_SPEED);
-  };
-
-  // Typewriter ONLY on theme toggle — never on initial load
-  useEffect(() => {
-    const handleThemeToggle = () => setTimeout(() => startTyping(), 350);
-    window.addEventListener("themeToggled", handleThemeToggle);
-    return () => {
-      window.removeEventListener("themeToggled", handleThemeToggle);
-      if (typingIntervalRef.current) clearInterval(typingIntervalRef.current);
-    };
-  }, []);
-
   return (
-
     <section id="hero" className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
       <Scene />
@@ -58,18 +25,11 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary border border-primary/20 backdrop-blur-md mb-4"
           >
-            AIML Specialist & Python Developer
+            AIML Specialist &amp; Python Developer
           </motion.div>
 
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
-            <span data-testid="text-typing-dilpreet">{displayText}</span>
-            {isTyping && (
-              <motion.span
-                animate={{ opacity: [1, 0] }}
-                transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle"
-              />
-            )}
+            {FULL_TEXT}
           </h1>
 
           <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.</p>
@@ -120,6 +80,7 @@ export default function Hero() {
           </div>
         </motion.div>
       </div>
+
       {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -127,10 +88,7 @@ export default function Hero() {
         transition={{ delay: 1.5, duration: 1 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 text-muted-foreground"
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
+        <motion.div animate={{ y: [0, 10, 0] }} transition={{ repeat: Infinity, duration: 2 }}>
           <ArrowDown className="h-6 w-6" />
         </motion.div>
       </motion.div>
