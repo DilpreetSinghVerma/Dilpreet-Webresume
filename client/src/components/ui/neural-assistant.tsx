@@ -1,134 +1,203 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Bot, Sparkles, User, ChevronRight } from 'lucide-react';
+import { MessageSquare, X, Send, Sparkles, User, ChevronRight, Copy, Check, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 
-interface Intent {
-    keywords: string[];
-    response: string;
-}
-
-interface KnowledgeBase {
-    profile: {
-        name: string;
-        role: string;
-        location: string;
-        education: string;
-        philosophy: string;
-    };
-    intents: Intent[];
-}
-
-// The "Brain" - Knowledge base for the AI
-const KNOWLEDGE_BASE: KnowledgeBase = {
-    profile: {
-        name: "Dilpreet Singh",
-        role: "Python Developer & AIML Specialist",
-        location: "Ludhiana, India",
-        education: "B.Tech in Computer Science at Gulzar Group of Institutions (GGI), Batch of 2026",
-        philosophy: "Merging technical precision with creative design to solve real-world problems."
+// ─── Knowledge Base ───────────────────────────────────────────────────────────
+const INTENTS = [
+    {
+        keywords: ["hackathon", "competition", "quantum", "silent", "coders", "win", "top 30", "achievement", "ggi"],
+        response: "🏆 Dilpreet's team **Silent Coders** placed in the **Top 30** at the *'Prompt The Future' Next Quantum 3.0 Hackathon* hosted by GGI!\n\nIn just 24 hours they built a real-time **AI Sign Language Translator** — converting speech into 3D avatar animations for both ASL & ISL. This was recognized for its technical depth and strong social impact on the hearing-impaired community."
     },
-    intents: [
-        {
-            keywords: ["hackathon", "competition", "quant", "future", "silent", "coders", "win", "achievement"],
-            response: "Dilpreet recently made waves at the 'Prompt The Future' Next Quantum 3.0 Hackathon! Out of numerous teams, his team 'Silent Coders' secured a spot in the Top 30. They built an AI-powered sign language translator that works in real-time, converting speech to 3D avatars. It was a rigorous 24-hour sprint that proved their ability to deliver under pressure."
-        },
-        {
-            keywords: ["skill", "tech", "stack", "language", "python", "machine", "learning", "ai", "react", "tailwind"],
-            response: "Dilpreet's technical arsenal is deep. He is a specialist in Python (both core and advanced) and AI/ML. For logic, he uses TensorFlow and OpenAI APIs. For the web, he builds with React 19 and Tailwind CSS. He's also proficient in Linux systems, Data Structures (DSA), and professional design tools like Photoshop."
-        },
-        {
-            keywords: ["jarvis", "assistant", "voice", "openai", "project"],
-            response: "Jarvis is a premier project in Dilpreet's portfolio. It's a sophisticated virtual assistant built in Python. Unlike basic scripts, it integrates OpenAI's powerful logic to understand complex voice commands, making it a true demonstration of his AI integration skills."
-        },
-        {
-            keywords: ["contact", "email", "hire", "talk", "reach", "social", "github", "linkedin", "instagram"],
-            response: "You can reach Dilpreet via email at dilpreetsinghverma@gmail.com. You can also track his production code on GitHub (DilpreetSinghVerma) or connect on LinkedIn. He's currently open to collaborations and new career opportunities!"
-        },
-        {
-            keywords: ["who", "dilpreet", "background", "about", "story"],
-            response: "Dilpreet Singh is a Ludhiana-based developer who specializes in the intersection of Python and Machine Learning. With a strong foundation in Computer Science from GGI, he consistently pushes the boundaries of UI/UX while keeping the backend logic robust and intelligent."
-        },
-        {
-            keywords: ["sign", "language", "translator", "3d", "avatar", "deaf"],
-            response: "The Sign Language Translator was Dilpreet's Hackathon masterpiece. It bridges the gap for the hearing and speech impaired by using AI to convert spoken words into clear, accurate 3D animations of Sign Language (supporting ASL and ISL) in real-time."
-        },
-        {
-            keywords: ["experience", "work", "job", "intern", "aiesec", "ggi"],
-            response: "Dilpreet has diverse experience, including a Google Student Ambassador role at GGI and an Ambassador Internship at AIESEC in Patiala. He has also worked as a Graphic Designer and provided technical support in photography studios, showing his versatility."
-        },
-        {
-            keywords: ["why", "purpose", "mission", "goal"],
-            response: "Dilpreet's mission is to build software that has social impact. Whether it's helping the deaf community through sign language translation or making daily life easier with AI assistants, he aims to use his Python and ML skills for good."
-        },
-        {
-            keywords: ["name", "meaning", "reet", "origin"],
-            response: "The name 'REET' is deeply significant to Dilpreet. It represents a tradition of love and wisdom (inspired by the name Mehreet). It symbolizes his vision of technology that is both intelligent and heart-centered."
-        }
-    ]
-};
-
-const INITIAL_MESSAGE = {
-    id: 'init',
-    type: 'ai',
-    text: "Neural engine synchronized. I am REET, Dilpreet's AI digital twin. Ask me anything about his Top 100 Hackathon win, his AI architectures, or his vision as a developer.",
-    timestamp: new Date()
-};
-
-const SUGGESTIONS = [
-    "Tell me about the Hackathon win",
-    "What is your technical stack?",
-    "Show me your AI projects",
-    "How can I hire you?"
+    {
+        keywords: ["skill", "tech", "stack", "python", "machine learning", "ml", "ai", "react", "tensorflow", "language"],
+        response: "⚡ Dilpreet's core tech stack:\n\n**AI / ML:** Python, TensorFlow, OpenAI API, NLP\n**Web:** React 19, Tailwind CSS 4, Three.js\n**Tools:** Photoshop, CorelDraw, Linux\n**Concepts:** DSA, System Design, REST APIs\n\nHis superpower is bridging *intelligent backends* with *stunning frontends*."
+    },
+    {
+        keywords: ["jarvis", "assistant", "voice", "openai", "project", "virtual"],
+        response: "🤖 **Jarvis** is Dilpreet's flagship AI project — a Python-powered voice assistant that goes far beyond basic commands.\n\nIt integrates **OpenAI GPT** for intelligent conversation, **Speech Recognition** for voice input, and custom **TTS** for natural voice responses. It can control system tasks, retrieve real-time info, and hold context-aware conversations."
+    },
+    {
+        keywords: ["sign", "language", "translator", "3d", "avatar", "deaf", "isl", "asl", "accessibility"],
+        response: "🤟 The **Silent Coders Sign Language Translator** bridges communication for the hearing-impaired.\n\nTech used: Python + TensorFlow for NLP, Blender-based 3D avatar animations, and a real-time gesture-to-animation pipeline. It supports **both ASL & ISL** and was built in a 24-hour hackathon sprint. Truly a project built for social impact."
+    },
+    {
+        keywords: ["contact", "email", "hire", "talk", "reach", "social", "github", "linkedin", "instagram", "recruit"],
+        response: "📬 Here's how to connect with Dilpreet:\n\n✉️ **Email:** dilpreetsinghverma@gmail.com\n💼 **LinkedIn:** dilpreet-singh-709b35310\n🐙 **GitHub:** DilpreetSinghVerma\n📸 **Instagram:** @dilpreet_singh_verma\n\nHe is actively **open to internships and collaborations** in AI/ML and web development!"
+    },
+    {
+        keywords: ["who", "dilpreet", "background", "about", "story", "introduce", "yourself"],
+        response: "👨‍💻 **Dilpreet Singh** is a B.Tech CSE student (Batch 2026) at Gulzar Group of Institutions, Ludhiana.\n\nHe specializes in **AI/ML and Python development**, with a design-conscious eye for building beautiful, functional software. His mission: *use technology for meaningful social impact* — demonstrated through projects like the Sign Language Translator and Jarvis AI."
+    },
+    {
+        keywords: ["experience", "work", "job", "intern", "aiesec", "ambassador", "google"],
+        response: "💼 Dilpreet's experience includes:\n\n🔷 **Google Student Ambassador** at GGI — promoting Google technologies and developer culture\n🔷 **AIESEC Ambassador Intern** in Patiala — cross-cultural leadership & global initiatives\n🔷 **Graphic Designer** — professional design work using Photoshop & CorelDraw\n🔷 **Photography Studio Support** — technical & creative role\n\nA versatile profile showing both technical and soft skills!"
+    },
+    {
+        keywords: ["certif", "course", "tata", "forage", "eduskills", "google", "learning", "course"],
+        response: "📜 Dilpreet's certifications include:\n\n🏅 **Top 30 - Prompt The Future Hackathon** (GGI, 2026)\n🏅 **10-Week AI-ML Virtual Internship** (EduSkills × Google Developers)\n🏅 **Tata iQ Data Analytics Simulation** (Forage, 2025)\n🏅 **AI Fundamentals** (Great Learning Academy)\n🏅 **Digital Logo Design - 2nd Place** (GNE ACME 2025)\n🏅 **Adobe Photoshop & CorelDraw** (CETI, 2019)"
+    },
+    {
+        keywords: ["project", "portfolio", "work", "build", "code", "github"],
+        response: "🚀 Dilpreet's key projects:\n\n1️⃣ **Jarvis AI** — Python voice assistant with OpenAI GPT integration\n2️⃣ **Silent Coders Translator** — Real-time AI sign language → 3D avatar\n3️⃣ **Perfect Guess** — Algorithmic number game in Python\n4️⃣ **Snake Water Gun** — Python logic game\n5️⃣ **This Portfolio** — Built with React 19, Three.js & Tailwind CSS 4\n\nClick any project card on the site for a full case study!"
+    },
+    {
+        keywords: ["reet", "name", "meaning", "why", "ai"],
+        response: "💫 **REET** is deeply personal to Dilpreet — it's inspired by *Mehreet*, symbolizing a tradition of love and wisdom.\n\nAs his AI, REET represents technology that is both *intelligent* and *heart-centered* — just like Dilpreet's philosophy of building software that truly helps people."
+    },
+    {
+        keywords: ["education", "college", "university", "ggi", "gulzar", "btech", "degree"],
+        response: "🎓 Dilpreet is pursuing his **B.Tech in Computer Science** at *Gulzar Group of Institutions (GGI)*, Ludhiana — graduating in **2026**.\n\nHis specialization is **AI & Machine Learning**. Alongside academics, he actively participates in hackathons, ambassador programs, and open-source projects."
+    },
+    {
+        keywords: ["hello", "hi", "hey", "greet", "start", "sup"],
+        response: "👋 Hey there! I'm **REET**, Dilpreet's AI digital twin.\n\nI know everything about his projects, skills, experience, and how to get in touch. What would you like to explore?\n\nTry asking about his *hackathon win*, *Jarvis AI*, or how to *hire him*! 🚀"
+    }
 ];
 
+const FALLBACK = "🤔 I'm still learning! But I can tell you about Dilpreet's **hackathon win**, **Jarvis AI**, **tech skills**, **certifications**, or how to **get in touch**. Which interests you?";
+
+const SUGGESTIONS = [
+    "Tell me about the hackathon win 🏆",
+    "What's his tech stack? ⚡",
+    "Show me his projects 🚀",
+    "How can I hire him? 📬",
+];
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+interface Message {
+    id: string;
+    type: 'ai' | 'user';
+    text: string;
+    timestamp: Date;
+    streaming?: boolean;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function matchIntent(input: string): string {
+    const text = input.toLowerCase();
+    let best: typeof INTENTS[0] | null = null;
+    let topScore = 0;
+
+    for (const intent of INTENTS) {
+        let score = 0;
+        for (const kw of intent.keywords) {
+            if (text.includes(kw)) score += kw.split(' ').length; // multi-word phrases score higher
+        }
+        if (score > topScore) { topScore = score; best = intent; }
+    }
+
+    return best ? best.response : FALLBACK;
+}
+
+// Render **bold** markdown-lite
+function renderText(text: string) {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) =>
+        part.startsWith('**') && part.endsWith('**')
+            ? <strong key={i} className="text-foreground font-semibold">{part.slice(2, -2)}</strong>
+            : <span key={i}>{part}</span>
+    );
+}
+
+// ─── Typing indicator ─────────────────────────────────────────────────────────
+function TypingDots() {
+    return (
+        <div className="flex gap-1 items-center px-3 py-2">
+            {[0, 1, 2].map(i => (
+                <motion.div key={i} className="h-1.5 w-1.5 rounded-full bg-primary"
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }} />
+            ))}
+        </div>
+    );
+}
+
+// ─── Message bubble ───────────────────────────────────────────────────────────
+function MessageBubble({ msg }: { msg: Message }) {
+    const [copied, setCopied] = useState(false);
+    const isAI = msg.type === 'ai';
+
+    const copy = () => {
+        navigator.clipboard.writeText(msg.text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className={`flex gap-2 ${isAI ? 'justify-start' : 'justify-end'}`}
+        >
+            {isAI && (
+                <div className="mt-1 p-1.5 rounded-lg h-fit bg-primary/15 text-primary shrink-0">
+                    <Sparkles className="h-3.5 w-3.5" />
+                </div>
+            )}
+
+            <div className={`group relative max-w-[85%]`}>
+                <div className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-line ${isAI
+                        ? 'bg-foreground/5 border border-foreground/8 rounded-tl-sm text-foreground/90'
+                        : 'bg-primary text-primary-foreground rounded-tr-sm shadow-md shadow-primary/20'
+                    }`}>
+                    {isAI ? renderText(msg.text) : msg.text}
+                </div>
+
+                {/* Copy button for AI messages */}
+                {isAI && (
+                    <button onClick={copy}
+                        className="absolute -bottom-5 right-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-[10px] text-muted-foreground hover:text-primary">
+                        {copied ? <><Check className="h-3 w-3" /> Copied!</> : <><Copy className="h-3 w-3" /> Copy</>}
+                    </button>
+                )}
+
+                <p className="text-[9px] text-muted-foreground/50 mt-1 px-1">
+                    {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
+            </div>
+
+            {!isAI && (
+                <div className="mt-1 p-1.5 rounded-lg h-fit bg-foreground/5 text-muted-foreground shrink-0">
+                    <User className="h-3.5 w-3.5" />
+                </div>
+            )}
+        </motion.div>
+    );
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 export function NeuralAssistant() {
     const [isOpen, setIsOpen] = useState(false);
-    const [messages, setMessages] = useState([INITIAL_MESSAGE]);
+    const [messages, setMessages] = useState<Message[]>([{
+        id: 'init',
+        type: 'ai',
+        text: "Neural engine synchronized. I'm **REET** — Dilpreet's AI digital twin.\n\nAsk me about his hackathon win, Jarvis AI, tech stack, certifications, or how to hire him! 💫",
+        timestamp: new Date()
+    }]);
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [hasNewMsg, setHasNewMsg] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
+        scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
     }, [messages, isTyping]);
 
-    const processMessage = (input: string) => {
-        const text = input.toLowerCase();
-        let bestMatch: Intent | null = null;
-        let highestScore = 0;
-
-        // "Smart" Intent Matching Algorithm
-        KNOWLEDGE_BASE.intents.forEach(intent => {
-            let score = 0;
-            intent.keywords.forEach(keyword => {
-                if (text.includes(keyword)) {
-                    score += 1;
-                }
-            });
-
-            if (score > highestScore) {
-                highestScore = score;
-                bestMatch = intent;
-            }
-        });
-
-        let response = "";
-
-        if (bestMatch) {
-            response = (bestMatch as Intent).response;
-        } else if (text.length < 3) {
-            response = "I'm ready when you are. Ask me about Dilpreet's work!";
-        } else if (text.includes('hello') || text.includes('hi') || text.includes('hey')) {
-            response = "Greetings. I'm REET, the intelligence core for Dilpreet's portfolio. I can provide detailed insights into his projects, his hackathon success, and his technical expertise. What would you like to explore?";
-        } else {
-            response = "That inquiry requires a deeper search of my records. While I refine that, I can tell you about his 'Silent Coders' AI project, his Top 30 Hackathon achievement at GGI, or his advanced Python skills. Which of these interests you?";
+    useEffect(() => {
+        if (isOpen) {
+            setHasNewMsg(false);
+            setTimeout(() => inputRef.current?.focus(), 300);
         }
+    }, [isOpen]);
 
+    const respond = useCallback((text: string) => {
         setIsTyping(true);
+        const response = matchIntent(text);
+        const delay = 600 + Math.min(response.length * 1.5, 1400);
+
         setTimeout(() => {
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
@@ -137,173 +206,148 @@ export function NeuralAssistant() {
                 timestamp: new Date()
             }]);
             setIsTyping(false);
-        }, 1200);
-    };
+            if (!isOpen) setHasNewMsg(true);
+        }, delay);
+    }, [isOpen]);
 
-    const handleSend = (e?: React.FormEvent) => {
+    const handleSend = (e?: React.FormEvent, override?: string) => {
         e?.preventDefault();
-        if (!inputValue.trim()) return;
+        const text = (override ?? inputValue).trim();
+        if (!text || isTyping) return;
 
-        const userMessage = {
+        setMessages(prev => [...prev, {
             id: Date.now().toString(),
-            type: 'user' as const,
-            text: inputValue,
+            type: 'user',
+            text,
             timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, userMessage]);
+        }]);
         setInputValue('');
-        processMessage(inputValue);
+        respond(text);
     };
 
     return (
-        <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end">
-            {/* Chat Window */}
+        <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-3">
+
+            {/* ── Chat Window ────────────────────────────────── */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                        initial={{ opacity: 0, scale: 0.85, y: 16 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.8, y: 20 }}
-                        className="mb-4 w-[calc(100vw-2rem)] max-w-[400px]"
+                        exit={{ opacity: 0, scale: 0.85, y: 16 }}
+                        transition={{ type: 'spring', stiffness: 340, damping: 28 }}
+                        className="w-[calc(100vw-2rem)] max-w-[400px] flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+                        style={{ height: 'min(520px, 80dvh)' }}
                     >
-                        <Card className="flex flex-col h-[500px] bg-background/95 md:bg-background/80 md:backdrop-blur-2xl border-primary/20 shadow-2xl overflow-hidden">
-                            {/* Header */}
-                            <div className="p-4 bg-primary flex items-center justify-between text-primary-foreground">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white/10 rounded-lg">
-                                        <Sparkles className="h-5 w-5" />
+                        {/* Header */}
+                        <div className="px-4 py-3 bg-primary flex items-center justify-between shrink-0">
+                            <div className="flex items-center gap-2.5">
+                                <div className="relative">
+                                    <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
+                                        <Sparkles className="h-4 w-4 text-white" />
                                     </div>
-                                    <div>
-                                        <h3 className="font-bold text-sm tracking-widest uppercase">REET AI</h3>
-                                        <div className="flex items-center gap-1.5">
-                                            <div className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
-                                            <span className="text-[10px] opacity-80 uppercase font-mono">Core Intelligence</span>
-                                        </div>
-                                    </div>
+                                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-primary" />
                                 </div>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => setIsOpen(false)}
-                                    className="hover:bg-white/10"
-                                >
-                                    <X className="h-5 w-5" />
-                                </Button>
+                                <div>
+                                    <h3 className="font-bold text-xs tracking-[0.18em] text-white uppercase">REET AI</h3>
+                                    <p className="text-[9px] text-white/60 font-mono uppercase tracking-widest">Dilpreet's Digital Twin</p>
+                                </div>
                             </div>
+                            <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/15 transition-colors text-white">
+                                <X className="h-4 w-4" />
+                            </button>
+                        </div>
 
-                            {/* Messages Area */}
-                            <div
-                                ref={scrollRef}
-                                className="flex-1 overflow-y-auto p-4 space-y-4 font-sans scroll-smooth"
-                            >
-                                {messages.map((msg) => (
-                                    <motion.div
-                                        key={msg.id}
-                                        initial={{ opacity: 0, x: msg.type === 'ai' ? -10 : 10 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        className={`flex ${msg.type === 'ai' ? 'justify-start' : 'justify-end'}`}
-                                    >
-                                        <div className={`flex gap-2 max-w-[85%] ${msg.type === 'ai' ? 'flex-row' : 'flex-row-reverse'}`}>
-                                            <div className={`mt-1 p-1.5 rounded-md h-fit ${msg.type === 'ai' ? 'bg-primary/10 text-primary' : 'bg-foreground/5 text-foreground/40'}`}>
-                                                {msg.type === 'ai' ? <Bot className="h-4 w-4" /> : <User className="h-4 w-4" />}
-                                            </div>
-                                            <div className={`p-3 rounded-2xl text-sm leading-relaxed ${msg.type === 'ai'
-                                                ? 'bg-foreground/5 rounded-tl-none border border-foreground/5 shadow-sm'
-                                                : 'bg-primary text-primary-foreground rounded-tr-none shadow-md'
-                                                }`}>
-                                                {msg.text}
-                                            </div>
-                                        </div>
-                                    </motion.div>
+                        {/* Messages */}
+                        <div ref={scrollRef}
+                            className="flex-1 overflow-y-auto p-4 space-y-5 bg-background/95 backdrop-blur-xl">
+                            {messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)}
+                            {isTyping && (
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                    className="flex gap-2 items-start justify-start">
+                                    <div className="p-1.5 rounded-lg bg-primary/15 text-primary">
+                                        <Sparkles className="h-3.5 w-3.5" />
+                                    </div>
+                                    <div className="bg-foreground/5 border border-foreground/8 rounded-2xl rounded-tl-sm">
+                                        <TypingDots />
+                                    </div>
+                                </motion.div>
+                            )}
+                        </div>
+
+                        {/* Suggestions */}
+                        {messages.length < 3 && (
+                            <div className="px-3 pt-2 pb-0 bg-background/95 flex flex-wrap gap-1.5 shrink-0">
+                                {SUGGESTIONS.map(s => (
+                                    <button key={s} onClick={() => handleSend(undefined, s)}
+                                        className="text-[10px] px-2.5 py-1.5 rounded-full bg-foreground/5 border border-foreground/10 hover:border-primary/50 hover:bg-primary/10 hover:text-primary transition-all text-muted-foreground flex items-center gap-1">
+                                        {s} <ChevronRight className="h-2.5 w-2.5 opacity-60" />
+                                    </button>
                                 ))}
-                                {isTyping && (
-                                    <div className="flex justify-start gap-2">
-                                        <div className="p-1.5 rounded-md bg-primary/10 text-primary h-fit">
-                                            <Bot className="h-4 w-4" />
-                                        </div>
-                                        <div className="bg-foreground/5 p-3 rounded-2xl rounded-tl-none flex gap-1">
-                                            <div className="h-1.5 w-1.5 bg-foreground/20 rounded-full animate-bounce" />
-                                            <div className="h-1.5 w-1.5 bg-foreground/20 rounded-full animate-bounce [animation-delay:0.2s]" />
-                                            <div className="h-1.5 w-1.5 bg-foreground/20 rounded-full animate-bounce [animation-delay:0.4s]" />
-                                        </div>
-                                    </div>
-                                )}
                             </div>
+                        )}
 
-                            {/* Footer / Suggestions */}
-                            <div className="p-4 border-t border-foreground/5 bg-foreground/5">
-                                {messages.length < 3 && (
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {SUGGESTIONS.map((s) => (
-                                            <button
-                                                key={s}
-                                                onClick={() => {
-                                                    setInputValue(s);
-                                                    setTimeout(() => handleSend(), 100);
-                                                }}
-                                                className="text-[10px] sm:text-xs px-3 py-1.5 rounded-full bg-background/50 border border-foreground/10 hover:border-primary/50 hover:bg-primary/10 transition-all text-muted-foreground hover:text-primary flex items-center gap-1 group"
-                                            >
-                                                {s} <ChevronRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
-                                <form onSubmit={handleSend} className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        placeholder="Ask about Dilpreet..."
-                                        className="flex-1 bg-background border border-foreground/10 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
-                                    />
-                                    <Button type="submit" size="icon" className="rounded-xl h-10 w-10 shrink-0">
-                                        <Send className="h-4 w-4" />
-                                    </Button>
-                                </form>
-                            </div>
-                        </Card>
+                        {/* Input */}
+                        <form onSubmit={handleSend}
+                            className="p-3 border-t border-foreground/8 bg-background/95 flex gap-2 shrink-0">
+                            <input
+                                ref={inputRef}
+                                type="text"
+                                value={inputValue}
+                                onChange={e => setInputValue(e.target.value)}
+                                placeholder="Ask about Dilpreet..."
+                                disabled={isTyping}
+                                className="flex-1 bg-foreground/5 border border-foreground/10 focus:border-primary/40 rounded-xl px-3.5 py-2 text-sm focus:outline-none transition-all placeholder:text-muted-foreground/40 disabled:opacity-50"
+                            />
+                            <Button type="submit" size="icon" disabled={isTyping || !inputValue.trim()}
+                                className="rounded-xl h-9 w-9 shrink-0 shadow-lg shadow-primary/20">
+                                <Send className="h-3.5 w-3.5" />
+                            </Button>
+                        </form>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* Trigger Button - Floating Neural Orb */}
-            <motion.div
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+            {/* ── Orb Button ─────────────────────────────────── */}
+            <motion.button
+                onClick={() => setIsOpen(o => !o)}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
                 className="relative group"
+                aria-label="Open REET AI"
             >
-                <div className="absolute -inset-4 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/30 transition-all duration-500 animate-pulse" />
-                <Button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={`relative h-14 w-14 rounded-full shadow-2xl flex items-center justify-center border-2 border-white/20 overflow-hidden ${isOpen ? 'bg-background text-foreground' : 'bg-primary text-primary-foreground'
-                        }`}
-                >
+                {/* Glow ring */}
+                <span className="absolute -inset-3 rounded-full bg-primary/20 blur-xl group-hover:bg-primary/35 transition-all duration-500 animate-pulse pointer-events-none" />
+
+                <span className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 shadow-2xl transition-all duration-300 ${isOpen
+                        ? 'bg-background border-foreground/20 text-foreground'
+                        : 'bg-primary border-white/20 text-primary-foreground'
+                    }`}>
                     <AnimatePresence mode="wait">
                         {isOpen ? (
-                            <motion.div
-                                key="close"
-                                initial={{ rotate: -90, opacity: 0 }}
-                                animate={{ rotate: 0, opacity: 1 }}
-                                exit={{ rotate: 90, opacity: 0 }}
-                            >
-                                <X className="h-6 w-6" />
-                            </motion.div>
+                            <motion.span key="x"
+                                initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
+                                exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                                <X className="h-5 w-5" />
+                            </motion.span>
                         ) : (
-                            <motion.div
-                                key="open"
-                                initial={{ scale: 0, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0, opacity: 0 }}
-                                className="flex items-center justify-center"
-                            >
-                                <MessageSquare className="h-6 w-6 absolute" />
-                                <Sparkles className="h-3 w-3 absolute -top-1 -right-1 text-yellow-300 animate-pulse" />
-                            </motion.div>
+                            <motion.span key="chat"
+                                initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.2 }}
+                                className="flex items-center justify-center">
+                                <MessageSquare className="h-5 w-5" />
+                                <Zap className="h-2.5 w-2.5 absolute -top-0.5 -right-0.5 text-yellow-300 fill-yellow-300" />
+                            </motion.span>
                         )}
                     </AnimatePresence>
-                </Button>
-            </motion.div>
+                </span>
+
+                {/* Unread notification dot */}
+                {hasNewMsg && !isOpen && (
+                    <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }}
+                        className="absolute top-0 right-0 h-3.5 w-3.5 rounded-full bg-green-400 border-2 border-background" />
+                )}
+            </motion.button>
         </div>
     );
 }
