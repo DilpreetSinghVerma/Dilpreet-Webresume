@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Gamepad2, ShieldAlert, Languages, X, ExternalLink, Info, Github } from "lucide-react";
+import { Bot, Languages, X, ExternalLink, Info, Github } from "lucide-react";
 import { RevealText } from "@/components/ui/reveal-text";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -9,34 +9,17 @@ import { Button } from "@/components/ui/button";
 const projects = [
   {
     id: "jarvis",
-    title: "Jarvis Virtual Assistant",
-    description: "A high-level voice-controlled assistant integrating OpenAI for intelligent task automation and natural conversation.",
-    longDescription: "Jarvis is not just a script; it's a modular AI environment. It uses advanced Signal Processing for speech recognition and high-fidelity TTS for response. The core brain connects to OpenAI's GPT models via a secure API middleware, allowing for context-aware conversations and complex task orchestration like system control, email drafting, and real-time information retrieval.",
-    tech: ["Python", "OpenAI", "Speech Recognition", "TTS"],
+    title: "Jarvis-0.2 (AI Assistant)",
+    description: "A high-end, voice-activated AI assistant featuring a futuristic sci-fi HUD, dual-brain logic, and biometric security.",
+    longDescription: "Jarvis-0.2 is a sophisticated AI ecosystem featuring a futuristic sci-fi HUD. It implements dual-brain logic using Gemini 2.0 Flash and Llama 3.3, biometric security via facial recognition (MediaPipe/OpenCV), and real-time hardware monitoring. The interface is built with Glassmorphism and Neon UI themes using Eel for Python-JS integration.",
+    tech: ["Python", "Gemini 2.0", "Llama 3.3", "MediaPipe", "OpenCV", "Eel", "SpeechRecognition"],
     icon: Bot,
     gradient: "from-cyan-500/20 to-blue-500/20",
     span: "md:col-span-2 md:row-span-2",
     featured: true,
-    challenges: "Handling asynchronous speech buffers without blocking the main event loop was the primary challenge.",
-    solutions: "Implemented multi-threaded audio processing and an event-driven architecture using Python's asyncio."
-  },
-  {
-    id: "guess",
-    title: "Perfect Guess",
-    description: "Compact algorithmic game using Python logic.",
-    tech: ["Python", "Logic"],
-    icon: Gamepad2,
-    gradient: "from-purple-500/20 to-pink-500/20",
-    span: "md:col-span-1 md:row-span-1"
-  },
-  {
-    id: "snake",
-    title: "Snake Water Gun",
-    description: "Quick Python logic game implementation.",
-    tech: ["Logic", "Random"],
-    icon: ShieldAlert,
-    gradient: "from-emerald-500/20 to-green-500/20",
-    span: "md:col-span-1 md:row-span-1"
+    repoUrl: "https://github.com/DilpreetSinghVerma/Jarvis-0.2",
+    challenges: "Integrating low-latency facial recognition with multi-modal AI response streams while maintaining a high-performance HUD.",
+    solutions: "Leveraged MediaPipe for efficient landmark detection and asynchronous processing for AI API calls, unified through an Eel-based bridging layer."
   },
   {
     id: "silent",
@@ -215,7 +198,11 @@ export default function Projects() {
                 <Button variant="outline" className="rounded-xl border-foreground/10" onClick={() => setSelectedProject(null)}>
                   Close Analysis
                 </Button>
-                <Button className="rounded-xl gap-2 shadow-lg shadow-primary/20">
+                <Button
+                  className="rounded-xl gap-2 shadow-lg shadow-primary/20"
+                  onClick={() => selectedProject.repoUrl && window.open(selectedProject.repoUrl, '_blank')}
+                  disabled={!selectedProject.repoUrl}
+                >
                   <Github className="h-4 w-4" /> View Source <ExternalLink className="h-3 w-3" />
                 </Button>
               </div>
