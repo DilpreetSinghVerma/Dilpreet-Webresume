@@ -50,15 +50,19 @@ const INTENTS = [
         response: "🎓 Dilpreet is pursuing his **B.Tech in Computer Science** at *Gulzar Group of Institutions (GGI)*, Ludhiana — graduating in **2026**.\n\nHis specialization is **AI & Machine Learning**. Alongside academics, he actively participates in hackathons, ambassador programs, and open-source projects."
     },
     {
+        keywords: ["eventfold", "event", "album", "media", "management", "storage", "sharing", "qr", "flipbook"],
+        response: "📸 **EventFold** is Dilpreet's premium media management platform for events. It transforms how businesses share memories with clients.\n\nKey features include:\n✨ **Interactive 3D Flipbooks** for a luxury viewing experience\n🎫 **Automated QR Card generation** for physical table-card distribution\n💳 **Stripe-powered Subscriptions** for tiered business scaling\n🚀 Built with React, Express, and Neon PostgreSQL for massive scalability."
+    },
+    {
         keywords: ["hello", "hi", "hey", "greet", "start", "sup"],
         response: "👋 Warm greetings! I'm **REET**, Dilpreet's AI digital soul.\n\nI'm here to share his journey, his vision, and his heart with you. What would you like to explore? ✨"
     }
 ];
 
-const FALLBACK = "🤔 I'm still learning! But I can tell you about Dilpreet's **hackathon win**, **Jarvis AI**, **tech skills**, **certifications**, or how to **get in touch**. Which interests you?";
+const FALLBACK = "🤔 I'm still learning! But I can tell you about Dilpreet's **EventFold platform**, **hackathon win**, **Jarvis AI**, or his **tech skills**. Which interests you?";
 
 const SUGGESTIONS = [
-    "Tell me about the hackathon win 🏆",
+    "Tell me about EventFold 📸",
     "What's your tech stack? ⚡",
     "Show me the projects 🚀",
     "How can I reach Dilpreet? 📬",
@@ -302,8 +306,8 @@ export function NeuralAssistant() {
                                     <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-primary" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-xs tracking-[0.18em] text-white uppercase">REET AI</h3>
-                                    <p className="text-[9px] text-white/60 font-mono uppercase tracking-widest">Dilpreet's Digital Twin</p>
+                                    <h3 className="font-bold text-sm tracking-[0.18em] !text-white uppercase drop-shadow-sm">REET AI</h3>
+                                    <p className="text-[10px] !text-white/90 font-mono uppercase tracking-widest">Dilpreet's Digital Twin</p>
                                 </div>
                             </div>
                             <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/15 transition-colors text-white">
