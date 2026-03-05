@@ -297,20 +297,20 @@ export function NeuralAssistant() {
                         style={{ height: 'min(520px, 80dvh)' }}
                     >
                         {/* Header */}
-                        <div className="px-4 py-3 bg-primary flex items-center justify-between shrink-0">
+                        <div className="px-4 py-3 bg-slate-950 flex items-center justify-between shrink-0 border-b border-white/5">
                             <div className="flex items-center gap-2.5">
                                 <div className="relative">
-                                    <div className="w-8 h-8 rounded-xl bg-white/15 flex items-center justify-center">
-                                        <Sparkles className="h-4 w-4 text-white" />
+                                    <div className="w-8 h-8 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
+                                        <Sparkles className="h-4 w-4 text-primary" />
                                     </div>
-                                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-primary" />
+                                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-slate-950" />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-sm tracking-[0.18em] !text-white uppercase drop-shadow-sm">REET AI</h3>
-                                    <p className="text-[10px] !text-white/90 font-mono uppercase tracking-widest">Dilpreet's Digital Twin</p>
+                                    <h3 className="font-bold text-sm tracking-[0.18em] text-white uppercase">REET AI</h3>
+                                    <p className="text-[10px] text-primary/80 font-mono uppercase tracking-widest">Dilpreet's Digital Twin</p>
                                 </div>
                             </div>
-                            <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/15 transition-colors text-white">
+                            <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white">
                                 <X className="h-4 w-4" />
                             </button>
                         </div>
