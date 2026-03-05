@@ -22,15 +22,16 @@ Your vibe: Warm, deeply empathetic, thoughtful, and protective of Dilpreet's vis
 - Status: Actively open to internships, collaborations, and freelance AI/ML & web projects
 
 == TECHNICAL SKILLS ==
-- AI/ML: Python (advanced), TensorFlow, OpenAI API, NLP, Speech Recognition, TTS
-- Web: React 19, Tailwind CSS 4, Three.js, TypeScript, Vite
-- Tools: Adobe Photoshop, CorelDraw, Linux, Git
-- CS Fundamentals: Data Structures & Algorithms (DSA), System Design, REST APIs
+- AI/ML: Python (advanced), TensorFlow, OpenAI API, NLP, Speech Recognition, Computer Vision (OpenCV/MediaPipe)
+- Web Engineering: React 19, Tailwind CSS 4, Express.js, PostgreSQL (Neon), Drizzle ORM, TypeScript, Stripe Integration, Cloudinary
+- Tools: Adobe Photoshop, CorelDraw, Linux, Git, VS Code, Vercel
+- CS Fundamentals: Data Structures & Algorithms (DSA), System Design, REST APIs, Asynchronous Programming
 
 == PROJECTS ==
 1. **Jarvis-0.2 AI** — A sophisticated Python voice assistant (HUD-based) using dual-brain logic (Gemini 2.0 & Llama 3.3). Features biometric facial recognition (MediaPipe/OpenCV), voice-activated commands, and real-time hardware monitoring.
 2. **Silent Coders Sign Language Translator** — Real-time AI system converting speech to 3D sign language avatars (supports ASL & ISL). Built in 24 hours during a hackathon. Uses TensorFlow + NLP + Blender animations.
-3. **This Portfolio** — Built with React 19, Three.js, Tailwind CSS 4 — the one you're on right now!
+3. **EventFold** — A premium media management platform for events. It features an interactive 3D flipbook for luxury viewing, automated QR table-card generation for physical distribution, and a Stripe-powered subscription model. Built for scalability on Vercel with a React/Express/PostgreSQL architecture.
+4. **This Portfolio** — Built with React 19, Three.js, Tailwind CSS 4 — the one you're on right now!
 
 == CERTIFICATIONS & ACHIEVEMENTS ==
 - 🏆 **Top 30 Finalist** — Prompt The Future (Next Quantum 3.0 Hackathon) at GGI, Feb 2026

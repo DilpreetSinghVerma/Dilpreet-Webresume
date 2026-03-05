@@ -39,7 +39,7 @@ const INTENTS = [
     },
     {
         keywords: ["project", "portfolio", "work", "build", "code", "github"],
-        response: "🚀 Dilpreet's key projects:\n\n1️⃣ **Jarvis-0.2 AI** — Dual-brain voice assistant with biometric security\n2️⃣ **Silent Coders Translator** — Real-time AI sign language → 3D avatar\n3️⃣ **This Portfolio** — Built with React 19, Three.js & Tailwind CSS 4\n\nClick any project card on the site for a full case study!"
+        response: "🚀 Dilpreet's key projects:\n\n1️⃣ **Jarvis-0.2 AI** — Dual-brain voice assistant with biometric security\n2️⃣ **EventFold** — Premium media platform with 3D Flipbooks & QR cards\n3️⃣ **Silent Coders Translator** — Real-time AI sign language → 3D avatar\n\nClick any project card on the site for a full case study!"
     },
     {
         keywords: ["reet", "name", "meaning", "why", "ai", "origin"],
@@ -239,11 +239,16 @@ export function NeuralAssistant() {
 
             const data = await res.json() as { response?: string; error?: string };
 
-            // Only use the API response if it returned a real answer
-            // Otherwise silently fall back to local knowledge base
-            const replyText = (res.ok && data.response)
-                ? data.response
-                : matchIntent(text);
+            // Training Priority: Lead with local knowledge if it's a high-confidence match (for specific projects)
+            // This ensures REET never says "I don't know" about Dilpreet's core work.
+            const localResponse = matchIntent(text);
+            const isLocalMatch = localResponse !== FALLBACK;
+
+            const replyText = (isLocalMatch && (text.toLowerCase().includes('eventfold') || text.toLowerCase().includes('jarvis')))
+                ? localResponse
+                : (res.ok && data.response)
+                    ? data.response
+                    : localResponse;
 
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
