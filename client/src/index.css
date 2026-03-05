@@ -100,8 +100,11 @@
 
 
 @layer base {
+
   /* Smooth theme transition on ALL elements */
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     @apply border-border;
     transition:
       background-color 0.45s ease,
@@ -113,7 +116,8 @@
   }
 
   /* Exclude transitions that break animations */
-  .no-transition, .no-transition * {
+  .no-transition,
+  .no-transition * {
     transition: none !important;
   }
 
@@ -166,4 +170,73 @@
   .section-gradient {
     background: radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.05) 0%, transparent 70%);
   }
+
+  .glitch-text {
+    animation: glitch 1.5s infinite;
+  }
+
+  @keyframes glitch {
+    0% {
+      transform: translate(0)
+    }
+
+    20% {
+      transform: translate(-2px, 2px)
+    }
+
+    40% {
+      transform: translate(-2px, -2px)
+    }
+
+    60% {
+      transform: translate(2px, 2px)
+    }
+
+    80% {
+      transform: translate(2px, -2px)
+    }
+
+    100% {
+      transform: translate(0)
+    }
+  }
+
+  @keyframes pulse-red {
+    0% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+
+    70% {
+      box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
+  }
+}
+
+.threat-mode {
+  --primary: 0 84% 60% !important;
+  --ring: 0 84% 60% !important;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+
+.threat-mode body::after {
+  content: "SYSTEM_COMPROMISED_MODE_ACTIVE";
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: hsl(var(--primary));
+  opacity: 0.3;
+  z-index: 1000;
+  pointer-events: none;
+  letter-spacing: 0.5em;
+}
+
+.threat-mode .border-glow {
+  box-shadow: 0 0 20px hsl(0 84% 60% / 0.5) !important;
+  animation: pulse-red 2s infinite;
 }

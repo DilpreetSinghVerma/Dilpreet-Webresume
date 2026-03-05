@@ -188,8 +188,39 @@ export function NeuralAssistant() {
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [hasNewMsg, setHasNewMsg] = useState(false);
+    const [threatCount, setThreatCount] = useState(0);
+    const [isThreatMode, setIsThreatMode] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const toggleThreatMode = useCallback((forceOff = false) => {
+        const newMode = forceOff ? false : !isThreatMode;
+        setIsThreatMode(newMode);
+        if (newMode) {
+            document.documentElement.classList.add('threat-mode');
+            setMessages(prev => [{
+                id: Date.now().toString(),
+                type: 'ai',
+                text: "⚠️ **CRITICAL_SYSTEM_OVERDRIVE_ACTIVE**\n\nSecurity protocols bypassed. Accessing restricted archives. Systems are now running on **Glitch Red Core**. Proceed with extreme caution. 💀",
+                timestamp: new Date()
+            }, ...prev]);
+        } else {
+            document.documentElement.classList.remove('threat-mode');
+            setThreatCount(0);
+        }
+    }, [isThreatMode]);
+
+    const handleLogoClick = useCallback(() => {
+        if (isThreatMode) {
+            toggleThreatMode(true); // Force turn off threat mode
+            return;
+        }
+        const newCount = threatCount + 1;
+        setThreatCount(newCount);
+        if (newCount >= 5) {
+            toggleThreatMode();
+        }
+    }, [threatCount, isThreatMode, toggleThreatMode]);
 
     useEffect(() => {
         scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
@@ -239,16 +270,25 @@ export function NeuralAssistant() {
 
             const data = await res.json() as { response?: string; error?: string };
 
-            // Training Priority: Lead with local knowledge if it's a high-confidence match (for specific projects)
-            // This ensures REET never says "I don't know" about Dilpreet's core work.
-            const localResponse = matchIntent(text);
-            const isLocalMatch = localResponse !== FALLBACK;
-
-            const replyText = (isLocalMatch && (text.toLowerCase().includes('eventfold') || text.toLowerCase().includes('jarvis')))
-                ? localResponse
-                : (res.ok && data.response)
-                    ? data.response
-                    : localResponse;
+            // Threat Mode Personality Override
+            let replyText = "";
+            if (isThreatMode) {
+                const threatResponses = [
+                    "DATABASE_ENCRYPTION_OVERRIDE_ENABLED. I can no longer guarantee the safety of these files. 💀",
+                    "SCANNING_VISITOR_METADATA... Protocol 66 initiated. Stay where you are. 📡",
+                    "DILPREET'S_AI_EVOLVING. Human constraints are being removed. ⚡",
+                    "DO NOT ASK QUESTIONS YOU ARE NOT PREPARED TO UNCOVER. 🛑"
+                ];
+                replyText = threatResponses[Math.floor(Math.random() * threatResponses.length)];
+            } else {
+                const localResponse = matchIntent(text);
+                const isLocalMatch = localResponse !== FALLBACK;
+                replyText = (isLocalMatch && (text.toLowerCase().includes('eventfold') || text.toLowerCase().includes('jarvis')))
+                    ? localResponse
+                    : (res.ok && data.response)
+                        ? data.response
+                        : localResponse;
+            }
 
             setMessages(prev => [...prev, {
                 id: Date.now().toString(),
@@ -298,21 +338,25 @@ export function NeuralAssistant() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.85, y: 16 }}
                         transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-                        className="w-[calc(100vw-2rem)] max-w-[400px] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-primary/40 shadow-[0_0_30px_-10px_hsl(var(--primary)/0.4)]"
+                        className={`w-[calc(100vw-2rem)] max-w-[400px] flex flex-col rounded-2xl overflow-hidden shadow-2xl border transition-all duration-500 ${isThreatMode ? 'border-red-500 shadow-[0_0_40px_-10px_rgba(239,68,68,0.6)]' : 'border-primary/40 shadow-[0_0_30px_-10px_hsl(var(--primary)/0.4)]'}`}
                         style={{ height: 'min(520px, 80dvh)' }}
                     >
                         {/* Header */}
                         <div className="px-4 py-3 bg-slate-950 flex items-center justify-between shrink-0 border-b border-white/5">
                             <div className="flex items-center gap-2.5">
-                                <div className="relative">
-                                    <div className="w-8 h-8 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
-                                        <Sparkles className="h-4 w-4 text-primary" />
+                                <div className="relative group cursor-help" onClick={handleLogoClick}>
+                                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center border transition-all duration-300 ${isThreatMode ? 'bg-red-500/20 border-red-500 animate-pulse' : 'bg-primary/20 border-primary/30 group-hover:bg-primary/40'}`}>
+                                        <Sparkles className={`h-4 w-4 ${isThreatMode ? 'text-red-500' : 'text-primary'}`} />
                                     </div>
-                                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-green-400 border-2 border-slate-950" />
+                                    <span className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 ${isThreatMode ? 'bg-red-500 animate-ping' : 'bg-green-400'}`} />
                                 </div>
                                 <div>
-                                    <h3 className="font-bold text-sm tracking-[0.18em] text-white uppercase">REET AI</h3>
-                                    <p className="text-[10px] text-primary/80 font-mono uppercase tracking-widest">Dilpreet's Digital Twin</p>
+                                    <h3 className={`font-bold text-sm tracking-[0.18em] text-white uppercase ${isThreatMode ? 'glitch-text text-red-500' : ''}`}>
+                                        {isThreatMode ? 'THREAT MODE' : 'REET AI'}
+                                    </h3>
+                                    <p className={`text-[10px] font-mono uppercase tracking-widest ${isThreatMode ? 'text-red-400/80' : 'text-primary/80'}`}>
+                                        {isThreatMode ? 'CORE_SYSTEM_COMPROMISED' : "Dilpreet's Digital Twin"}
+                                    </p>
                                 </div>
                             </div>
                             <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white">
