@@ -1,10 +1,11 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Languages, X, ExternalLink, Info, Github, CalendarCheck } from "lucide-react";
 import { RevealText } from "@/components/ui/reveal-text";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import ProjectVisual from "@/components/3d/ProjectVisual";
 
 const projects = [
   {
@@ -51,6 +52,85 @@ const projects = [
   }
 ];
 
+function TiltCard({ project, index, onClick }: { project: any, index: number, onClick: () => void }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
+
+  function handleMouse(event: React.MouseEvent<HTMLDivElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const xPct = mouseX / rect.width - 0.5;
+    const yPct = mouseY / rect.height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  }
+
+  function handleMouseLeave() {
+    x.set(0);
+    y.set(0);
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ delay: index * 0.05 }}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      className={`${project.span} group relative cursor-pointer perspective-1000`}
+      onMouseMove={handleMouse}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+    >
+      <Card className="h-full bg-background/90 md:bg-background/40 md:backdrop-blur-xl border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
+        <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+
+        {/* Visual Accent */}
+        <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
+          <project.icon className="w-24 h-24" />
+        </div>
+
+        <CardHeader className={`${project.featured ? 'pt-10' : 'pt-6'} relative z-10`}>
+          <div className={`mb-4 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500`}>
+            <project.icon className="h-6 w-6" />
+          </div>
+          <CardTitle className={`${project.featured ? 'text-3xl' : 'text-xl'} font-bold tracking-tight flex items-center gap-2`}>
+            {project.title}
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="relative z-10 flex-1 flex flex-col justify-between">
+          <div>
+            <p className={`text-muted-foreground leading-relaxed ${project.featured ? 'text-lg mb-6' : 'text-sm mb-4'}`}>
+              {project.description}
+            </p>
+
+            {project.longDescription && (
+              <div className="text-[10px] font-bold text-primary flex items-center gap-1 mb-4 opacity-0 group-hover:opacity-100 transition-opacity translate-z-10">
+                <Info className="h-3 w-3" /> CLICK FOR CASE STUDY
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {project.tech.map((t: string) => (
+              <Badge key={t} variant="secondary" className="bg-foreground/5 border-foreground/10 text-[10px] uppercase font-mono group-hover:border-primary/40 transition-colors">
+                {t}
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+
+        <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-primary group-hover:w-full transition-all duration-700 shadow-[0_0_15px_rgba(var(--primary),0.8)]" />
+      </Card>
+    </motion.div>
+  );
+}
+
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<any>(null);
 
@@ -73,63 +153,13 @@ export default function Projects() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4">
           {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ delay: index * 0.05 }}
-              className={`${project.span} group relative cursor-pointer`}
-              onClick={() => project.longDescription && setSelectedProject(project)}
-            >
-              <Card className="h-full bg-background/90 md:bg-background/40 md:backdrop-blur-xl border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
-
-                {/* Visual Accent */}
-                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-20 transition-opacity">
-                  <project.icon className="w-24 h-24" />
-                </div>
-
-                <CardHeader className={`${project.featured ? 'pt-10' : 'pt-6'} relative z-10`}>
-                  <div className={`mb-4 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500`}>
-                    <project.icon className="h-6 w-6" />
-                  </div>
-                  <CardTitle className={`${project.featured ? 'text-3xl' : 'text-xl'} font-bold tracking-tight flex items-center gap-2`}>
-                    {project.title}
-                    {(project as any).isHackathon && (
-                      <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-500 border-amber-500/20">Hackathon</Badge>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-
-                <CardContent className="relative z-10 flex-1 flex flex-col justify-between">
-                  <div>
-                    <p className={`text-muted-foreground leading-relaxed ${project.featured ? 'text-lg mb-6' : 'text-sm mb-4'}`}>
-                      {project.description}
-                    </p>
-
-                    {project.longDescription && (
-                      <div className="text-[10px] font-bold text-primary flex items-center gap-1 mb-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Info className="h-3 w-3" /> CLICK FOR CASE STUDY
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.tech.map((t) => (
-                      <Badge key={t} variant="secondary" className="bg-foreground/5 border-foreground/10 text-[10px] uppercase font-mono group-hover:border-primary/40 transition-colors">
-                        {t}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-
-                {/* Bottom Border Glow */}
-                <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-primary group-hover:w-full transition-all duration-700 shadow-[0_0_15px_rgba(var(--primary),0.8)]" />
-              </Card>
-            </motion.div>
+            <TiltCard
+              key={project.id}
+              project={project}
+              index={index}
+              onClick={() => setSelectedProject(project)}
+            />
           ))}
-
         </div>
       </div>
 
@@ -163,6 +193,8 @@ export default function Projects() {
               </div>
 
               <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto">
+                <ProjectVisual projectId={selectedProject.id} />
+
                 <div>
                   <h4 className="text-sm font-mono uppercase text-muted-foreground mb-3 flex items-center gap-2">
                     <div className="h-1 w-4 bg-primary rounded-full" /> The Vision
