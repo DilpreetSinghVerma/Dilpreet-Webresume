@@ -5,7 +5,6 @@ import { Bot, Languages, X, ExternalLink, Info, Github, CalendarCheck } from "lu
 import { RevealText } from "@/components/ui/reveal-text";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import ProjectVisual from "@/components/3d/ProjectVisual";
 
 const projects = [
   {
@@ -193,7 +192,6 @@ export default function Projects() {
               </div>
 
               <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto">
-                <ProjectVisual projectId={selectedProject.id} />
 
                 <div>
                   <h4 className="text-sm font-mono uppercase text-muted-foreground mb-3 flex items-center gap-2">
