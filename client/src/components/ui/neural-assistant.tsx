@@ -293,7 +293,7 @@ export function NeuralAssistant() {
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.85, y: 16 }}
                         transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-                        className="w-[calc(100vw-2rem)] max-w-[400px] flex flex-col rounded-2xl overflow-hidden shadow-2xl"
+                        className="w-[calc(100vw-2rem)] max-w-[400px] flex flex-col rounded-2xl overflow-hidden shadow-2xl border border-primary/40 shadow-[0_0_30px_-10px_hsl(var(--primary)/0.4)]"
                         style={{ height: 'min(520px, 80dvh)' }}
                     >
                         {/* Header */}
