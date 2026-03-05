@@ -8,37 +8,37 @@ import Magnetic from "@/components/ui/magnetic";
 const skills = [
   {
     category: "Programming",
-    items: ["Python", "C", "Data Structures"],
+    items: ["Python", "C", "Data Structures", "TypeScript"],
     icon: Terminal,
     color: "text-emerald-400",
     level: 95
   },
   {
-    category: "Development Tools",
-    items: ["VS Code", "PyCharm", "Git", "Linux"],
+    category: "Web Engineering",
+    items: ["React", "Express", "PostgreSQL", "Drizzle", "Stripe"],
     icon: Code2,
     color: "text-blue-400",
-    level: 88
+    level: 90
   },
   {
     category: "Creative Tech",
     items: ["Adobe Photoshop", "CorelDraw", "Photography", "Videography"],
     icon: Palette,
     color: "text-purple-400",
-    level: 82
+    level: 85
   },
   {
     category: "AI & Fundamentals",
-    items: ["AI Fundamentals", "Machine Learning", "Problem Solving"],
+    items: ["AI Fundamentals", "Machine Learning", "Computer Vision"],
     icon: Cpu,
     color: "text-primary",
-    level: 75
+    level: 80
   }
 ];
 
 import { RevealText } from "@/components/ui/reveal-text";
 
-const tools = ["Python", "Machine Learning", "OpenAI", "React", "Linux", "Git", "VS Code", "Photoshop", "C", "Data Structures", "Tailwind CSS"];
+const tools = ["Python", "Machine Learning", "React", "PostgreSQL", "Express", "Stripe", "Git", "VS Code", "Photoshop", "Linux", "TypeScript", "Tailwind CSS"];
 
 export default function Skills() {
   return (

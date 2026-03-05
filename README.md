@@ -70,14 +70,24 @@ A high-performance, immersive 3D web portfolio built to showcase engineering exp
    ```
    *The client will be available at `http://localhost:5000`*
 
-## 🤖 Featured Project: Jarvis-0.2
+## 🤖 Featured Projects
 
+### 1. Jarvis-0.2
 This portfolio serves as the primary showcase for **Jarvis-0.2**, a high-end AI assistant featuring:
 - Biometric Facial Recognition (MediaPipe/OpenCV)
 - Dual-Brain Logic (Gemini 2.0 & Llama 3.3)
 - Real-time Hardware Monitoring HUD
 
 [View Jarvis-0.2 Repository](https://github.com/DilpreetSinghVerma/Jarvis-0.2)
+
+### 2. EventFold
+A premium event media management platform with:
+- Interactive 3D Flipbook component
+- Automated Luxury QR Card generation
+- Stripe-powered tier-based subscriptions
+- Scalable serverless architecture on Vercel
+
+[View EventFold Repository](https://github.com/DilpreetSinghVerma/EventFold)
 
 ## 📄 License
 

@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Languages, X, ExternalLink, Info, Github } from "lucide-react";
+import { Bot, Languages, X, ExternalLink, Info, Github, CalendarCheck } from "lucide-react";
 import { RevealText } from "@/components/ui/reveal-text";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,20 @@ const projects = [
     repoUrl: "https://github.com/DilpreetSinghVerma/Jarvis-0.2",
     challenges: "Integrating low-latency facial recognition with multi-modal AI response streams while maintaining a high-performance HUD.",
     solutions: "Leveraged MediaPipe for efficient landmark detection and asynchronous processing for AI API calls, unified through an Eel-based bridging layer."
+  },
+  {
+    id: "eventfold",
+    title: "EventFold",
+    description: "A premium event media management platform featuring interactive 3D flipbooks and luxury QR sharing.",
+    longDescription: "EventFold is a full-stack media management solution designed for businesses to showcase event albums. It features a custom interactive 3D flipbook for high-end viewing, automated QR card generation for physical distribution, and a robust Stripe-powered subscription model. Built for scalability using a serverless architecture on Vercel with Neon PostgreSQL.",
+    tech: ["React", "Express", "PostgreSQL", "Drizzle", "Stripe", "Cloudinary", "Vercel"],
+    icon: CalendarCheck,
+    gradient: "from-purple-500/20 to-blue-500/20",
+    span: "md:col-span-2 md:row-span-1",
+    featured: false,
+    repoUrl: "https://github.com/DilpreetSinghVerma/EventFold",
+    challenges: "Handling large media asset synchronization across serverless environments and managing complex subscription states.",
+    solutions: "Implemented optimized background sync processes, leveraged Cloudinary for media delivery, and unified subscription logic via Stripe webhooks."
   },
   {
     id: "silent",
@@ -116,17 +130,6 @@ export default function Projects() {
             </motion.div>
           ))}
 
-          {/* Decorative Placeholder for Bento Consistency */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="md:col-span-2 hidden md:flex rounded-2xl bg-gradient-to-br from-primary/5 to-transparent border border-foreground/5 items-center justify-center p-8 text-center"
-          >
-            <div>
-              <p className="text-sm font-mono text-primary/40 uppercase tracking-[0.2em] mb-2">System Status</p>
-              <p className="text-xl font-display font-medium text-foreground/20 italic">"The best way to predict the future is to create it."</p>
-            </div>
-          </motion.div>
         </div>
       </div>
 
