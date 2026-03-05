@@ -4,30 +4,38 @@
 [![Tech Stack](https://img.shields.io/badge/Tech-Stack-blue?style=for-the-badge&logo=react)](https://github.com/DilpreetSinghVerma/Dilpreet-Webresume)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-A high-performance, immersive 3D web portfolio built to showcase engineering expertise in AI/ML and Full-stack development. Featuring a futuristic Glassmorphic UI, real-time interactive components, and a custom-built AI assistant interface.
+A high-performance, immersive 3D web portfolio built to showcase engineering expertise in **AI/ML**, **Python**, and **Full-stack Development**. Featuring a futuristic Glassmorphic UI, real-time interactive components, and a custom-built AI assistant interface.
 
 ## 🚀 Key Features
 
-- **🌀 Immersive 3D HUD**: Interactive central core built with Three.js and React Three Fiber.
-- **🛡️ Case Study System**: Deep-dive modals for major projects like **Jarvis-0.2**.
+- **🌀 Immersive 3D HUD**: Interactive central core built with **Three.js** and **React Three Fiber**.
+- **🤖 REET AI (Digital Twin)**: A custom-built, soulful AI assistant integrated into the portfolio. She understands Dilpreet's journey, tech stack, and future vision.
+- **🛡️ Case Study System**: Deep-dive modals for major projects like **Jarvis-0.2** and **EventFold**.
 - **🎧 Intelligent Music Player**: Ambient background audio with seamless controls.
-- **📱 Ultra-Responsive**: Optimized for everything from mobile devices to ultra-wide monitors.
-- **✨ Micro-animations**: Fluid transitions powered by Framer Motion.
-- **🤖 REET Chat Interface**: A custom AI helper integration for portfolio navigation.
+- **�️ Interactive Interactivity**: Features like **3D Tilt Cards** and magnetic elements for a premium feel.
+- **✨ Micro-animations**: Fluid transitions powered by **Framer Motion**.
+- **�📱 Ultra-Responsive**: Optimized for everything from mobile devices to ultra-wide monitors.
+
+## 💀 Hidden Intelligence: Threat Mode
+
+This portfolio contains a secret **"Threat Mode"** override.
+- **Trigger**: Click REET AI's logo 5 times.
+- **Effect**: The system undergoes a red-glitch override, bypassing security protocols and revealing restricted AI personality logs.
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **Framework**: React 18+ (Vite)
+- **Framework**: React 19 (Vite)
 - **Styling**: Tailwind CSS 4.0
 - **Animations**: Framer Motion
 - **3D Rendering**: Three.js & React Three Fiber
 - **Components**: Radix UI & Shadcn UI
 
 ### Backend & Infrastructure
-- **Server**: Express.js
+- **Server**: Express.js & Vercel Serverless Functions
 - **Database**: PostgreSQL (via Neon)
 - **ORM**: Drizzle ORM
+- **API Integration**: Groq (Llama 3.1) for REET AI logic
 - **Deployment**: Vercel
 
 ## 📂 Project Structure
@@ -35,13 +43,13 @@ A high-performance, immersive 3D web portfolio built to showcase engineering exp
 ```bash
 ├── client/          # Frontend React application
 │   ├── src/
-│   │   ├── components/  # Reusable UI & Section components
+│   │   ├── components/  # Reusable UI & Section components (3D, layout, sections)
 │   │   ├── hooks/       # Custom React hooks
 │   │   ├── pages/       # Main entry pages
-│   │   └── lib/         # Utility functions
-├── server/          # Express backend & dynamic routes
+│   │   └── lib/         # Utility functions & API clients
+├── server/          # Express backend & local endpoints
 ├── shared/          # Shared Zod schemas & types
-└── api/             # Vercel serverless functions
+└── api/             # Vercel serverless functions (REET AI backend)
 ```
 
 ## ⚙️ Installation & Setup
@@ -61,6 +69,7 @@ A high-performance, immersive 3D web portfolio built to showcase engineering exp
    Create a `.env` file in the root directory:
    ```env
    DATABASE_URL=your_postgresql_url
+   GROQ_API_KEY=your_groq_api_key
    NODE_ENV=development
    ```
 
@@ -73,7 +82,7 @@ A high-performance, immersive 3D web portfolio built to showcase engineering exp
 ## 🤖 Featured Projects
 
 ### 1. Jarvis-0.2
-This portfolio serves as the primary showcase for **Jarvis-0.2**, a high-end AI assistant featuring:
+A high-end AI assistant featuring:
 - Biometric Facial Recognition (MediaPipe/OpenCV)
 - Dual-Brain Logic (Gemini 2.0 & Llama 3.3)
 - Real-time Hardware Monitoring HUD
