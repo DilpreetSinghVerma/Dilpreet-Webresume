@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Briefcase, GraduationCap, Award, Star, X, MapPin } from "lucide-react";
+import { Briefcase, GraduationCap, Award, Star, X, MapPin, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
 import { RevealText } from "@/components/ui/reveal-text";
 
@@ -97,8 +97,34 @@ const JOURNEY_ITEMS = [
 
 export default function Experience() {
   const [showAmbassadorModal, setShowAmbassadorModal] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [lightboxState, setLightboxState] = useState<{ images: string[]; currentIndex: number } | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const openLightbox = (images: string[], index: number) => {
+    setImageLoading(true);
+    setLightboxState({ images, currentIndex: index });
+  };
+
+  const nextLightboxImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!lightboxState) return;
+    setImageLoading(true);
+    setLightboxState({
+      ...lightboxState,
+      currentIndex: (lightboxState.currentIndex + 1) % lightboxState.images.length
+    });
+  };
+
+  const prevLightboxImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!lightboxState) return;
+    setImageLoading(true);
+    setLightboxState({
+      ...lightboxState,
+      currentIndex: (lightboxState.currentIndex - 1 + lightboxState.images.length) % lightboxState.images.length
+    });
+  };
 
   // Scroll logic for the glowing center line
   const { scrollYProgress } = useScroll({
@@ -207,11 +233,14 @@ export default function Experience() {
                             <div 
                               key={i} 
                               className="relative rounded-lg overflow-hidden border border-foreground/10 aspect-video bg-foreground/5 relative group/img cursor-pointer"
-                              onClick={() => setSelectedImage(src)}
+                              onClick={() => openLightbox((item as any).images, i)}
                             >
+                               {/* Use WebP format equivalent or modern HTML lazy loading for optimization */}
                                <img 
                                  src={src} 
                                  alt={`${item.title} photo ${i + 1}`} 
+                                 loading="lazy"
+                                 decoding="async"
                                  className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                                />
                                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -269,13 +298,13 @@ export default function Experience() {
           </motion.div>
         )}
 
-        {/* Dynamic Image Lightbox Modal */}
-        {selectedImage && (
+        {/* Dynamic Image Lightbox Modal with Carousel */}
+        {lightboxState && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setSelectedImage(null)}
+            onClick={() => setLightboxState(null)}
             className="fixed inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50 p-4 md:p-10"
           >
             <motion.div
@@ -284,20 +313,57 @@ export default function Experience() {
               exit={{ scale: 0.9, opacity: 0, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-5xl w-full max-h-[90vh] flex items-center justify-center border border-foreground/10 bg-black"
+              className="relative rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-5xl w-full max-h-[90vh] flex items-center justify-center border border-foreground/10 bg-black group/modal"
             >
               <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10 bg-black/50 backdrop-blur-md border border-white/10"
+                onClick={() => setLightboxState(null)}
+                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10"
               >
                 <X className="h-5 w-5 text-white" />
               </button>
+
+              {/* Loader */}
+              {imageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center z-0">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                </div>
+              )}
+
+              {/* Prev Button */}
+              {lightboxState.images.length > 1 && (
+                <button
+                  onClick={prevLightboxImage}
+                  className="absolute left-4 p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-0 group-hover/modal:opacity-100"
+                >
+                  <ChevronLeft className="h-6 w-6 text-white" />
+                </button>
+              )}
+
               {/* object-contain ensures the entire image fits inside without cropping */}
               <img
-                src={selectedImage}
+                key={lightboxState.images[lightboxState.currentIndex]}
+                src={lightboxState.images[lightboxState.currentIndex]}
                 alt="Expanded view"
-                className="w-full h-[90vh] object-contain"
+                className={`w-full h-[90vh] object-contain relative z-10 transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                onLoad={() => setImageLoading(false)}
               />
+
+              {/* Next Button */}
+              {lightboxState.images.length > 1 && (
+                <button
+                  onClick={nextLightboxImage}
+                  className="absolute right-4 p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-0 group-hover/modal:opacity-100"
+                >
+                  <ChevronRight className="h-6 w-6 text-white" />
+                </button>
+              )}
+
+              {/* Image Counter */}
+              {lightboxState.images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm font-mono bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-20">
+                  {lightboxState.currentIndex + 1} / {lightboxState.images.length}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
