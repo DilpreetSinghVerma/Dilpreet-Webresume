@@ -317,9 +317,9 @@ export default function Experience() {
             >
               <button
                 onClick={() => setLightboxState(null)}
-                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10"
+                className="absolute top-2 right-2 md:top-4 md:right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-30 bg-black/50 backdrop-blur-md border border-white/10"
               >
-                <X className="h-5 w-5 text-white" />
+                <X className="h-5 w-5 md:h-6 md:w-6 text-white" />
               </button>
 
               {/* Loader */}
@@ -333,9 +333,9 @@ export default function Experience() {
               {lightboxState.images.length > 1 && (
                 <button
                   onClick={prevLightboxImage}
-                  className="absolute left-4 p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-0 group-hover/modal:opacity-100"
+                  className="absolute left-2 md:left-4 p-2 md:p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-100 md:opacity-0 md:group-hover/modal:opacity-100"
                 >
-                  <ChevronLeft className="h-6 w-6 text-white" />
+                  <ChevronLeft className="h-5 w-5 md:h-6 md:w-6 text-white" />
                 </button>
               )}
 
@@ -352,9 +352,9 @@ export default function Experience() {
               {lightboxState.images.length > 1 && (
                 <button
                   onClick={nextLightboxImage}
-                  className="absolute right-4 p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-0 group-hover/modal:opacity-100"
+                  className="absolute right-2 md:right-4 p-2 md:p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-100 md:opacity-0 md:group-hover/modal:opacity-100"
                 >
-                  <ChevronRight className="h-6 w-6 text-white" />
+                  <ChevronRight className="h-5 w-5 md:h-6 md:w-6 text-white" />
                 </button>
               )}
 
