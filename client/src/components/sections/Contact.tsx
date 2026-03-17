@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Instagram, Send, Download, Loader2 } from "lucide-react";
+import { Mail, Github, Linkedin, Instagram, Send, Download, Loader2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RevealText } from "@/components/ui/reveal-text";
@@ -106,8 +106,17 @@ export default function Contact() {
                                 initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="pt-4"
+                                className="pt-4 flex flex-wrap gap-4"
                             >
+                                <a
+                                    href="/Dilpreet_Singh_Resume.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group relative inline-flex items-center gap-3 px-8 py-4 bg-primary/10 text-primary border border-primary/20 rounded-xl font-bold overflow-hidden transition-all hover:bg-primary/20 hover:border-primary/50 active:scale-95"
+                                >
+                                    <ExternalLink className="h-5 w-5" />
+                                    <span>View Resume</span>
+                                </a>
                                 <a
                                     href="/Dilpreet_Singh_Resume.pdf"
                                     download

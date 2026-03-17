@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
-import { ArrowDown, Github, Linkedin, Mail, Instagram, Download } from "lucide-react";
+import { ArrowDown, Github, Linkedin, Mail, Instagram, Download, ExternalLink } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import Magnetic from "@/components/ui/magnetic";
 
@@ -116,6 +116,25 @@ export default function Hero() {
                 </Button>
               </Magnetic>
 
+              {/* External Resume View */}
+              <Magnetic>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2"
+                  asChild
+                >
+                  <a
+                    href="/Dilpreet_Singh_Resume.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    View CV
+                  </a>
+                </Button>
+              </Magnetic>
+
               {/* AI-powered Resume download */}
               <Magnetic>
                 <Button
@@ -130,7 +149,7 @@ export default function Hero() {
                     onClick={handleResumeDownload}
                   >
                     <Download className="h-4 w-4 animate-bounce" />
-                    Resume
+                    Download
                   </a>
                 </Button>
               </Magnetic>
