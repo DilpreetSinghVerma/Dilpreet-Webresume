@@ -3,12 +3,14 @@ import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram, Download, ExternalLink } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useLocation } from "wouter";
 import Magnetic from "@/components/ui/magnetic";
 
 const FULL_TEXT = "DILPREET SINGH";
 const TYPING_SPEED = 80;
 
 export default function Hero() {
+  const [, setLocation] = useLocation();
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -122,16 +124,10 @@ export default function Hero() {
                   variant="outline"
                   size="lg"
                   className="rounded-full px-8 border-primary/20 hover:border-primary/50 bg-primary/5 backdrop-blur-md transition-all gap-2"
-                  asChild
+                  onClick={() => setLocation("/resume")}
                 >
-                  <a
-                    href="/Dilpreet_Singh_Resume.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <ExternalLink className="h-4 w-4" />
-                    View CV
-                  </a>
+                  <ExternalLink className="h-4 w-4" />
+                  View CV
                 </Button>
               </Magnetic>
 
