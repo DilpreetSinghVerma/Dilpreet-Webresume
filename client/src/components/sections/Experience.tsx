@@ -97,6 +97,7 @@ const JOURNEY_ITEMS = [
 
 export default function Experience() {
   const [showAmbassadorModal, setShowAmbassadorModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Scroll logic for the glowing center line
@@ -203,13 +204,21 @@ export default function Experience() {
                       {(item as any).images && (
                         <div className="mt-6 grid grid-cols-2 gap-3">
                           {(item as any).images.map((src: string, i: number) => (
-                            <div key={i} className="relative rounded-lg overflow-hidden border border-foreground/10 aspect-video bg-foreground/5 relative group/img">
+                            <div 
+                              key={i} 
+                              className="relative rounded-lg overflow-hidden border border-foreground/10 aspect-video bg-foreground/5 relative group/img cursor-pointer"
+                              onClick={() => setSelectedImage(src)}
+                            >
                                <img 
                                  src={src} 
                                  alt={`${item.title} photo ${i + 1}`} 
                                  className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                                />
-                               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                  <span className="text-white bg-black/50 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover/img:translate-y-0">
+                                    View Full
+                                  </span>
+                               </div>
                             </div>
                           ))}
                         </div>
@@ -255,6 +264,39 @@ export default function Experience() {
                 src="/gap-badge-full.jpg"
                 alt="Google Student Ambassador Badge"
                 className="w-full h-auto"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+
+        {/* Dynamic Image Lightbox Modal */}
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50 p-4 md:p-10"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-5xl w-full max-h-[90vh] flex items-center justify-center border border-foreground/10 bg-black"
+            >
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10 bg-black/50 backdrop-blur-md border border-white/10"
+              >
+                <X className="h-5 w-5 text-white" />
+              </button>
+              {/* object-contain ensures the entire image fits inside without cropping */}
+              <img
+                src={selectedImage}
+                alt="Expanded view"
+                className="w-full h-[90vh] object-contain"
               />
             </motion.div>
           </motion.div>
