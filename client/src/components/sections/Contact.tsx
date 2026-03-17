@@ -82,7 +82,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-muted-foreground">Email Me</p>
-                                    <p className="text-lg font-semibold">dilpreetsinghverma@gmail.com</p>
+                                    <p className="text-sm sm:text-base md:text-lg font-semibold break-all">dilpreetsinghverma@gmail.com</p>
                                 </div>
                             </a>
 

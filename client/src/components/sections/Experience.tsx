@@ -150,10 +150,10 @@ export default function Experience() {
             <MapPin className="h-4 w-4" />
             <span className="text-sm font-mono tracking-wider">MY JOURNEY</span>
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-display font-bold">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold leading-tight">
             <RevealText text="Experience & Education" />
           </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-lg">
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
             A timeline of my academic milestones, technical roles, and achievements.
           </p>
         </div>
