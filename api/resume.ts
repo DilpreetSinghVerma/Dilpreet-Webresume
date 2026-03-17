@@ -4,6 +4,7 @@ type VercelRequest = IncomingMessage & { body: any; query: Record<string, string
 type VercelResponse = ServerResponse & {
     json: (data: any) => VercelResponse;
     status: (code: number) => VercelResponse;
+    send: (data: any) => VercelResponse;
 };
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
@@ -11,7 +12,7 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(405).json({ error: "Method not allowed" });
     }
 
-    res.status(200).json({
+    const resumeData = {
         name: "Dilpreet Singh",
         role: "AIML Specialist & Python Developer",
         location: "Ludhiana, Punjab, India",
@@ -51,5 +52,9 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
             linkedin: "https://www.linkedin.com/in/dilpreet-singh-709b35310/"
         },
         message: "Hey fellow dev! Nice to see you looking around the APIs. Want to build something cool together? Shoot me an email! 🚀"
-    });
+    };
+
+    // Use JSON.stringify with a 2-space indent to pretty-print for terminal users (curl)
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    return res.status(200).send(JSON.stringify(resumeData, null, 2));
 }
