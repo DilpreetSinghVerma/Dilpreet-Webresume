@@ -34,16 +34,30 @@ const JOURNEY_ITEMS = [
     id: 3,
     type: "award",
     icon: Award,
+    title: "Top 30 Finalist - Prompt The Future Hackathon",
+    subtitle: "Next Quantum 3.0 | GGI",
+    date: "Feb 2026",
+    description: "Competed in an intensive 24-hour hackathon, developing AI-driven solutions and ranking among the Top 30 Finalists out of hundreds of participants.",
+    color: "text-purple-400",
+    bgColor: "bg-purple-500/10",
+    borderColor: "border-purple-400/30",
+    images: ["/achievements/Hacathon 1.jpg", "/achievements/Hackathon 2.jpg"]
+  },
+  {
+    id: 4,
+    type: "award",
+    icon: Award,
     title: "2nd Position - Digital Logo Designing",
     subtitle: "GNE's ACME 2025",
     date: "2025",
     description: "Represented Gulzar Group of Institutes at Guru Nanak Dev Engineering College. Demonstrated creativity and precision in digital design.",
     color: "text-yellow-400",
     bgColor: "bg-yellow-400/10",
-    borderColor: "border-yellow-400/30"
+    borderColor: "border-yellow-400/30",
+    images: ["/achievements/logo designing compitition 1.jpg", "/achievements/logo designing compitition 2.jpg", "/achievements/logo designing compitition 3.jpg", "/achievements/logo designing compitition 4.jpg"]
   },
   {
-    id: 4,
+    id: 5,
     type: "experience",
     icon: Briefcase,
     title: "Technical Support & Assistance",
@@ -55,7 +69,7 @@ const JOURNEY_ITEMS = [
     borderColor: "border-primary/30"
   },
   {
-    id: 5,
+    id: 6,
     type: "education",
     icon: GraduationCap,
     title: "12th Grade (90.2%)",
@@ -64,10 +78,11 @@ const JOURNEY_ITEMS = [
     description: "Completed Senior Secondary education with an outstanding academic record.",
     color: "text-muted-foreground",
     bgColor: "bg-muted/10",
-    borderColor: "border-muted/30"
+    borderColor: "border-muted/30",
+    images: ["/achievements/12th class last day.jpg"]
   },
   {
-    id: 6,
+    id: 7,
     type: "education",
     icon: GraduationCap,
     title: "10th Grade (74.9%)",
@@ -183,6 +198,22 @@ export default function Experience() {
                       <p className="text-muted-foreground leading-relaxed text-sm">
                         {item.description}
                       </p>
+
+                      {/* Attached Journey Images */}
+                      {(item as any).images && (
+                        <div className="mt-6 grid grid-cols-2 gap-3">
+                          {(item as any).images.map((src: string, i: number) => (
+                            <div key={i} className="relative rounded-lg overflow-hidden border border-foreground/10 aspect-video bg-foreground/5 relative group/img">
+                               <img 
+                                 src={src} 
+                                 alt={`${item.title} photo ${i + 1}`} 
+                                 className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
+                               />
+                               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
 
                       {item.isGoogle && (
                         <div className={`mt-4 inline-flex items-center gap-2 text-xs font-mono ${item.color} group-hover:underline`}>
