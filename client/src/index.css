@@ -174,7 +174,7 @@
   }
 
   .glass-dark {
-    @apply bg-background/60 backdrop-blur-xl border border-foreground/10;
+    @apply bg-background/60 backdrop-blur-md border border-foreground/10;
   }
 
   .section-gradient {
