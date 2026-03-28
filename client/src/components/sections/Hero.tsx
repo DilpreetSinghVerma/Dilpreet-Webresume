@@ -86,7 +86,7 @@ export default function Hero() {
 
             {/* Role pill */}
             <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary border border-primary/20 backdrop-blur-md">
-              AIML Specialist &amp; Python Developer
+              Founder @ EventFold Studio • AIML Student
             </div>
           </motion.div>
 
@@ -103,7 +103,7 @@ export default function Hero() {
           </h1>
 
           <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">
-            Motivated B.Tech CSE student specializing in Artificial Intelligence and Machine Learning. Demonstrated ability to quickly learn and adapt to new technologies. Committed to contributing to innovative projects while gaining practical industry experience.
+            Founder of <span className="text-foreground font-medium">EventFold Studio</span> and a B.Tech CSE student specializing in AIML. I'm passionate about bridging the gap between engineering and entrepreneurship by building scalable, real-world solutions.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">

@@ -23,17 +23,18 @@ const projects = [
   },
   {
     id: "eventfold",
-    title: "EventFold",
-    description: "A premium event media management platform featuring interactive 3D flipbooks and luxury QR sharing.",
-    longDescription: "EventFold is a full-stack media management solution designed for businesses to showcase event albums. It features a custom interactive 3D flipbook for high-end viewing, automated QR card generation for physical distribution, and a robust Stripe-powered subscription model. Built for scalability using a serverless architecture on Vercel with Neon PostgreSQL.",
-    tech: ["React", "Express", "PostgreSQL", "Drizzle", "Stripe", "Cloudinary", "Vercel"],
+    title: "EventFold Studio (Founder)",
+    description: "Founder & Lead Developer of a high-end SaaS platform for photographers featuring 3D cinematic albums and luxury QR sharing.",
+    longDescription: "EventFold Studio is a premium digital album ecosystem designed for luxury photography studios. It streamlines event media delivery with custom 3D flipbooks, automated branded QR generation, and real-time analytics. The platform features an AI-enhanced 'Motion Portrait' system and handles high-resolution media at scale using a serverless architecture on Vercel.",
+    tech: ["Next.js", "Express", "PostgreSQL", "Drizzle", "Stripe", "Clerk", "Framer Motion", "Cloudinary"],
     icon: CalendarCheck,
     gradient: "from-purple-500/20 to-blue-500/20",
-    span: "md:col-span-2 md:row-span-1",
-    featured: false,
+    span: "md:col-span-2 md:row-span-2",
+    featured: true,
     repoUrl: "https://github.com/DilpreetSinghVerma/EventFold",
-    challenges: "Handling large media asset synchronization across serverless environments and managing complex subscription states.",
-    solutions: "Implemented optimized background sync processes, leveraged Cloudinary for media delivery, and unified subscription logic via Stripe webhooks."
+    liveUrl: "https://www.eventfold.studio", // Updated based on business launch
+    challenges: "Scaling real-time 3D album rendering for high-traffic events while maintaining sub-second latency for 4K media assets.",
+    solutions: "Engineered a sophisticated multi-stage caching player and leveraged edge computing for dynamic album generation, resulting in a 60% faster load time for mobile users."
   },
   {
     id: "silent",
@@ -231,6 +232,15 @@ export default function Projects() {
                 <Button variant="outline" className="rounded-xl border-foreground/10" onClick={() => setSelectedProject(null)}>
                   Close Analysis
                 </Button>
+                {selectedProject.liveUrl && (
+                  <Button
+                    variant="default"
+                    className="rounded-xl gap-2 shadow-lg shadow-primary/20 bg-primary/20 text-primary hover:bg-primary/30"
+                    onClick={() => window.open(selectedProject.liveUrl, '_blank')}
+                  >
+                    <ExternalLink className="h-4 w-4" /> Visit Site
+                  </Button>
+                )}
                 <Button
                   className="rounded-xl gap-2 shadow-lg shadow-primary/20"
                   onClick={() => selectedProject.repoUrl && window.open(selectedProject.repoUrl, '_blank')}
