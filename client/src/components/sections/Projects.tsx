@@ -86,7 +86,7 @@ function TiltCard({ project, index, onClick }: { project: any, index: number, on
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
-      <Card className="h-full bg-background/90 md:bg-background/40 md:backdrop-blur-xl border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
+      <Card className="h-full bg-background/90 md:bg-background/40 md:backdrop-blur-md border-foreground/5 overflow-hidden flex flex-col hover:border-primary/30 transition-all duration-500 shadow-2xl">
         <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
 
         {/* Visual Accent */}

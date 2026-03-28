@@ -138,9 +138,9 @@ export default function Scene() {
       <Canvas
         camera={{ position: [0, 0, 2], fov: 45 }}
         gl={glConfig}
-        dpr={isMobile ? [1, 1] : [1, 1.2]}
+        dpr={isMobile ? [0.8, 1] : [1, 1.2]}
       >
-        <Stars count={isMobile ? 120 : 500} color={starColor} />
+        <Stars count={isMobile ? 60 : 500} color={starColor} />
         <AmbientGlow color={activeColor} position={[-1.5, 0.5, -1]} isMobile={isMobile} />
         <AmbientGlow color={isDark ? "#7c3aed" : "#8b5cf6"} position={[1.5, -0.5, -1]} isMobile={isMobile} />
 
