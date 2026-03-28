@@ -145,7 +145,7 @@ export default function Hero() {
                     onClick={handleResumeDownload}
                   >
                     <Download className="h-4 w-4 animate-bounce" />
-                    Download
+                    Download CV
                   </a>
                 </Button>
               </Magnetic>
