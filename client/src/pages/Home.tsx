@@ -12,6 +12,7 @@ import AITerminal from "@/components/ui/ai-terminal";
 import { NeuralAssistant } from "@/components/ui/neural-assistant";
 import EasterEgg from "@/components/ui/easter-egg";
 import TechStackBadge from "@/components/ui/tech-stack-badge";
+import Vision from "@/components/sections/Vision";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
 
       {/* Page sections */}
       <Hero />
+      <Vision />
 
       <div id="skills"><Skills /></div>
       <div id="experience"><Experience /></div>

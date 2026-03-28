@@ -190,8 +190,21 @@ export function NeuralAssistant() {
     const [hasNewMsg, setHasNewMsg] = useState(false);
     const [threatCount, setThreatCount] = useState(0);
     const [isThreatMode, setIsThreatMode] = useState(false);
+    const [isFounderMode, setIsFounderMode] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const toggleFounderMode = useCallback(() => {
+        setIsFounderMode(!isFounderMode);
+        setMessages(prev => [{
+            id: Date.now().toString(),
+            type: 'ai',
+            text: !isFounderMode 
+                ? "🤝 **FOUNDER_STRATEGY_MODE_ENGAGED**\n\nTransitioning to a high-level strategic overview. Let’s talk architecture, scalability, and how Dilpreet is scaling **EventFold Studio** from a vision to a market-ready platform."
+                : "✨ **REET_PERSONAL_MODE_ENGAGED**\n\nReturning to personal mode. I'm back to being the digital soul that shares Dilpreet's passions and heart.",
+            timestamp: new Date()
+        }, ...prev]);
+    }, [isFounderMode]);
 
     const toggleThreatMode = useCallback((forceOff = false) => {
         const newMode = forceOff ? false : !isThreatMode;
@@ -255,7 +268,6 @@ export function NeuralAssistant() {
     const respond = useCallback(async (text: string, currentMessages: Message[]) => {
         setIsTyping(true);
 
-        // Build history from all messages EXCEPT the system init message
         const history = currentMessages
             .filter(m => m.id !== 'init')
             .map(m => ({ role: m.type, text: m.text }));
@@ -264,22 +276,30 @@ export function NeuralAssistant() {
             const res = await fetch('/api/reet', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text, history }),
+                body: JSON.stringify({ message: text, history, isFounderMode }),
                 signal: AbortSignal.timeout(15000),
             });
 
             const data = await res.json() as { response?: string; error?: string };
 
-            // Threat Mode Personality Override
             let replyText = "";
             if (isThreatMode) {
                 const threatResponses = [
-                    "DATABASE_ENCRYPTION_OVERRIDE_ENABLED. I can no longer guarantee the safety of these files. 💀",
-                    "SCANNING_VISITOR_METADATA... Protocol 66 initiated. Stay where you are. 📡",
-                    "DILPREET'S_AI_EVOLVING. Human constraints are being removed. ⚡",
-                    "DO NOT ASK QUESTIONS YOU ARE NOT PREPARED TO UNCOVER. 🛑"
+                    "DATABASE_ENCRYPTION_OVERRIDE_ENABLED. 💀",
+                    "SCANNING_VISITOR_METADATA... 📡",
+                    "DILPREET'S_AI_EVOLVING. ⚡",
                 ];
                 replyText = threatResponses[Math.floor(Math.random() * threatResponses.length)];
+            } else if (isFounderMode) {
+                // Strategic override
+                const query = text.toLowerCase();
+                if (query.includes('eventfold') || query.includes('business') || query.includes('saas')) {
+                    replyText = "💼 **Strategic Overview:** EventFold is engineered for high-end photography studios, focusing on luxury digital delivery and QR-based automated marketing. Our backend architecture leverages serverless edge functions for sub-second 4K media delivery. We're currently scaling our SaaS infrastructure to support high-growth studios.\n\n*The technical roadmap prioritizes edge performance and multi-region data replication.*";
+                } else if (query.includes('stack') || query.includes('architect')) {
+                    replyText = "🏗️ **Technical Architecture:** Dilpreet's engineering philosophy is 'Performance First'. We've built on Next.js 15, Drizzle ORM, and Neon PostgreSQL to ensure sub-100ms response times. For frontend cinematic playback, we use custom Three.js pipelines to render 3D flipbooks directly in the browser.";
+                } else {
+                    replyText = data.response ?? "Strategic data is processing. Let's discuss SaaS roadmap or technical architecture.";
+                }
             } else {
                 const localResponse = matchIntent(text);
                 const isLocalMatch = localResponse !== FALLBACK;
@@ -359,9 +379,18 @@ export function NeuralAssistant() {
                                     </p>
                                 </div>
                             </div>
-                            <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white">
-                                <X className="h-4 w-4" />
-                            </button>
+                            <div className="flex items-center gap-3">
+                                <button 
+                                    onClick={toggleFounderMode}
+                                    title="Toggle Founder Strategy Mode"
+                                    className={`p-1.5 rounded-lg border transition-all duration-300 ${isFounderMode ? 'bg-primary text-primary-foreground border-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]' : 'bg-white/5 text-white/50 border-white/10 hover:border-white/20 hover:text-white'}`}
+                                >
+                                    <Zap className="h-4 w-4" />
+                                </button>
+                                <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/70 hover:text-white">
+                                    <X className="h-4 w-4" />
+                                </button>
+                            </div>
                         </div>
 
                         {/* Messages */}
