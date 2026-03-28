@@ -101,18 +101,28 @@
 
 @layer base {
 
-  /* Smooth theme transition on ALL elements */
-  *,
-  *::before,
-  *::after {
+  /* Targeted transitions instead of universal '*' for massive performance gain */
+  body, 
+  header, 
+  main, 
+  section, 
+  footer, 
+  canvas,
+  .card, 
+  .glass,
+  .glass-dark,
+  button, 
+  input, 
+  a, 
+  span, 
+  div[class*="border-"],
+  div[class*="bg-"] {
     @apply border-border;
-    transition:
-      background-color 0.45s ease,
+    transition: 
+      background-color 0.45s cubic-bezier(0.19, 1, 0.22, 1),
       color 0.35s ease,
       border-color 0.45s ease,
-      box-shadow 0.45s ease,
-      fill 0.35s ease,
-      stroke 0.35s ease;
+      box-shadow 0.45s ease;
   }
 
   /* Exclude transitions that break animations */

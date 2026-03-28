@@ -92,21 +92,24 @@ export default function Scene() {
       const scrollY = window.scrollY;
       const height = window.innerHeight;
 
-      // Dynamic color shifts based on scroll position
+      // Dynamic color shifts — only update if the color actually changes
+      let newColor = "#00e5ff";
       if (scrollY < height * 0.8) {
-        setActiveColor("#00e5ff"); // Hero - Cyan
+        newColor = "#00e5ff"; // Hero - Cyan
       } else if (scrollY < height * 1.8) {
-        setActiveColor("#10b981"); // Skills - Emerald
+        newColor = "#10b981"; // Skills - Emerald
       } else if (scrollY < height * 2.8) {
-        setActiveColor("#8b5cf6"); // Experience - Violet
+        newColor = "#8b5cf6"; // Experience - Violet
       } else if (scrollY < height * 3.8) {
-        setActiveColor("#f43f5e"); // Projects - Rose
+        newColor = "#f43f5e"; // Projects - Rose
       } else {
-        setActiveColor("#f59e0b"); // Contact - Amber
+        newColor = "#f59e0b"; // Contact - Amber
       }
+
+      setActiveColor((current) => current !== newColor ? newColor : current);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       observer.disconnect();
@@ -137,13 +140,13 @@ export default function Scene() {
         gl={glConfig}
         dpr={isMobile ? [1, 1] : [1, 1.2]}
       >
-        <Stars count={isMobile ? 150 : 800} color={starColor} />
+        <Stars count={isMobile ? 120 : 500} color={starColor} />
         <AmbientGlow color={activeColor} position={[-1.5, 0.5, -1]} isMobile={isMobile} />
         <AmbientGlow color={isDark ? "#7c3aed" : "#8b5cf6"} position={[1.5, -0.5, -1]} isMobile={isMobile} />
 
         {isDark && !isMobile && (
           <EffectComposer multisampling={0}>
-            <Bloom luminanceThreshold={0.5} intensity={1} radius={0.3} />
+            <Bloom luminanceThreshold={0.5} intensity={0.6} radius={0.2} />
           </EffectComposer>
         )}
       </Canvas>
