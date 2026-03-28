@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Briefcase, GraduationCap, Award, Star, X, MapPin, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
 import { RevealText } from "@/components/ui/reveal-text";
@@ -96,10 +96,22 @@ const JOURNEY_ITEMS = [
 ];
 
 export default function Experience() {
+  const [activeTab, setActiveTab] = useState<"all" | "experience" | "education" | "award">("all");
   const [showAmbassadorModal, setShowAmbassadorModal] = useState(false);
   const [lightboxState, setLightboxState] = useState<{ images: string[]; currentIndex: number } | null>(null);
   const [imageLoading, setImageLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const tabs = [
+    { id: "all", label: "Full Journey", icon: Star },
+    { id: "experience", label: "Experience", icon: Briefcase },
+    { id: "education", label: "Education", icon: GraduationCap },
+    { id: "award", label: "Honors", icon: Award },
+  ];
+
+  const filteredItems = activeTab === "all" 
+    ? JOURNEY_ITEMS 
+    : JOURNEY_ITEMS.filter(item => item.type === activeTab);
 
   const openLightbox = (images: string[], index: number) => {
     setImageLoading(true);
@@ -110,37 +122,22 @@ export default function Experience() {
     e.stopPropagation();
     if (!lightboxState) return;
     setImageLoading(true);
-    setLightboxState({
-      ...lightboxState,
-      currentIndex: (lightboxState.currentIndex + 1) % lightboxState.images.length
-    });
+    setLightboxState({ ...lightboxState, currentIndex: (lightboxState.currentIndex + 1) % lightboxState.images.length });
   };
 
   const prevLightboxImage = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!lightboxState) return;
     setImageLoading(true);
-    setLightboxState({
-      ...lightboxState,
-      currentIndex: (lightboxState.currentIndex - 1 + lightboxState.images.length) % lightboxState.images.length
-    });
+    setLightboxState({ ...lightboxState, currentIndex: (lightboxState.currentIndex - 1 + lightboxState.images.length) % lightboxState.images.length });
   };
-
-  // Scroll logic for the glowing center line
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end end"]
-  });
-
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
     <section className="py-24 relative overflow-hidden" id="experience" ref={containerRef}>
-      {/* Background ambient light */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       <div className="container px-4 md:px-6 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -148,225 +145,146 @@ export default function Experience() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 mb-4"
           >
             <MapPin className="h-4 w-4" />
-            <span className="text-sm font-mono tracking-wider">MY JOURNEY</span>
+            <span className="text-sm font-mono tracking-wider">CHRONICLES</span>
           </motion.div>
           <h2 className="text-3xl sm:text-4xl md:text-6xl font-display font-bold leading-tight">
-            <RevealText text="Experience & Education" />
+            <RevealText text="My Journey" />
           </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
-            A timeline of my academic milestones, technical roles, and achievements.
-          </p>
         </div>
 
-        {/* Timeline Container */}
-        <div className="relative max-w-5xl mx-auto">
-          
-          {/* Central Glowing Line (Desktop) / Left Line (Mobile) */}
-          <div className="absolute left-[24px] md:left-1/2 top-0 bottom-0 w-0.5 bg-foreground/10 md:-translate-x-1/2 transform rounded-full overflow-hidden">
-            <motion.div 
-              style={{ scaleY: pathLength, originY: 0 }}
-              className="absolute top-0 w-full h-full bg-gradient-to-b from-primary via-accent to-blue-500 shadow-[0_0_15px_rgba(var(--primary),1)]"
-            />
+        {/* Tab Switcher */}
+        <div className="flex flex-wrap justify-center gap-2 mb-12">
+          <div className="flex p-1.5 rounded-2xl bg-foreground/5 border border-foreground/10 backdrop-blur-md">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-500 overflow-hidden ${
+                  activeTab === tab.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                }`}
+              >
+                {activeTab === tab.id && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute inset-0 bg-primary shadow-lg shadow-primary/20"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <tab.icon className="h-4 w-4 relative z-10" />
+                <span className="relative z-10">{tab.label}</span>
+              </button>
+            ))}
           </div>
+        </div>
 
-          <div className="space-y-12">
-            {JOURNEY_ITEMS.map((item, index) => {
-              const isEven = index % 2 === 0;
-              return (
-                <div key={item.id} className="relative flex items-center justify-between md:justify-normal w-full" >
-                  
-                  {/* Timeline Node */}
-                  <motion.div 
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    viewport={{ once: true, amount: 0.8 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className={`absolute left-[24px] md:left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full border-4 border-background bg-background shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10 flex items-center justify-center`}
-                  >
-                    <div className={`w-2.5 h-2.5 rounded-full ${item.bgColor.replace('/10', '')} shadow-[0_0_10px_currentColor] ${item.color}`} />
-                  </motion.div>
+        {/* Bento Grid Layout */}
+        <motion.div 
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredItems.map((item) => (
+              <motion.div
+                layout
+                key={item.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4 }}
+              >
+                <div 
+                  className={`relative h-full p-6 rounded-3xl bg-background/60 backdrop-blur-xl border ${item.borderColor} hover:border-current transition-all duration-300 group hover:-translate-y-1 hover:shadow-2xl hover:shadow-current/10 ${item.isGoogle ? 'cursor-pointer' : ''}`}
+                  onClick={() => item.isGoogle && setShowAmbassadorModal(true)}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.bgColor} opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-3xl -z-10`} />
 
-                  {/* Desktop Layout Space (Empty side) */}
-                  <div className={`hidden md:block w-[45%] ${!isEven ? 'order-1' : 'order-3'}`} />
-
-                  {/* Card Content */}
-                  <motion.div 
-                    initial={{ opacity: 0, x: isEven ? 50 : -50, y: 20 }}
-                    whileInView={{ opacity: 1, x: 0, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.5, type: "spring" }}
-                    className={`w-full md:w-[45%] pl-14 md:pl-0 ${isEven ? 'md:pr-12 md:text-right order-1' : 'md:pl-12 order-3 text-left'}`}
-                  >
-                    <div 
-                      className={`relative p-6 rounded-2xl bg-background/60 backdrop-blur-xl border ${item.borderColor} hover:border-current transition-all duration-300 group hover:-translate-y-1 hover:shadow-2xl hover:shadow-current/10 ${item.isGoogle ? 'cursor-pointer' : ''}`}
-                      onClick={() => item.isGoogle && setShowAmbassadorModal(true)}
-                    >
-                      {/* Hover glow effect internally */}
-                      <div className={`absolute inset-0 bg-gradient-to-r ${item.bgColor} opacity-0 group-hover:opacity-50 transition-opacity duration-300 rounded-2xl -z-10`} />
-                      
-                      {/* Icon */}
-                      <div className={`w-12 h-12 rounded-full ${item.bgColor} border flex items-center justify-center mb-4 ${item.borderColor} ${isEven ? 'md:ml-auto' : ''}`}>
-                        <item.icon className={`w-6 h-6 ${item.color}`} />
-                      </div>
-
-                      {/* Header Section */}
-                      <div className="space-y-1 mb-4">
-                        <span className={`text-xs font-mono font-bold uppercase tracking-wider ${item.color}`}>
-                          {item.date}
-                        </span>
-                        <h3 className="text-xl md:text-2xl font-bold font-display text-foreground">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm font-medium text-muted-foreground w-full">
-                          {item.subtitle}
-                        </p>
-                      </div>
-
-                      <p className="text-muted-foreground leading-relaxed text-sm">
-                        {item.description}
-                      </p>
-
-                      {/* Attached Journey Images */}
-                      {(item as any).images && (
-                        <div className="mt-6 grid grid-cols-2 gap-3">
-                          {(item as any).images.map((src: string, i: number) => (
-                            <div 
-                              key={i} 
-                              className="relative rounded-lg overflow-hidden border border-foreground/10 aspect-video bg-foreground/5 relative group/img cursor-pointer"
-                              onClick={() => openLightbox((item as any).images, i)}
-                            >
-                               {/* Use WebP format equivalent or modern HTML lazy loading for optimization */}
-                               <img 
-                                 src={src} 
-                                 alt={`${item.title} photo ${i + 1}`} 
-                                 loading="lazy"
-                                 decoding="async"
-                                 className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
-                               />
-                               <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                  <span className="text-white bg-black/50 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover/img:translate-y-0">
-                                    View Full
-                                  </span>
-                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {item.isGoogle && (
-                        <div className={`mt-4 inline-flex items-center gap-2 text-xs font-mono ${item.color} group-hover:underline`}>
-                          View Credential <Star className="w-3 h-3" />
-                        </div>
-                      )}
+                  <div className="flex items-start justify-between mb-6">
+                    <div className={`w-12 h-12 rounded-2xl ${item.bgColor} border flex items-center justify-center ${item.borderColor}`}>
+                      <item.icon className={`w-6 h-6 ${item.color}`} />
                     </div>
-                  </motion.div>
+                    <span className={`text-[10px] font-mono font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${item.borderColor} ${item.bgColor} ${item.color}`}>
+                      {item.date}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 mb-4">
+                    <h3 className="text-xl font-bold font-display text-foreground leading-tight group-hover:text-primary transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs font-semibold text-primary/80 uppercase tracking-widest leading-none">
+                      {item.subtitle}
+                    </p>
+                  </div>
+
+                  <p className="text-muted-foreground leading-relaxed text-sm mb-6">
+                    {item.description}
+                  </p>
+
+                  {/* Journey Images (Compact) */}
+                  {(item as any).images && (
+                    <div className="grid grid-cols-3 gap-2">
+                      {(item as any).images.map((src: string, i: number) => (
+                        <div 
+                          key={i} 
+                          className="relative rounded-xl overflow-hidden border border-foreground/5 aspect-square bg-foreground/5 group/img cursor-pointer"
+                          onClick={(e) => { e.stopPropagation(); openLightbox((item as any).images, i); }}
+                        >
+                           <img 
+                             src={src} 
+                             alt={`${item.title} ${i + 1}`} 
+                             loading="lazy"
+                             className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110"
+                           />
+                           <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/img:opacity-100 transition-opacity" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {item.isGoogle && (
+                    <div className={`mt-4 inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase ${item.color} group-hover:underline`}>
+                      Verify Credential <Star className="w-3 h-3 fill-current" />
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
 
-        {/* Ambassador Badge Modal Restored */}
-        {showAmbassadorModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowAmbassadorModal(false)}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.7, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.7, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative bg-card rounded-xl overflow-hidden shadow-2xl max-w-lg w-full border border-blue-500/30"
-            >
-              <button
-                onClick={() => setShowAmbassadorModal(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-muted rounded-full transition-colors z-10 bg-background border border-border/50"
-              >
-                <X className="h-5 w-5 text-foreground" />
-              </button>
-              <img
-                src="/gap-badge-full.jpg"
-                alt="Google Student Ambassador Badge"
-                className="w-full h-auto"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-
-        {/* Dynamic Image Lightbox Modal with Carousel */}
-        {lightboxState && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setLightboxState(null)}
-            className="fixed inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50 p-4 md:p-10"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.9, opacity: 0, y: 20 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative rounded-xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] max-w-5xl w-full max-h-[90vh] flex items-center justify-center border border-foreground/10 bg-black group/modal"
-            >
-              <button
-                onClick={() => setLightboxState(null)}
-                className="absolute top-2 right-2 md:top-4 md:right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-30 bg-black/50 backdrop-blur-md border border-white/10"
-              >
-                <X className="h-5 w-5 md:h-6 md:w-6 text-white" />
-              </button>
-
-              {/* Loader */}
-              {imageLoading && (
-                <div className="absolute inset-0 flex items-center justify-center z-0">
-                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                </div>
-              )}
-
-              {/* Prev Button */}
-              {lightboxState.images.length > 1 && (
-                <button
-                  onClick={prevLightboxImage}
-                  className="absolute left-2 md:left-4 p-2 md:p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-100 md:opacity-0 md:group-hover/modal:opacity-100"
-                >
-                  <ChevronLeft className="h-5 w-5 md:h-6 md:w-6 text-white" />
+        {/* Modals... */}
+        <AnimatePresence>
+          {showAmbassadorModal && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowAmbassadorModal(false)} className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+              <motion.div initial={{ scale: 0.7, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.7, opacity: 0, y: 20 }} onClick={(e) => e.stopPropagation()} className="relative bg-card rounded-2xl overflow-hidden shadow-2xl max-w-lg w-full border border-blue-500/30">
+                <button onClick={() => setShowAmbassadorModal(false)} className="absolute top-4 right-4 p-2 hover:bg-muted rounded-full transition-colors z-10 bg-background border">
+                  <X className="h-5 w-5" />
                 </button>
-              )}
-
-              {/* object-contain ensures the entire image fits inside without cropping */}
-              <img
-                key={lightboxState.images[lightboxState.currentIndex]}
-                src={lightboxState.images[lightboxState.currentIndex]}
-                alt="Expanded view"
-                className={`w-full h-[90vh] object-contain relative z-10 transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
-                onLoad={() => setImageLoading(false)}
-              />
-
-              {/* Next Button */}
-              {lightboxState.images.length > 1 && (
-                <button
-                  onClick={nextLightboxImage}
-                  className="absolute right-2 md:right-4 p-2 md:p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 backdrop-blur-md border border-white/10 opacity-100 md:opacity-0 md:group-hover/modal:opacity-100"
-                >
-                  <ChevronRight className="h-5 w-5 md:h-6 md:w-6 text-white" />
-                </button>
-              )}
-
-              {/* Image Counter */}
-              {lightboxState.images.length > 1 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm font-mono bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 z-20">
-                  {lightboxState.currentIndex + 1} / {lightboxState.images.length}
-                </div>
-              )}
+                <img src="/gap-badge-full.jpg" alt="Google Student Ambassador Badge" className="w-full h-auto" />
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
+          )}
+
+          {lightboxState && (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setLightboxState(null)} className="fixed inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50 p-4">
+              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} onClick={(e) => e.stopPropagation()} className="relative rounded-2xl overflow-hidden shadow-2xl max-w-5xl w-full max-h-[90vh] flex items-center justify-center border border-foreground/10 bg-black group/modal">
+                <button onClick={() => setLightboxState(null)} className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-30 bg-black/50 backdrop-blur-md border border-white/10">
+                  <X className="h-6 w-6 text-white" />
+                </button>
+                {imageLoading && <div className="absolute inset-0 flex items-center justify-center z-0"><Loader2 className="w-8 h-8 text-primary animate-spin" /></div>}
+                
+                {lightboxState.images.length > 1 && (
+                  <>
+                    <button onClick={prevLightboxImage} className="absolute left-4 p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 border border-white/10"><ChevronLeft className="h-6 w-6 text-white" /></button>
+                    <button onClick={nextLightboxImage} className="absolute right-4 p-3 hover:bg-white/20 rounded-full transition-colors z-20 bg-black/50 border border-white/10"><ChevronRight className="h-6 w-6 text-white" /></button>
+                  </>
+                )}
+                
+                <img key={lightboxState.images[lightboxState.currentIndex]} src={lightboxState.images[lightboxState.currentIndex]} alt="Expanded view" className={`w-full h-[90vh] object-contain relative z-10 ${imageLoading ? 'opacity-0' : 'opacity-100'}`} onLoad={() => setImageLoading(false)} />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
