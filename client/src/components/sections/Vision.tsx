@@ -22,13 +22,14 @@ export default function Vision() {
                         THE FOUNDER'S VISION
                     </motion.div>
 
-                    <h2 className="text-3xl md:text-5xl lg:text-3xl font-display font-medium leading-tight mb-12">
+                    <h2 className="text-3xl md:text-5xl font-display font-medium leading-tight mb-12 text-foreground/90">
                         <Quote className="h-10 w-10 text-primary/20 mb-6" />
-                        <span className="text-foreground italic">"I don't just build software; I engineer ecosystems. My mission is to bridge the frontier of </span>
-                        <span className="text-primary font-bold"><RevealText text="Agentic AI" /></span>
-                        <span className="text-foreground italic"> with the creative spirit of modern </span>
-                        <span className="text-primary font-bold"><RevealText text="Entrepreneurship" /></span>
-                        <span className="text-foreground italic">."</span>
+                        <span className="italic">
+                            "I don't just build software; I engineer ecosystems. My mission is to bridge the frontier of {" "}
+                            <span className="text-primary not-italic font-bold">Agentic AI</span>
+                            {" "} with the creative spirit of modern {" "}
+                            <span className="text-primary not-italic font-bold">Entrepreneurship</span>."
+                        </span>
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 pt-16 border-t border-foreground/5">
@@ -58,7 +59,7 @@ export default function Vision() {
                                 <h3 className="font-bold uppercase tracking-wider text-sm">Future Legacy</h3>
                             </div>
                             <p className="text-muted-foreground leading-relaxed">
-                                As a final-year student and active business owner, I am refining the path where engineering meets strategy. My goal is to build a digital legacy that uses technology to empower professionals and elevate human connection.
+                                As a B.Tech student and active business owner, I am refining the path where engineering meets strategy. My goal is to build a digital legacy that uses technology to empower professionals and elevate human connection.
                             </p>
                         </motion.div>
                     </div>
