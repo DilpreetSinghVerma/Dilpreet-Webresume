@@ -32,7 +32,7 @@ const projects = [
     span: "md:col-span-2 md:row-span-2",
     featured: true,
     repoUrl: "https://github.com/DilpreetSinghVerma/EventFold",
-    liveUrl: "https://www.eventfold.studio", // Updated based on business launch
+    liveUrl: "https://www.eventfoldstudio.com", // Corrected business URL
     challenges: "Scaling real-time 3D album rendering for high-traffic events while maintaining sub-second latency for 4K media assets.",
     solutions: "Engineered a sophisticated multi-stage caching player and leveraged edge computing for dynamic album generation, resulting in a 60% faster load time for mobile users."
   },
