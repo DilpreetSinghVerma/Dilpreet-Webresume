@@ -11,6 +11,7 @@ const TYPING_SPEED = 80;
 
 export default function Hero() {
   const [, setLocation] = useLocation();
+  // Deployment trigger
   const [displayText, setDisplayText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const typingIntervalRef = useRef<NodeJS.Timeout | null>(null);
