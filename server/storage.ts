@@ -15,25 +15,30 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
+    if (!db) return undefined;
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
+    if (!db) return undefined;
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    if (!db) throw new Error("Database not connected");
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 
   async getGuestbookEntries(): Promise<GuestbookEntry[]> {
+    if (!db) return [];
     return await db.select().from(guestbook).orderBy(desc(guestbook.createdAt));
   }
 
   async createGuestbookEntry(entry: InsertGuestbook): Promise<GuestbookEntry> {
+    if (!db) throw new Error("Database not connected");
     const [newEntry] = await db.insert(guestbook).values(entry).returning();
     return newEntry;
   }
