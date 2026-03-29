@@ -13,6 +13,7 @@ import { NeuralAssistant } from "@/components/ui/neural-assistant";
 import EasterEgg from "@/components/ui/easter-egg";
 import TechStackBadge from "@/components/ui/tech-stack-badge";
 import Vision from "@/components/sections/Vision";
+import Guestbook from "@/components/sections/Guestbook";
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
       <div id="certifications"><Certifications /></div>
       <div id="projects"><Projects /></div>
       <div id="growth"><Growth /></div>
+      <div id="guestbook"><Guestbook /></div>
       <div id="contact"><Contact /></div>
 
       {/* Footer */}

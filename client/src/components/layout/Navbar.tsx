@@ -62,7 +62,12 @@ export default function Navbar() {
     window.dispatchEvent(new CustomEvent("themeToggled"));
   };
 
-  const navItems = ['skills', 'experience', 'certifications', 'projects'];
+  const NAV_LINKS = [
+    { label: "Skills", id: "skills" },
+    { label: "Experience", id: "experience" },
+    { label: "Projects", id: "projects" },
+    { label: "Guestbook", id: "guestbook" },
+  ];
 
   return (
     <motion.nav
@@ -80,13 +85,13 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
+          {NAV_LINKS.map((link) => (
             <button
-              key={item}
-              onClick={() => scrollTo(item)}
+              key={link.id}
+              onClick={() => scrollTo(link.id)}
               className="text-sm font-medium hover:text-primary transition-colors capitalize px-2 py-1 relative group"
             >
-              {item}
+              {link.label}
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
             </button>
           ))}
@@ -187,13 +192,13 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent className="bg-background/95 backdrop-blur-xl border-foreground/10">
               <div className="flex flex-col gap-6 mt-10">
-                {navItems.map((item) => (
+                {NAV_LINKS.map((link) => (
                   <button
-                    key={item}
-                    onClick={() => scrollTo(item)}
+                    key={link.id}
+                    onClick={() => scrollTo(link.id)}
                     className="text-lg font-medium hover:text-primary text-left capitalize"
                   >
-                    {item}
+                    {link.label}
                   </button>
                 ))}
                 <Button

@@ -1,10 +1,32 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { contactSchema } from "@shared/schema";
+import { contactSchema, insertGuestbookSchema } from "@shared/schema";
 import { log } from "./app";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Guestbook Routes
+  app.get("/api/guestbook", async (_req, res) => {
+    try {
+      const entries = await storage.getGuestbookEntries();
+      res.json(entries);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch guestbook entries" });
+    }
+  });
+
+  app.post("/api/guestbook", async (req, res) => {
+    try {
+      const data = insertGuestbookSchema.parse(req.body);
+      const entry = await storage.createGuestbookEntry(data);
+      res.status(201).json(entry);
+    } catch (error: any) {
+      res.status(400).json({
+        message: error.errors?.[0]?.message || "Invalid guestbook entry"
+      });
+    }
+  });
+
   app.post("/api/contact", async (req, res) => {
     try {
       const data = contactSchema.parse(req.body);
