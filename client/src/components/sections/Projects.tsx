@@ -94,18 +94,18 @@ function TiltCard({ project, index, onClick }: { project: any, index: number, on
           <project.icon className="w-24 h-24" />
         </div>
 
-        <CardHeader className={`${project.featured ? 'pt-10' : 'pt-6'} relative z-10`}>
-          <div className={`mb-4 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500`}>
-            <project.icon className="h-6 w-6" />
+        <CardHeader className={`${project.featured ? 'pt-8 sm:pt-10' : 'pt-5 sm:pt-6'} relative z-10 p-5 sm:p-6 pb-0`}>
+          <div className={`mb-3 sm:mb-4 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500`}>
+            <project.icon className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
-          <CardTitle className={`${project.featured ? 'text-3xl' : 'text-xl'} font-bold tracking-tight flex items-center gap-2`}>
+          <CardTitle className={`${project.featured ? 'text-2xl sm:text-3xl' : 'text-lg sm:text-xl'} font-bold tracking-tight flex items-center gap-2`}>
             {project.title}
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="relative z-10 flex-1 flex flex-col justify-between">
+        <CardContent className="relative z-10 flex-1 flex flex-col justify-between p-5 sm:p-6 pt-2 sm:pt-2">
           <div>
-            <p className={`text-muted-foreground leading-relaxed ${project.featured ? 'text-lg mb-6' : 'text-sm mb-4'}`}>
+            <p className={`text-muted-foreground leading-relaxed ${project.featured ? 'text-base sm:text-lg mb-4 sm:mb-6' : 'text-xs sm:text-sm mb-3 sm:mb-4'}`}>
               {project.description}
             </p>
 
@@ -177,22 +177,22 @@ export default function Projects() {
               onClick={(e) => e.stopPropagation()}
               className="max-w-3xl w-full bg-card border border-primary/20 rounded-3xl overflow-hidden shadow-2xl"
             >
-              <div className="p-8 border-b border-foreground/5 flex items-center justify-between bg-primary/5">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-primary text-primary-foreground rounded-2xl">
-                    <selectedProject.icon className="h-6 w-6" />
+              <div className="p-5 sm:p-8 border-b border-foreground/5 flex items-center justify-between bg-primary/5">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="p-2.5 sm:p-3 bg-primary text-primary-foreground rounded-2xl">
+                    <selectedProject.icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold tracking-tight">{selectedProject.title}</h3>
-                    <p className="text-xs font-mono text-primary uppercase">Deep Dive Case Study</p>
+                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight">{selectedProject.title}</h3>
+                    <p className="text-[10px] font-mono text-primary uppercase">Deep Dive Case Study</p>
                   </div>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => setSelectedProject(null)}>
+                <Button variant="ghost" size="icon" onClick={() => setSelectedProject(null)} className="h-8 w-8 sm:h-10 sm:w-10">
                   <X className="h-5 w-5" />
                 </Button>
               </div>
 
-              <div className="p-8 space-y-8 max-h-[70vh] overflow-y-auto">
+              <div className="p-6 sm:p-8 space-y-6 sm:space-y-8 max-h-[70vh] overflow-y-auto thin-scrollbar">
 
                 <div>
                   <h4 className="text-sm font-mono uppercase text-muted-foreground mb-3 flex items-center gap-2">

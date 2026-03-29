@@ -152,28 +152,30 @@ export default function Experience() {
           </h2>
         </div>
 
-        {/* Tab Switcher */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          <div className="flex p-1.5 rounded-2xl bg-foreground/5 border border-foreground/10 backdrop-blur-md">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-500 overflow-hidden ${
-                  activeTab === tab.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
-                }`}
-              >
-                {activeTab === tab.id && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-primary shadow-lg shadow-primary/20"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-                <tab.icon className="h-4 w-4 relative z-10" />
-                <span className="relative z-10">{tab.label}</span>
-              </button>
-            ))}
+        {/* Tab Switcher - Horizontal Scroll on Mobile */}
+        <div className="flex justify-center mb-12">
+          <div className="flex p-1.5 rounded-2xl bg-foreground/5 border border-foreground/10 backdrop-blur-md max-w-full overflow-x-auto no-scrollbar scroll-smooth">
+            <div className="flex gap-1 min-w-max">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all duration-500 overflow-hidden whitespace-nowrap ${
+                    activeTab === tab.id ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                  }`}
+                >
+                  {activeTab === tab.id && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-primary shadow-lg shadow-primary/20"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <tab.icon className="h-4 w-4 relative z-10" />
+                  <span className="relative z-10 font-display uppercase tracking-wider">{tab.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -193,16 +195,16 @@ export default function Experience() {
                 transition={{ duration: 0.4 }}
               >
                 <div 
-                  className={`relative h-full p-6 rounded-3xl bg-background/60 backdrop-blur-xl border ${item.borderColor} hover:border-current transition-all duration-300 group hover:-translate-y-1 hover:shadow-2xl hover:shadow-current/10 ${item.isGoogle ? 'cursor-pointer' : ''}`}
+                  className={`relative h-full p-5 sm:p-7 rounded-3xl bg-background/60 backdrop-blur-xl border ${item.borderColor} hover:border-current transition-all duration-300 group hover:-translate-y-1 hover:shadow-2xl hover:shadow-current/10 ${item.isGoogle ? 'cursor-pointer' : ''}`}
                   onClick={() => item.isGoogle && setShowAmbassadorModal(true)}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.bgColor} opacity-0 group-hover:opacity-40 transition-opacity duration-500 rounded-3xl -z-10`} />
 
-                  <div className="flex items-start justify-between mb-6">
-                    <div className={`w-12 h-12 rounded-2xl ${item.bgColor} border flex items-center justify-center ${item.borderColor}`}>
-                      <item.icon className={`w-6 h-6 ${item.color}`} />
+                  <div className="flex items-start justify-between mb-4 sm:mb-6">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl ${item.bgColor} border flex items-center justify-center ${item.borderColor}`}>
+                      <item.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${item.color}`} />
                     </div>
-                    <span className={`text-[10px] font-mono font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${item.borderColor} ${item.bgColor} ${item.color}`}>
+                    <span className={`text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${item.borderColor} ${item.bgColor} ${item.color}`}>
                       {item.date}
                     </span>
                   </div>

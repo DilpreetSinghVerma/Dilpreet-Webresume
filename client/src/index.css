@@ -133,6 +133,7 @@
 
   html {
     color-scheme: dark;
+    overflow-x: hidden;
   }
 
   body {
@@ -141,6 +142,7 @@
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+    width: 100%;
   }
 
   /* Premium Noise Overlay */
@@ -179,6 +181,18 @@
 
   .section-gradient {
     background: radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.05) 0%, transparent 70%);
+  }
+
+  /* Utility to hide scrollbars but keep functionality */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 
   .glitch-text {

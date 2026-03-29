@@ -73,8 +73,8 @@ export default function Navbar() {
         : "py-6 bg-transparent"
         }`}
     >
-      <div className="container px-4 md:px-6 flex items-center justify-between">
-        <a href="#" className="text-xl font-display font-bold tracking-tighter hover:text-primary transition-colors">
+      <div className="container px-4 md:px-6 flex items-center justify-between gap-4">
+        <a href="#" className="text-xl sm:text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors shrink-0">
           DS.
         </a>
 

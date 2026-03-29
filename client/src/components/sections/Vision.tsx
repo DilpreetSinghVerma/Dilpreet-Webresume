@@ -4,7 +4,7 @@ import { RevealText } from "@/components/ui/reveal-text";
 
 export default function Vision() {
     return (
-        <section className="py-24 md:py-32 relative overflow-hidden bg-background">
+        <section className="py-20 md:py-32 relative overflow-hidden bg-background">
             {/* Design Elements */}
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
             <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
@@ -16,14 +16,14 @@ export default function Vision() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5 }}
-                        className="mb-8 flex items-center gap-3 text-primary/60 font-mono text-xs tracking-widest uppercase"
+                        className="mb-8 flex items-center gap-3 text-primary/60 font-mono text-[10px] sm:text-xs tracking-widest uppercase"
                     >
-                        <Sparkles className="h-4 w-4" />
+                        <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
                         THE FOUNDER'S VISION
                     </motion.div>
 
-                    <h2 className="text-3xl md:text-5xl font-display font-medium leading-tight mb-12 text-foreground/90">
-                        <Quote className="h-10 w-10 text-primary/20 mb-6" />
+                    <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-display font-medium leading-tight mb-8 sm:mb-12 text-foreground/90">
+                        <Quote className="h-8 w-8 sm:h-10 sm:w-10 text-primary/20 mb-4 sm:mb-6" />
                         <span className="italic">
                             "I don't just build software; I engineer ecosystems. My mission is to bridge the frontier of {" "}
                             <span className="text-primary not-italic font-bold">Agentic AI</span>
@@ -32,7 +32,7 @@ export default function Vision() {
                         </span>
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 pt-16 border-t border-foreground/5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-12 mt-10 pt-10 sm:mt-16 sm:pt-16 border-t border-foreground/5">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}

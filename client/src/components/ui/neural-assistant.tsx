@@ -454,24 +454,24 @@ export function NeuralAssistant() {
                 {/* Glow ring */}
                 <span className="absolute -inset-3 rounded-full bg-primary/20 blur-xl group-hover:bg-primary/35 transition-all duration-500 animate-pulse pointer-events-none" />
 
-                <span className={`relative flex h-14 w-14 items-center justify-center rounded-full border-2 shadow-2xl transition-all duration-300 ${isOpen
+                <span className={`relative flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full border shadow-2xl transition-all duration-300 ${isOpen
                     ? 'bg-background border-foreground/20 text-foreground'
-                    : 'bg-primary border-white/20 text-primary-foreground'
+                    : 'bg-primary border-white/20 text-primary-foreground shadow-primary/20'
                     }`}>
                     <AnimatePresence mode="wait">
                         {isOpen ? (
                             <motion.span key="x"
                                 initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }}
                                 exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                                <X className="h-5 w-5" />
+                                <X className="h-5 w-5 sm:h-6 sm:w-6" />
                             </motion.span>
                         ) : (
                             <motion.span key="chat"
                                 initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0, opacity: 0 }} transition={{ duration: 0.2 }}
                                 className="flex items-center justify-center">
-                                <MessageSquare className="h-5 w-5" />
-                                <Zap className="h-2.5 w-2.5 absolute -top-0.5 -right-0.5 text-yellow-300 fill-yellow-300" />
+                                <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
+                                <Zap className="h-2 w-2 sm:h-2.5 sm:w-2.5 absolute -top-0.5 -right-0.5 text-yellow-300 fill-yellow-300" />
                             </motion.span>
                         )}
                     </AnimatePresence>

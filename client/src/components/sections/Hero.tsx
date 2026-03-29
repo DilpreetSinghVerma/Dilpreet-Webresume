@@ -91,18 +91,18 @@ export default function Hero() {
           </motion.div>
 
           {/* ── Name with Typewriter ── */}
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
+          <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl font-display font-bold tracking-tighter text-foreground drop-shadow-2xl pb-2">
             <span data-testid="text-typing-dilpreet">{displayText}</span>
             {isTyping && (
               <motion.span
                 animate={{ opacity: [1, 0] }}
                 transition={{ duration: 0.6, repeat: Infinity, ease: "linear" }}
-                className="inline-block w-[3px] h-[0.9em] bg-primary ml-1 align-middle"
+                className="inline-block w-[2px] sm:w-[3px] h-[0.9em] bg-primary ml-1 align-middle"
               />
             )}
           </h1>
 
-          <p className="max-w-[600px] mx-auto text-muted-foreground text-lg md:text-xl font-light">
+          <p className="max-w-[600px] mx-auto text-muted-foreground text-base sm:text-lg md:text-xl font-light leading-relaxed px-2">
             Founder of <span className="text-foreground font-medium">EventFold Studio</span> and a B.Tech CSE student specializing in AIML. I'm passionate about bridging the gap between engineering and entrepreneurship by building scalable, real-world solutions.
           </p>
 
