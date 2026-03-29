@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Guestbook() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { toast } = useToast();
 
   const { data: entries, isLoading } = useQuery<GuestbookEntry[]>({
     queryKey: ["/api/guestbook"],
@@ -36,10 +37,18 @@ export default function Guestbook() {
       queryClient.invalidateQueries({ queryKey: ["/api/guestbook"] });
       form.reset();
       setIsExpanded(false);
-      toast.success("Message added to guestbook! ✨");
+      toast({
+        title: "Success! ✨",
+        description: "Message added to guestbook!",
+      });
     },
-    onError: () => {
-      toast.error("Failed to add message. Please try again.");
+    onError: (error: any) => {
+      console.error("Guestbook mutation error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to add message. Please ensure the database is connected.",
+      });
     },
   });
 
