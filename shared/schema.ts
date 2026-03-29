@@ -13,6 +13,7 @@ export const guestbook = pgTable("guestbook", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
   message: text("message").notNull(),
+  pinned: text("pinned").default("false"), // Using text for compatibility or boolean
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

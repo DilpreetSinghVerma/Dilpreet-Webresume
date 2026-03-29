@@ -1,228 +1,247 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MessageSquare, Send, User, Calendar, Sparkles, Loader2 } from "lucide-react";
 import { insertGuestbookSchema, type GuestbookEntry, type InsertGuestbook } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, MessageSquare, ShieldCheck, Pin, Trash2, ChevronDown, ChevronUp, Star } from "lucide-react";
+import { useAdmin } from "@/hooks/use-admin";
 
 export default function Guestbook() {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const { toast } = useToast();
+    const { toast } = useToast();
+    const { isAdmin } = useAdmin();
+    const [showAll, setShowAll] = useState(false);
+    
+    const { data: entries = [], isLoading } = useQuery<GuestbookEntry[]>({
+        queryKey: ["/api/guestbook"],
+    });
 
-  const { data: entries, isLoading } = useQuery<GuestbookEntry[]>({
-    queryKey: ["/api/guestbook"],
-  });
+    const form = useForm<InsertGuestbook>({
+        resolver: zodResolver(insertGuestbookSchema),
+        defaultValues: {
+            name: "",
+            message: "",
+        },
+    });
 
-  const form = useForm<InsertGuestbook>({
-    resolver: zodResolver(insertGuestbookSchema),
-    defaultValues: {
-      name: "",
-      message: "",
-    },
-  });
+    const mutation = useMutation({
+        mutationFn: async (data: InsertGuestbook) => {
+            const res = await apiRequest("POST", "/api/guestbook", data);
+            return res.json();
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["/api/guestbook"] });
+            toast({ title: "Message Shared!", description: "Your legacy has been added to the guestbook." });
+            form.reset();
+        },
+        onError: (error: any) => {
+            toast({ 
+                variant: "destructive", 
+                title: "Error", 
+                description: error.message || "Failed to post message. Please try again." 
+            });
+        }
+    });
 
-  const mutation = useMutation({
-    mutationFn: async (data: InsertGuestbook) => {
-      const res = await apiRequest("POST", "/api/guestbook", data);
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/guestbook"] });
-      form.reset();
-      setIsExpanded(false);
-      toast({
-        title: "Success! ✨",
-        description: "Message added to guestbook!",
-      });
-    },
-    onError: (error: any) => {
-      console.error("Guestbook mutation error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "Failed to add message. Please ensure the database is connected.",
-      });
-    },
-  });
+    const adminMutation = useMutation({
+        mutationFn: async ({ action, id, pinned }: { action: 'pin' | 'delete', id: string, pinned?: boolean }) => {
+            const secret = "dilpreet_admin_2026"; // In real app, this would be from context
+            if (action === 'delete') {
+                await apiRequest("DELETE", `/api/guestbook?id=${id}&secret=${secret}`);
+            } else {
+                await apiRequest("PATCH", "/api/guestbook", { id, pinned, secret });
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["/api/guestbook"] });
+            toast({ title: "Admin Action Successful" });
+        }
+    });
 
-  const onSubmit = (data: InsertGuestbook) => {
-    mutation.mutate(data);
-  };
+    const displayEntries = useMemo(() => {
+        if (showAll) return entries;
+        return entries.slice(0, 3);
+    }, [entries, showAll]);
 
-  return (
-    <section id="guestbook" className="py-24 relative overflow-hidden bg-background/50">
-      <div className="absolute inset-0 bg-grid-white/[0.02] pointer-events-none" />
-      
-      <div className="container px-4 md:px-6 relative">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-mono mb-4">
-              <Sparkles className="h-3 w-3" />
-              DIGITAL GUESTBOOK
-            </div>
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 italic">
-              Leave a <span className="text-primary not-italic">Legacy</span>
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Share your thoughts, feedback, or just a friendly "hello". Your message stores on the blockchain... just kidding, it's on a high-performance Neon database.
-            </p>
-          </motion.div>
-
-          {/* Form Trigger / Form */}
-          <div className="mb-16">
-            <AnimatePresence mode="wait">
-              {!isExpanded ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="flex justify-center"
-                >
-                  <Button
-                    onClick={() => setIsExpanded(true)}
-                    size="lg"
-                    className="group rounded-full px-8 h-14 text-base shadow-xl shadow-primary/10 hover:shadow-primary/20 transition-all"
-                  >
-                    <MessageSquare className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-                    Sign the Guestbook
-                  </Button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <Card className="border-primary/20 bg-background/40 backdrop-blur-xl shadow-2xl overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
-                    <CardContent className="p-6 md:p-8">
-                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="space-y-2">
-                            <label className="text-xs font-mono uppercase tracking-widest text-muted-foreground ml-1">Your Name</label>
-                            <Input
-                              {...form.register("name")}
-                              placeholder="Alex Doe"
-                              className="bg-background/50 border-white/10 focus:border-primary/50 rounded-xl h-12"
-                            />
-                            {form.formState.errors.name && (
-                              <p className="text-xs text-red-500 ml-1">{form.formState.errors.name.message}</p>
-                            )}
-                          </div>
-                          <div className="flex items-end pb-1 text-xs text-muted-foreground italic opacity-60">
-                            * Name will be visible to everyone.
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <label className="text-xs font-mono uppercase tracking-widest text-muted-foreground ml-1">Message</label>
-                          <Textarea
-                            {...form.register("message")}
-                            placeholder="Loved the Jarvis HUD section! Amazing work on the 3D flipbooks too."
-                            className="bg-background/50 border-white/10 focus:border-primary/50 rounded-xl min-h-[120px] resize-none"
-                          />
-                          {form.formState.errors.message && (
-                            <p className="text-xs text-red-500 ml-1">{form.formState.errors.message.message}</p>
-                          )}
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                          <Button
-                            type="submit"
-                            disabled={mutation.isPending}
-                            className="flex-1 rounded-xl h-12 shadow-lg shadow-primary/10"
-                          >
-                            {mutation.isPending ? (
-                              <Loader2 className="h-5 w-5 animate-spin" />
-                            ) : (
-                              <>
-                                <Send className="mr-2 h-4 w-4" />
-                                Post Message
-                              </>
-                            )}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setIsExpanded(false)}
-                            className="rounded-xl h-12 border-white/10 hover:bg-white/5"
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </form>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Entries Feed */}
-          <div className="space-y-8">
-            {isLoading ? (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <Loader2 className="h-8 w-8 animate-spin text-primary/40" />
-                <p className="text-sm font-mono text-muted-foreground animate-pulse">Accessing archives...</p>
-              </div>
-            ) : entries && entries.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {entries.map((entry, index) => (
-                  <motion.div
-                    key={entry.id}
+    return (
+        <section id="guestbook" className="py-24 relative overflow-hidden">
+            <div className="container mx-auto px-4 max-w-4xl relative z-10">
+                <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: (index % 4) * 0.1 }}
-                  >
-                    <Card className="h-full border-white/5 bg-background/20 backdrop-blur-sm hover:border-primary/20 transition-all duration-500 overflow-hidden group">
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 text-primary">
-                              <User className="h-5 w-5" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-sm tracking-tight">{entry.name}</h4>
-                              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
-                                <Calendar className="h-3 w-3" />
-                                {new Date(entry.createdAt).toLocaleDateString()}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                             <Sparkles className="h-4 w-4 text-primary/30" />
-                          </div>
-                        </div>
-                        <p className="text-sm leading-relaxed text-muted-foreground italic">
-                          "{entry.message}"
-                        </p>
-                      </CardContent>
+                    className="text-center mb-16"
+                >
+                    <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-primary/50 bg-clip-text text-transparent">
+                        Leave a <span className="text-primary italic">Legacy</span>
+                    </h2>
+                    <p className="text-muted-foreground max-w-2xl mx-auto">
+                        Share your thoughts, feedback, or just a friendly "hello". Your message stores on a high-performance Neon database.
+                    </p>
+                </motion.div>
+
+                <div className="grid md:grid-cols-[1fr,1.5fr] gap-8">
+                    {/* Form */}
+                    <Card className="bg-white/5 border-primary/20 backdrop-blur-sm h-fit sticky top-24">
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2 text-primary">
+                                <MessageSquare className="h-5 w-5" />
+                                Post a Message
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <form onSubmit={form.handleSubmit((data) => mutation.mutate(data))} className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground ml-1">YOUR NAME</label>
+                                    <Input 
+                                        {...form.register("name")} 
+                                        placeholder="Dilpreet Singh"
+                                        className="bg-primary/5 border-primary/20 focus:border-primary transition-all"
+                                    />
+                                    {form.formState.errors.name && (
+                                        <p className="text-xs text-red-500 ml-1">{form.formState.errors.name.message}</p>
+                                    )}
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground ml-1">MESSAGE</label>
+                                    <Textarea 
+                                        {...form.register("message")} 
+                                        placeholder="Write something cool..."
+                                        className="bg-primary/5 border-primary/20 focus:border-primary transition-all min-h-[120px]"
+                                    />
+                                    {form.formState.errors.message && (
+                                        <p className="text-xs text-red-500 ml-1">{form.formState.errors.message.message}</p>
+                                    )}
+                                </div>
+                                <Button 
+                                    type="submit" 
+                                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
+                                    disabled={mutation.isPending}
+                                >
+                                    {mutation.isPending ? "Sharing..." : (
+                                        <>
+                                            <Send className="mr-2 h-4 w-4" /> Post Message
+                                        </>
+                                    )}
+                                </Button>
+                            </form>
+                        </CardContent>
                     </Card>
-                  </motion.div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 border-2 border-dashed border-white/5 rounded-3xl">
-                <MessageSquare className="h-12 w-12 text-primary/20 mx-auto mb-4" />
-                <p className="text-muted-foreground">The guestbook is currently empty. Be the first to leave a mark!</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+
+                    {/* Entries */}
+                    <div className="space-y-4">
+                        {isLoading ? (
+                            Array(3).fill(0).map((_, i) => (
+                                <div key={i} className="h-32 bg-white/5 animate-pulse rounded-xl border border-primary/10" />
+                            ))
+                        ) : entries.length === 0 ? (
+                            <div className="text-center py-12 text-muted-foreground italic bg-white/5 rounded-xl border border-dashed border-primary/20">
+                                No messages yet. Be the first to leave one!
+                            </div>
+                        ) : (
+                            <>
+                                <AnimatePresence mode="popLayout">
+                                    {displayEntries.map((entry) => (
+                                        <motion.div
+                                            key={entry.id}
+                                            layout
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            className={`p-6 rounded-xl border transition-all ${
+                                                entry.pinned === "true" 
+                                                    ? "bg-primary/10 border-primary ring-1 ring-primary/30" 
+                                                    : "bg-white/5 border-primary/10 hover:border-primary/30"
+                                            }`}
+                                        >
+                                            <div className="flex justify-between items-start mb-2">
+                                                <div className="flex items-center gap-2">
+                                                    <h4 className="font-bold text-primary">{entry.name}</h4>
+                                                    {entry.pinned === "true" && (
+                                                        <span className="flex items-center gap-1 text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">
+                                                            <Star className="h-2.5 w-2.5 fill-current" /> Pinned
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-xs text-muted-foreground">
+                                                        {new Date(entry.createdAt).toLocaleDateString()}
+                                                    </span>
+                                                    {isAdmin && (
+                                                        <div className="flex items-center gap-1 ml-2 border-l border-primary/20 pl-2">
+                                                            <button 
+                                                                onClick={() => adminMutation.mutate({ 
+                                                                    action: 'pin', 
+                                                                    id: entry.id, 
+                                                                    pinned: entry.pinned !== "true" 
+                                                                })}
+                                                                className={`p-1.5 rounded transition-colors ${entry.pinned === "true" ? "text-primary bg-primary/20" : "text-muted-foreground hover:bg-white/10"}`}
+                                                                title="Pin message"
+                                                            >
+                                                                <Pin className="h-3.5 w-3.5" />
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => adminMutation.mutate({ action: 'delete', id: entry.id })}
+                                                                className="p-1.5 rounded text-red-400 hover:bg-red-400/10 transition-colors"
+                                                                title="Delete message"
+                                                            >
+                                                                <Trash2 className="h-3.5 w-3.5" />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <p className="text-muted-foreground text-sm line-clamp-4 leading-relaxed whitespace-pre-wrap">{entry.message}</p>
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
+
+                                {entries.length > 3 && (
+                                    <Button
+                                        variant="ghost"
+                                        onClick={() => setShowAll(!showAll)}
+                                        className="w-full border border-primary/20 hover:bg-primary/10 text-primary py-6 rounded-xl font-bold group"
+                                    >
+                                        {showAll ? (
+                                            <>
+                                                <ChevronUp className="mr-2 h-4 w-4 group-hover:-translate-y-1 transition-transform" />
+                                                Show Less
+                                            </>
+                                        ) : (
+                                            <>
+                                                <ChevronDown className="mr-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
+                                                View {entries.length - 3} More Messages
+                                            </>
+                                        )}
+                                    </Button>
+                                )}
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Admin Status */}
+                {isAdmin && (
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="mt-12 p-4 rounded-xl bg-primary/5 border border-primary/20 flex items-center justify-between"
+                    >
+                        <div className="flex items-center gap-2 text-primary font-bold">
+                            <ShieldCheck className="h-5 w-5" />
+                            <span>SUPERUSER ADMIN MODE ACTIVE</span>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={() => logout()} className="border-primary/20 hover:bg-red-500/10 hover:text-red-500">
+                             Deactivate
+                        </Button>
+                    </motion.div>
+                )}
+            </div>
+        </section>
+    );
 }

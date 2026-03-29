@@ -4,13 +4,14 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { pgTable, text, varchar, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { desc, sql } from "drizzle-orm";
+import { desc, sql, eq } from "drizzle-orm";
 
 // Define schema locally to avoid bundling issues with shared/ schema in serverless
 const guestbookTable = pgTable("guestbook", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull(),
   message: text("message").notNull(),
+  pinned: text("pinned").default("false"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -28,16 +29,7 @@ type VercelResponse = ServerResponse & {
     status: (code: number) => VercelResponse;
 };
 
-// Error handling helper
-const sendError = (res: VercelResponse, code: number, message: string) => {
-    res.statusCode = code;
-    res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ message }));
-    return res;
-};
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-    // Add missing methods if not present (Vercel usually adds them but just in case)
     res.json = (data: any) => {
         res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(data));
@@ -49,55 +41,61 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     const databaseUrl = process.env.DATABASE_URL;
+    const adminSecret = process.env.ADMIN_SECRET || "dilpreet_admin_2026"; // Default for now
     
     try {
         if (!databaseUrl) {
-           return res.status(503).json({ message: "Database connection string missing (DATABASE_URL)" });
+           return res.status(503).json({ message: "Database connection string missing" });
         }
 
         const client = neon(databaseUrl);
         const db = drizzle(client);
 
+        // GET: Fetch all entries
         if (req.method === "GET") {
-            const entries = await db.select().from(guestbookTable).orderBy(desc(guestbookTable.createdAt));
+            const entries = await db.select().from(guestbookTable).orderBy(desc(guestbookTable.pinned), desc(guestbookTable.createdAt));
             return res.status(200).json(entries);
         }
 
+        // POST: Add new entry
         if (req.method === "POST") {
-            // Vercel pre-parses the body in many cases
             let body = req.body;
-            if (typeof body === 'string') {
-                try {
-                    body = JSON.parse(body);
-                } catch (e) {
-                    return res.status(400).json({ message: "Invalid JSON body" });
-                }
-            }
+            if (typeof body === 'string') body = JSON.parse(body);
 
             const data = insertGuestbookSchema.parse(body);
-            const [entry] = await db.insert(guestbookTable).values(data).returning();
-            
-            if (!entry) {
-                throw new Error("Failed to insert entry");
-            }
-
+            const [entry] = await db.insert(guestbookTable).values({ ...data, pinned: "false" }).returning();
             return res.status(201).json(entry);
+        }
+
+        // DELETE: Remove an entry (Admin only)
+        if (req.method === "DELETE") {
+            const { id, secret } = req.query;
+            if (secret !== adminSecret) return res.status(401).json({ message: "Unauthorized" });
+            if (!id) return res.status(400).json({ message: "ID required" });
+
+            await db.delete(guestbookTable).where(eq(guestbookTable.id, id));
+            return res.status(200).json({ success: true });
+        }
+
+        // PATCH: Pin/Unpin an entry (Admin only)
+        if (req.method === "PATCH") {
+            let body = req.body;
+            if (typeof body === 'string') body = JSON.parse(body);
+            
+            const { id, pinned, secret } = body;
+            if (secret !== adminSecret) return res.status(401).json({ message: "Unauthorized" });
+            if (!id) return res.status(400).json({ message: "ID required" });
+
+            await db.update(guestbookTable)
+                .set({ pinned: pinned ? "true" : "false" })
+                .where(eq(guestbookTable.id, id));
+            
+            return res.status(200).json({ success: true });
         }
 
         return res.status(405).json({ message: "Method not allowed" });
     } catch (error: any) {
         console.error("Guestbook API error:", error);
-        
-        // Handle Zod validation errors
-        if (error instanceof z.ZodError) {
-            return res.status(400).json({
-                message: error.errors[0]?.message || "Invalid input data"
-            });
-        }
-
-        return res.status(500).json({
-            message: error.message || "Internal server error",
-            details: process.env.NODE_ENV === 'development' ? error.stack : undefined
-        });
+        return res.status(500).json({ message: error.message || "Internal server error" });
     }
 }

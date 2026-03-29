@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Terminal as TerminalIcon, X, ChevronRight, Command } from "lucide-react";
+import { useAdmin } from "@/hooks/use-admin";
 
 const COMMANDS = {
     "/whois": "DILPREET SINGH: AIML Specialist, Python Developer, and Creative Enthusiast.",
     "/skills": "Python, Machine Learning, Data Structures, Creative Tech, and problem-solving.",
     "/contact": "Email: dilpreetsinghverma@gmail.com | LinkedIn: dilpreet-singh-709b35310",
-    "/help": "Available commands: /whois, /skills, /contact, /clear, /help",
+    "/help": "Available commands: /whois, /skills, /contact, /clear, /help, sudo admin <key>",
     "/clear": "CLEAR"
 };
 
 export default function AITerminal() {
+    const { login } = useAdmin();
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState("");
     const [history, setHistory] = useState<string[]>(["Welcome to DS-Terminal v1.0.0", "Type /help to see available commands."]);
@@ -24,16 +26,28 @@ export default function AITerminal() {
 
     const handleCommand = (e: React.FormEvent) => {
         e.preventDefault();
-        const cmd = input.trim().toLowerCase();
+        const fullCmd = input.trim();
+        const cmd = fullCmd.toLowerCase();
 
         if (!cmd) return;
 
-        setHistory(prev => [...prev, `> ${input}`]);
+        setHistory(prev => [...prev, `> ${fullCmd}`]);
 
         if (cmd === "/clear") {
             setHistory([]);
+        } else if (cmd.startsWith("sudo admin ")) {
+            const key = fullCmd.substring(11); // Handle case-sensitive key
+            const success = login(key);
+            if (success) {
+                setHistory(prev => [...prev, "SYSTEM: Admin access granted. Superuser mode active. 🔐", "You can now pin/delete messages and edit your resume directly!"]);
+            } else {
+                setHistory(prev => [...prev, "ACCESS DENIED: Invalid secret key."]);
+            }
         } else if (COMMANDS[cmd as keyof typeof COMMANDS]) {
-            setHistory(prev => [...prev, COMMANDS[cmd as keyof typeof COMMANDS]]);
+            const response = COMMANDS[cmd as keyof typeof COMMANDS];
+            if (response !== "CLEAR") {
+                setHistory(prev => [...prev, response]);
+            }
         } else {
             setHistory(prev => [...prev, `Command not found: ${cmd}. Type /help for assistance.`]);
         }

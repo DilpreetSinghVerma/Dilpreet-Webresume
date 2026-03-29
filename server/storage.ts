@@ -76,7 +76,7 @@ export class MemStorage implements IStorage {
 
   async createGuestbookEntry(entry: InsertGuestbook): Promise<GuestbookEntry> {
     const id = randomUUID();
-    const newEntry: GuestbookEntry = { ...entry, id, createdAt: new Date() };
+    const newEntry: GuestbookEntry = { ...entry, id, pinned: "false", createdAt: new Date() };
     this.guestbookEntries.push(newEntry);
     return newEntry;
   }
