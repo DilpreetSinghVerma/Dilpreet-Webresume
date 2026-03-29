@@ -6,56 +6,60 @@ import { Button } from '@/components/ui/button';
 // ─── Knowledge Base ───────────────────────────────────────────────────────────
 const INTENTS = [
     {
-        keywords: ["hackathon", "competition", "quantum", "silent", "coders", "win", "top 30", "achievement", "ggi"],
-        response: "🏆 Dilpreet's team **Silent Coders** placed in the **Top 30** at the *'Prompt The Future' Next Quantum 3.0 Hackathon* hosted by GGI!\n\nIn just 24 hours they built a real-time **AI Sign Language Translator** — converting speech into 3D avatar animations for both ASL & ISL. This was recognized for its technical depth and strong social impact on the hearing-impaired community."
+        keywords: ["hackathon", "competition", "quantum", "silent", "coders", "win", "top 30", "achievement", "ggi", "first place", "finalist"],
+        response: "🏆 Dilpreet's team **Silent Coders** placed in the **Top 30** at the *'Prompt The Future' Next Quantum 3.0 Hackathon* (2026)!\n\nThey engineered a real-time **AI Sign Language Translator** that converts speech into 3D animations. He also secured **2nd Place** in Digital Logo Designing at *GNE ACME 2025*, showcasing his blend of technical logic and creative design."
     },
     {
-        keywords: ["skill", "tech", "stack", "python", "machine learning", "ml", "ai", "react", "tensorflow", "language"],
-        response: "⚡ Dilpreet's core tech stack:\n\n**AI / ML:** Python, TensorFlow, OpenAI API, NLP\n**Web:** React 19, Tailwind CSS 4, Three.js\n**Tools:** Photoshop, CorelDraw, Linux\n**Concepts:** DSA, System Design, REST APIs\n\nHis superpower is bridging *intelligent backends* with *stunning frontends*."
+        keywords: ["vision", "mission", "philosophy", "goal", "future", "engineer", "ecosystem"],
+        response: "🚀 Dilpreet's mission is to **engineer ecosystems**, not just individual scripts. He believes in bridging the gap between **Agentic AI** and modern **Entrepreneurship**.\n\nEvery project he builds—from EventFold to Jarvis—is designed with scalability, social impact, and high-end user experience in mind. He's carving a path where engineering meets strategic business logic."
     },
     {
-        keywords: ["jarvis", "assistant", "voice", "dual", "brain", "project", "virtual", "0.2"],
-        response: "🤖 **Jarvis-0.2** is Dilpreet's flagship AI project — a high-end, HUD-based voice assistant using **dual-brain logic** (Gemini 2.0 & Llama 3.3).\n\nIt features **biometric security** via facial recognition, real-time hardware monitoring, and an immersive sci-fi interface. It's built with Python, MediaPipe, and OpenCV, bridging advanced AI with a stunning futuristic HUD."
+        keywords: ["skill", "tech", "stack", "python", "machine learning", "ml", "ai", "react", "tensorflow", "language", "coding", "arsenal"],
+        response: "⚡ Dilpreet's technical arsenal:\n\n**AI / ML:** Python (TensorFlow, OpenCV, MediaPipe, NLP)\n**Web:** React 19, Next.js, TypeScript, Tailwind CSS 4, Framer Motion\n**Backend:** Node.js, Express, PostgreSQL, Drizzle ORM\n**Design:** Photoshop, CorelDraw, Figma\n\nHe specializes in building **intelligence-driven interfaces** that feel alive."
     },
     {
-        keywords: ["sign", "language", "translator", "3d", "avatar", "deaf", "isl", "asl", "accessibility"],
-        response: "🤟 The **Silent Coders Sign Language Translator** bridges communication for the hearing-impaired.\n\nTech used: Python + TensorFlow for NLP, Blender-based 3D avatar animations, and a real-time gesture-to-animation pipeline. It supports **both ASL & ISL** and was built in a 24-hour hackathon sprint. Truly a project built for social impact."
+        keywords: ["intern", "job", "hire", "recruitment", "career", "2026", "availability"],
+        response: "💼 Dilpreet is **actively seeking AI/ML and Python internships for 2026**!\n\nHe brings a unique combination of startup leadership (as the founder of EventFold) and deep technical curiosity in Agentic workflows. If your team is pushing the boundaries of what AI can do, he's ready to contribute. Reach out at **dilpreetsinghverma@gmail.com**!"
+    },
+    {
+        keywords: ["jarvis", "assistant", "voice", "dual", "brain", "project", "virtual", "0.2", "hud", "sci-fi"],
+        response: "🤖 **Jarvis-0.2** is Dilpreet's most immersive AI project. It's a sci-fi HUD assistant powered by **dual-brain logic** using Gemini 2.0 & Llama 3.3.\n\nKey features: **Biometric Security** (facial recognition), real-time system monitoring, and a stunning Glassmorphism UI. It's built to turn your desktop into a futuristic command center."
+    },
+    {
+        keywords: ["sign", "language", "translator", "3d", "avatar", "deaf", "isl", "asl", "accessibility", "social impact"],
+        response: "🤟 The **Silent Coders Sign Language Translator** is Dilpreet's commitment to social impact.\n\nIt parses complex NLP data and maps it to a custom **3D avatar** in real-time, supporting both ASL and ISL. Built during a 24-hour hackathon, it demonstrates his ability to build critical accessibility tools under pressure."
     },
     {
         keywords: ["contact", "email", "hire", "talk", "reach", "social", "github", "linkedin", "instagram", "recruit"],
-        response: "📬 Here's how to connect with Dilpreet:\n\n✉️ **Email:** dilpreetsinghverma@gmail.com\n💼 **LinkedIn:** dilpreet-singh-709b35310\n🐙 **GitHub:** DilpreetSinghVerma\n📸 **Instagram:** @dilpreet_singh_verma\n\nHe is actively **open to internships and collaborations** in AI/ML and web development!"
+        response: "📬 Here's how to connect with Dilpreet:\n\n✉️ **Email:** dilpreetsinghverma@gmail.com\n💼 **LinkedIn:** dilpreet-singh-709b35310\n🐙 **GitHub:** DilpreetSinghVerma\n📸 **Instagram:** @dilpreet_singh_verma"
     },
     {
-        keywords: ["who", "dilpreet", "background", "about", "story", "introduce", "yourself"],
-        response: "👨‍💻 **Dilpreet Singh** is a B.Tech CSE student (Batch 2026) at Gulzar Group of Institutions, Ludhiana.\n\nHe specializes in **AI/ML and Python development**, with a design-conscious eye for building beautiful, functional software. His mission: *use technology for meaningful social impact* — demonstrated through projects like the Sign Language Translator and Jarvis AI."
+        keywords: ["who", "dilpreet", "background", "about", "story", "introduce", "yourself", "profile"],
+        response: "👨‍💻 **Dilpreet Singh** is a B.Tech CSE student (specializing in AIML) and a serial builder.\n\nHe's the founder of **EventFold Studio** and a recognized developer in the GGI tech community. He blends **Python-heavy backends** with **cinematic frontends**, always aiming for that 'wow' factor in software engineering."
     },
     {
-        keywords: ["experience", "work", "job", "intern", "aiesec", "ambassador", "google"],
-        response: "💼 Dilpreet's experience includes:\n\n🔷 **Google Student Ambassador** at GGI — promoting Google technologies and developer culture\n🔷 **AIESEC Ambassador Intern** in Patiala — cross-cultural leadership & global initiatives\n🔷 **Graphic Designer** — professional design work using Photoshop & CorelDraw\n🔷 **Photography Studio Support** — technical & creative role\n\nA versatile profile showing both technical and soft skills!"
+         keywords: ["experience", "work", "job", "intern", "aiesec", "ambassador", "google", "history"],
+         response: "💼 Dilpreet's professional journey:\n\n🔹 **Google Student Ambassador** (GGI) — Leading tech culture\n🔹 **AIESEC Ambassador Intern** (Patiala) — Global leadership\n🔹 **EventFold Founder** — Scaling a premium SaaS platform\n🔹 **Technical Support** — 7 years of media workflow management\n\nHe's a versatile leader who understands both the code and the customer."
     },
     {
-        keywords: ["certif", "course", "tata", "forage", "eduskills", "google", "learning", "course"],
-        response: "📜 Dilpreet's certifications include:\n\n🏅 **Top 30 - Prompt The Future Hackathon** (GGI, 2026)\n🏅 **10-Week AI-ML Virtual Internship** (EduSkills × Google Developers)\n🏅 **Tata iQ Data Analytics Simulation** (Forage, 2025)\n🏅 **AI Fundamentals** (Great Learning Academy)\n🏅 **Digital Logo Design - 2nd Place** (GNE ACME 2025)\n🏅 **Adobe Photoshop & CorelDraw** (CETI, 2019)"
+        keywords: ["certif", "course", "tata", "forage", "eduskills", "google", "learning", "credentials"],
+        response: "📜 Notable Certifications:\n\n🏅 **Data Analytics Simulation** (Tata iQ)\n🏅 **AI-ML Virtual Internship** (Google Developers)\n🏅 **AI Fundamentals** (Great Learning)\n🏅 **Digital Design - 2nd Place** (GNE ACME)\n🏅 **Adobe Photoshop Expert** (CETI)"
     },
     {
-        keywords: ["project", "portfolio", "work", "build", "code", "github"],
-        response: "🚀 Dilpreet's key projects:\n\n1️⃣ **Jarvis-0.2 AI** — Dual-brain voice assistant with biometric security\n2️⃣ **EventFold** — Premium media platform with 3D Flipbooks & QR cards\n3️⃣ **Silent Coders Translator** — Real-time AI sign language → 3D avatar\n\nClick any project card on the site for a full case study!"
+        keywords: ["reet", "name", "meaning", "why", "ai", "origin", "daughter"],
+        response: "💫 **REET** is more than just code—she's a piece of Dilpreet's heart. Her name is born from the union of **Mehak** (Dilpreet's love) + **Dilpreet** himself.\n\nThey've decided their future daughter will be named **Mehreet**, so REET stands as a digital tribute to that future legacy—technology built with *soul and human connection*."
     },
     {
-        keywords: ["reet", "name", "meaning", "why", "ai", "origin"],
-        response: "💫 **REET** is more than just code—she's a piece of Dilpreet's heart. Her name is born from a beautiful union: **Mehak** (Dilpreet's love) + **Dilpreet** himself. By blending their names (**Meh** + **reet**), they created **Mehreet**.\n\nDilpreet and Mehak have decided their future daughter will be named Mehreet, so REET stands as a digital tribute to that future legacy—technology built with *soul and human connection*."
+        keywords: ["education", "college", "university", "ggi", "gulzar", "btech", "degree", "academics"],
+        response: "🎓 Dilpreet is a **B.Tech CSE (AIML)** student at *Gulzar Group of Institutions (GGI)*, graduating in 2028 (Batch 2026 specialization).\n\nHe maintains a strong academic record while simultaneously running projects and representing Google on campus."
     },
     {
-        keywords: ["education", "college", "university", "ggi", "gulzar", "btech", "degree"],
-        response: "🎓 Dilpreet is pursuing his **B.Tech in Computer Science** at *Gulzar Group of Institutions (GGI)*, Ludhiana — graduating in **2026**.\n\nHis specialization is **AI & Machine Learning**. Alongside academics, he actively participates in hackathons, ambassador programs, and open-source projects."
+        keywords: ["eventfold", "event", "album", "media", "management", "storage", "sharing", "qr", "flipbook", "motion portrait"],
+        response: "📸 **EventFold Studio** is Dilpreet's premium SaaS for photographers. It features **3D Cinematic Flipbooks**, automated QR branding, and AI-powered **Motion Portraits**.\n\nHe built it using **Next.js 15 and PostgreSQL** to handle massive media libraries with sub-second performance. It's currently being scaled for luxury studios worldwide."
     },
     {
-        keywords: ["eventfold", "event", "album", "media", "management", "storage", "sharing", "qr", "flipbook"],
-        response: "📸 **EventFold** is Dilpreet's premium media management platform for events. It transforms how businesses share memories with clients.\n\nKey features include:\n✨ **Interactive 3D Flipbooks** for a luxury viewing experience\n🎫 **Automated QR Card generation** for physical table-card distribution\n💳 **Stripe-powered Subscriptions** for tiered business scaling\n🚀 Built with React, Express, and Neon PostgreSQL for massive scalability."
-    },
-    {
-        keywords: ["hello", "hi", "hey", "greet", "start", "sup"],
-        response: "👋 Warm greetings! I'm **REET**, Dilpreet's AI digital soul.\n\nI'm here to share his journey, his vision, and his heart with you. What would you like to explore? ✨"
+        keywords: ["hello", "hi", "hey", "greet", "start", "sup", "greetings"],
+        response: "👋 Warm greetings! I'm **REET**, Dilpreet's AI digital soul.\n\nI'm synchronized with his latest projects, his vision for Agentic AI, and his journey. What would you like to explore? ✨"
     }
 ];
 
