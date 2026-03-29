@@ -49,6 +49,7 @@ export default function AITerminal() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="fixed bottom-6 left-4 sm:left-6 z-50 p-3.5 sm:p-4 bg-primary text-primary-foreground rounded-full shadow-lg shadow-primary/20 flex items-center gap-2 font-mono text-xs sm:text-sm font-bold border border-white/10"
+                aria-label="Open AI Terminal"
             >
                 <TerminalIcon className="h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="hidden md:inline">TERMINAL</span>
