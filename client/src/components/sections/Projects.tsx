@@ -1,7 +1,7 @@
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Languages, X, ExternalLink, Info, Github, CalendarCheck } from "lucide-react";
+import { Bot, Languages, X, ExternalLink, Info, Github, CalendarCheck, PenTool } from "lucide-react";
 import { RevealText } from "@/components/ui/reveal-text";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,21 @@ const projects = [
     featured: false,
     challenges: "Synchronizing the avatar animations with the temporal pacing of human speech was critical for natural communication.",
     solutions: "Applied Time-Series prediction models to anticipate word transitions and smooth animation blending."
+  },
+  {
+    id: "kalam",
+    title: "Kalam (Punjabi Editor)",
+    description: "A native Windows text editor tailored for Punjabi typing with multi-language support and a polished UI.",
+    longDescription: "Kalam is a dedicated Punjabi editor application featuring a native Windows distribution. It includes a custom startup splash screen with a loading progress bar, a home grid view for managing notes, and a multi-language toggle (Punjabi, Hindi, English). Packaged with a professional NSIS installation wizard, it offers seamless system integration and is ready for Microsoft Store publishing.",
+    tech: ["Electron", "React", "NSIS", "Desktop Development"],
+    icon: PenTool,
+    gradient: "from-emerald-500/20 to-teal-500/20",
+    span: "md:col-span-2 md:row-span-1",
+    isHackathon: false,
+    featured: false,
+    repoUrl: "https://github.com/DilpreetSinghVerma/Kalam",
+    challenges: "Building a responsive multi-language interface within a native Windows packaging context without compromising startup performance.",
+    solutions: "Implemented a streamlined home grid view and a custom startup splash screen to enhance perceived performance, combined with an NSIS installer for deep system integration."
   }
 ];
 
