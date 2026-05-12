@@ -52,18 +52,19 @@ const projects = [
   },
   {
     id: "kalam",
-    title: "Kalam (Punjabi Editor)",
-    description: "A native Windows text editor tailored for Punjabi typing with multi-language support and a polished UI.",
-    longDescription: "Kalam is a dedicated Punjabi editor application featuring a native Windows distribution. It includes a custom startup splash screen with a loading progress bar, a home grid view for managing notes, and a multi-language toggle (Punjabi, Hindi, English). Packaged with a professional NSIS installation wizard, it offers seamless system integration and is ready for Microsoft Store publishing.",
-    tech: ["Electron", "React", "NSIS", "Desktop Development"],
+    title: "Kalam Notes Ecosystem",
+    description: "A comprehensive multilingual note-taking ecosystem featuring a native Windows app, a React Native mobile app, and real-time Google Cloud Sync.",
+    longDescription: "Kalam is a dedicated Tri-Language (Punjabi, Hindi, English) editor spanning a native Windows distribution and a cross-platform mobile application. It features intelligent transliteration, responsive grid views, and a sophisticated Firebase-powered Google Sign-In system. This allows users to securely write and sync their notes effortlessly between PC and Mobile with full offline-first capabilities.",
+    tech: ["Electron", "React", "React Native", "Expo", "Firebase", "Google Auth"],
     icon: PenTool,
     gradient: "from-emerald-500/20 to-teal-500/20",
     span: "md:col-span-2 md:row-span-1",
     isHackathon: false,
-    featured: false,
-    repoUrl: "https://github.com/DilpreetSinghVerma/Kalam",
-    challenges: "Building a responsive multi-language interface within a native Windows packaging context without compromising startup performance.",
-    solutions: "Implemented a streamlined home grid view and a custom startup splash screen to enhance perceived performance, combined with an NSIS installer for deep system integration."
+    featured: true,
+    repoUrl: "https://github.com/DilpreetSinghVerma/kalam-notes",
+    liveUrl: "https://github.com/DilpreetSinghVerma/kalam-mobile-Notes",
+    challenges: "Implementing a secure, seamless cross-platform sync mechanism that bypassed web-browser redirect issues on Android while retaining offline-first functionality.",
+    solutions: "Engineered a native `@react-native-google-signin` authentication flow integrated with Firebase Firestore and strict security rules to guarantee private, real-time data synchronization."
   }
 ];
 
