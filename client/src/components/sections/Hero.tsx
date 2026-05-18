@@ -5,6 +5,7 @@ import { ArrowDown, Github, Linkedin, Mail, Instagram, Download, ExternalLink } 
 import { useState, useEffect, useRef } from "react";
 import { useLocation } from "wouter";
 import Magnetic from "@/components/ui/magnetic";
+import Lanyard from "@/components/3d/Lanyard";
 
 const FULL_TEXT = "DILPREET SINGH";
 const TYPING_SPEED = 80;
@@ -63,9 +64,14 @@ export default function Hero() {
       className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden"
     >
       <Scene />
+      
+      {/* 3D Lanyard Card - Desktop/TV only (≥1024px), hidden on phones & tablets */}
+      <div className="absolute top-0 right-0 w-full lg:w-[55%] h-full z-50 pointer-events-none hidden lg:block">
+        <Lanyard />
+      </div>
 
-      <div className="container px-4 md:px-6 relative z-10 text-center">
-        <motion.div style={{ y: y1, opacity }} className="space-y-6">
+      <div className="relative z-10 w-full h-full flex justify-start items-center px-4 md:pl-32 md:pr-10 pointer-events-none">
+        <motion.div style={{ y: y1, opacity }} className="max-w-xl text-left space-y-6 pointer-events-auto">
 
           {/* ── Open to Work Badge ── */}
           <motion.div
@@ -103,12 +109,12 @@ export default function Hero() {
             )}
           </h1>
 
-          <p className="max-w-[600px] mx-auto text-muted-foreground text-base sm:text-lg md:text-xl font-light leading-relaxed px-2">
+          <p className="max-w-[600px] text-muted-foreground text-base sm:text-lg md:text-xl font-light leading-relaxed px-2">
             Founder of <span className="text-foreground font-medium">EventFold Studio</span> and a B.Tech CSE student specializing in AIML. I'm passionate about bridging the gap between engineering and entrepreneurship by building scalable, real-world solutions.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 items-center">
-            <div className="flex gap-4 flex-wrap justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-start pt-6 items-center">
+            <div className="flex gap-4 flex-wrap justify-start">
               <Magnetic>
                 <Button
                   size="lg"

@@ -78,74 +78,79 @@ export default function Navbar() {
         }`}
     >
       <div className="container px-4 md:px-6 flex items-center justify-between gap-4">
-        <a href="#" className="text-xl sm:text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors shrink-0">
-          DS.
-        </a>
+        <div className="flex items-center gap-10">
+          <a href="#" className="text-xl sm:text-2xl font-display font-bold tracking-tighter hover:text-primary transition-colors shrink-0">
+            DS.
+          </a>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => scrollTo(link.id)}
-              className="text-sm font-medium hover:text-primary transition-colors capitalize px-2 py-1 relative group"
-            >
-              {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-            </button>
-          ))}
+          {/* Desktop Nav Links - Left Side */}
+          <div className="hidden md:flex items-center gap-6">
+            {NAV_LINKS.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => scrollTo(link.id)}
+                className="text-sm font-medium hover:text-primary transition-colors capitalize px-2 py-1 relative group"
+              >
+                {link.label}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
+              </button>
+            ))}
 
           {/* Music Player & IST Clock */}
-          <div className="hidden lg:flex items-center gap-3">
-            <MusicPlayer />
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/10 bg-foreground/5 text-xs font-mono text-muted-foreground select-none">
-              <span>{isDay ? "☀️" : "🌙"}</span>
-              <span>{clockTime} IST</span>
+            <div className="hidden lg:flex items-center gap-3 ml-4">
+              <MusicPlayer />
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-foreground/10 bg-foreground/5 text-xs font-mono text-muted-foreground select-none">
+                <span>{isDay ? "☀️" : "🌙"}</span>
+                <span>{clockTime} IST</span>
+              </div>
+            </div>
+
+            {/* Theme Toggle - moved left to avoid ID card overlap */}
+            <button
+              onClick={toggleTheme}
+              aria-label="Toggle dark mode"
+              className="hidden md:flex relative w-9 h-9 rounded-full items-center justify-center border border-foreground/10 hover:border-primary/40 bg-foreground/5 hover:bg-primary/10 transition-all duration-300 ml-2"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isDark ? (
+                  <motion.span
+                    key="sun"
+                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="absolute"
+                  >
+                    <Sun className="h-4 w-4 text-yellow-400" />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="moon"
+                    initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                    exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                    className="absolute"
+                  >
+                    <Moon className="h-4 w-4 text-cyan-400" />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </button>
+
+            {/* Connect Button - moved left to avoid ID card overlap */}
+            <div className="hidden md:block ml-2">
+              <Magnetic>
+                <Button
+                  variant="outline"
+                  className="rounded-full border-primary/50 hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/10"
+                  onClick={() => scrollTo('contact')}
+                >
+                  Connect
+                </Button>
+              </Magnetic>
             </div>
           </div>
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            aria-label="Toggle dark mode"
-            className="relative w-9 h-9 rounded-full flex items-center justify-center border border-foreground/10 hover:border-primary/40 bg-foreground/5 hover:bg-primary/10 transition-all duration-300"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {isDark ? (
-                <motion.span
-                  key="sun"
-                  initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                  exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  className="absolute"
-                >
-                  <Sun className="h-4 w-4 text-yellow-400" />
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="moon"
-                  initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
-                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
-                  exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  className="absolute"
-                >
-                  <Moon className="h-4 w-4 text-cyan-400" />
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </button>
-
-          <Magnetic>
-            <Button
-              variant="outline"
-              className="rounded-full border-primary/50 hover:bg-primary hover:text-primary-foreground transition-all duration-300 shadow-lg shadow-primary/10"
-              onClick={() => scrollTo('contact')}
-            >
-              Connect
-            </Button>
-          </Magnetic>
         </div>
 
         {/* Mobile Nav */}
