@@ -7,6 +7,38 @@ import { RevealText } from "@/components/ui/reveal-text";
 
 const certifications = [
   {
+    title: "Claude Code 101",
+    issuer: "Anthropic",
+    date: "May 2026",
+    icon: BrainCircuit,
+    featured: true,
+    description: "Completed Anthropic's official Claude Code 101 course, mastering AI-assisted coding workflows and agentic development patterns using Claude.",
+    details: [
+      "Learned to use Claude as an intelligent coding partner for complex software tasks.",
+      "Explored agentic coding patterns and multi-step code generation workflows.",
+      "Applied Claude Code in real-world development scenarios and project automation.",
+      "Certified by Anthropic — the leading AI safety company behind the Claude model family."
+    ],
+    tags: ["Anthropic", "Claude Code", "AI Coding", "Agentic AI"],
+    certificateImage: "/claude-code-101-certificate.jpg"
+  },
+  {
+    title: "Claude 101",
+    issuer: "Anthropic",
+    date: "May 2026",
+    icon: BrainCircuit,
+    featured: true,
+    description: "Completed Anthropic's foundational Claude 101 certification, gaining deep understanding of prompt engineering and effective Claude usage.",
+    details: [
+      "Mastered core prompting techniques and best practices for working with Claude.",
+      "Understood Claude's capabilities, safety principles, and constitutional AI approach.",
+      "Applied effective prompt engineering strategies across diverse use cases.",
+      "Certificate No: dy4kfank946e — issued by Anthropic on May 8, 2026."
+    ],
+    tags: ["Anthropic", "Claude AI", "Prompt Engineering", "LLMs"],
+    certificateImage: "/claude-101-certificate.jpg"
+  },
+  {
     title: "Top 30 Finalist - Prompt The Future Hackathon",
     issuer: "Gulzar Group of Institutions (GGI)",
     date: "February 2026",
