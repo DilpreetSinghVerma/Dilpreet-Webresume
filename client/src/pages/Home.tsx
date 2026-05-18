@@ -44,13 +44,13 @@ export default function Home() {
 
         {/* Page sections */}
         <Hero />
-        <Vision />
 
         <div id="skills"><Skills /></div>
         <div id="experience"><Experience /></div>
         <div id="certifications"><Certifications /></div>
         <div id="projects"><Projects /></div>
         <div id="growth"><Growth /></div>
+        <Vision />
         <div id="contact"><Contact /></div>
 
         {/* Footer */}
