@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import ScrollProgress from "@/components/ui/scroll-progress";
 import Hero from "@/components/sections/Hero";
@@ -13,38 +14,54 @@ import { NeuralAssistant } from "@/components/ui/neural-assistant";
 import EasterEgg from "@/components/ui/easter-egg";
 import TechStackBadge from "@/components/ui/tech-stack-badge";
 import Vision from "@/components/sections/Vision";
+import SplashScreen from "@/components/SplashScreen";
 
 export default function Home() {
+  // Show splash only once per session (not on every refresh)
+  const [splashDone, setSplashDone] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return sessionStorage.getItem("splashShown") === "true";
+  });
+
+  const handleSplashDone = () => {
+    sessionStorage.setItem("splashShown", "true");
+    setSplashDone(true);
+  };
+
   return (
-    <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative">
-      {/* Fixed overlays */}
-      <CursorGlow />
-      <AITerminal />
-      <NeuralAssistant />
-      <EasterEgg />
-      <ScrollProgress />
-      <Navbar />
+    <>
+      {/* Splash screen — only on first visit per session */}
+      {!splashDone && <SplashScreen onDone={handleSplashDone} />}
 
-      {/* Page sections */}
-      <Hero />
-      <Vision />
+      <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative">
+        {/* Fixed overlays */}
+        <CursorGlow />
+        <AITerminal />
+        <NeuralAssistant />
+        <EasterEgg />
+        <ScrollProgress />
+        <Navbar />
 
-      <div id="skills"><Skills /></div>
-      <div id="experience"><Experience /></div>
-      <div id="certifications"><Certifications /></div>
-      <div id="projects"><Projects /></div>
-      <div id="growth"><Growth /></div>
-      <div id="contact"><Contact /></div>
+        {/* Page sections */}
+        <Hero />
+        <Vision />
 
-      {/* Footer */}
-      <footer className="border-t border-foreground/10 text-center text-sm text-muted-foreground bg-background/40 backdrop-blur-sm">
-        {/* Built with badge — in-page, not floating */}
-        <TechStackBadge />
-        <div className="container px-4 pb-10">
-          <p className="mb-2 font-display font-medium text-foreground">DILPREET SINGH</p>
-          <p>© 2026 • Designed with precision and crafted with passion.</p>
-        </div>
-      </footer>
-    </main>
+        <div id="skills"><Skills /></div>
+        <div id="experience"><Experience /></div>
+        <div id="certifications"><Certifications /></div>
+        <div id="projects"><Projects /></div>
+        <div id="growth"><Growth /></div>
+        <div id="contact"><Contact /></div>
+
+        {/* Footer */}
+        <footer className="border-t border-foreground/10 text-center text-sm text-muted-foreground bg-background/40 backdrop-blur-sm">
+          <TechStackBadge />
+          <div className="container px-4 pb-10">
+            <p className="mb-2 font-display font-medium text-foreground">DILPREET SINGH</p>
+            <p>© 2026 • Designed with precision and crafted with passion.</p>
+          </div>
+        </footer>
+      </main>
+    </>
   );
 }
