@@ -70,9 +70,9 @@ export default function Hero() {
         <Lanyard />
       </div>
 
-      {/* Portrait photo - Mobile/Tablet only (hidden on desktop where lanyard shows) */}
+      {/* Portrait photo - Tablet only (sm→lg). Hidden on phones (overlap) & desktop (lanyard shows it) */}
       <motion.div
-        className="absolute top-20 right-4 sm:right-8 z-10 pointer-events-none lg:hidden"
+        className="absolute top-20 right-8 z-10 pointer-events-none hidden sm:block lg:hidden"
         initial={{ opacity: 0, scale: 0.85, y: -10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
