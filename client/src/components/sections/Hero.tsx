@@ -70,6 +70,39 @@ export default function Hero() {
         <Lanyard />
       </div>
 
+      {/* Portrait photo - Mobile/Tablet only (hidden on desktop where lanyard shows) */}
+      <motion.div
+        className="absolute top-20 right-4 sm:right-8 z-10 pointer-events-none lg:hidden"
+        initial={{ opacity: 0, scale: 0.85, y: -10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* Glow behind */}
+        <div
+          className="absolute inset-0 rounded-full blur-2xl opacity-30"
+          style={{ background: "radial-gradient(circle, #00e5ff 0%, transparent 70%)", transform: "scale(1.3)" }}
+        />
+        {/* Glowing ring */}
+        <motion.div
+          className="relative rounded-full p-[2px]"
+          style={{
+            background: "linear-gradient(135deg, #00e5ff, #7c3aed, #00e5ff)",
+            boxShadow: "0 0 24px rgba(0,229,255,0.35), 0 0 60px rgba(0,229,255,0.1)",
+          }}
+          animate={{ boxShadow: ["0 0 24px rgba(0,229,255,0.35)", "0 0 40px rgba(0,229,255,0.55)", "0 0 24px rgba(0,229,255,0.35)"] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <div className="rounded-full overflow-hidden bg-background w-28 h-28 sm:w-36 sm:h-36">
+            <img
+              src="/dilpreet-portrait.png"
+              alt="Dilpreet Singh"
+              className="w-full h-full object-cover object-top scale-110"
+            />
+          </div>
+        </motion.div>
+      </motion.div>
+
+
       <div className="relative z-10 w-full h-full flex justify-start items-center px-4 md:pl-32 md:pr-10 pointer-events-none">
         <motion.div style={{ y: y1, opacity }} className="max-w-xl text-left space-y-6 pointer-events-auto">
 
