@@ -7,6 +7,38 @@ import { RevealText } from "@/components/ui/reveal-text";
 
 const certifications = [
   {
+    title: "Skyscanner Front-End Software Engineering Job Simulation",
+    issuer: "Forage",
+    date: "May 2026",
+    icon: Award,
+    featured: true,
+    description: "Completed a job simulation where I built a web application using React as a front-end engineer at Skyscanner. Developed a page for picking travel dates using Skyscanner's open-source Backpack React library, customized the application, and ran automated tests.",
+    details: [
+      "Created a Backpack React Web App using Skyscanner's custom templates and design tokens.",
+      "Configured date selection, formatting, and responsive calendar layouts utilizing bpk-component-calendar.",
+      "Ran automated Jest tests to verify UI components and layout integrity.",
+      "Gained direct experience with professional component libraries, design systems, and frontend workflows."
+    ],
+    tags: ["React", "Backpack Design System", "Jest Testing", "Frontend Development"],
+    certificateImage: "/km4rw7dihDr3etqom_skoQmxqhtgWmKv2pm_ef4Ma6CaHFCCrNyoa_1779636092173_completion_certificate_page-0001.jpg"
+  },
+  {
+    title: "Skyscanner Software Engineering Job Simulation",
+    issuer: "Forage",
+    date: "May 2026",
+    icon: Award,
+    featured: true,
+    description: "Completed a job simulation involving back-end software engineering tasks at Skyscanner, focusing on project setup, Kafka messaging integration, database management, and REST API controller development.",
+    details: [
+      "Successfully set up a robust backend application architecture.",
+      "Integrated Apache Kafka for real-time, event-driven stream processing and messaging.",
+      "Configured H2 Database for local relational database management and fast persistence.",
+      "Developed and optimized REST API Integration and Controllers for service communication."
+    ],
+    tags: ["Software Engineering", "Java", "Apache Kafka", "REST APIs", "H2 Database"],
+    certificateImage: "/E6McHJDKsQYh79moz_Sj7temL583QAYpHXD_ef4Ma6CaHFCCrNyoa_1779632766106_completion_certificate_page-0001.jpg"
+  },
+  {
     title: "Claude Code 101",
     issuer: "Anthropic",
     date: "May 2026",
