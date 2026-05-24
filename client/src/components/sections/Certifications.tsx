@@ -23,19 +23,19 @@ const certifications = [
     certificateImage: "/km4rw7dihDr3etqom_skoQmxqhtgWmKv2pm_ef4Ma6CaHFCCrNyoa_1779636092173_completion_certificate_page-0001.jpg"
   },
   {
-    title: "Skyscanner Software Engineering Job Simulation",
+    title: "JPMorgan Chase Software Engineering Job Simulation",
     issuer: "Forage",
     date: "May 2026",
     icon: Award,
     featured: true,
-    description: "Completed a job simulation involving back-end software engineering tasks at Skyscanner, focusing on project setup, Kafka messaging integration, database management, and REST API controller development.",
+    description: "Completed a job simulation involving backend software engineering tasks at JPMorgan Chase & Co., focusing on project setup, Kafka messaging integration, database management, and REST API controller development.",
     details: [
-      "Successfully set up a robust backend application architecture.",
+      "Successfully set up a robust backend application architecture using Java, Spring Boot, and Maven.",
       "Integrated Apache Kafka for real-time, event-driven stream processing and messaging.",
       "Configured H2 Database for local relational database management and fast persistence.",
       "Developed and optimized REST API Integration and Controllers for service communication."
     ],
-    tags: ["Software Engineering", "Java", "Apache Kafka", "REST APIs", "H2 Database"],
+    tags: ["Software Engineering", "Java", "Spring Boot", "Apache Kafka", "REST APIs", "H2 Database"],
     certificateImage: "/E6McHJDKsQYh79moz_Sj7temL583QAYpHXD_ef4Ma6CaHFCCrNyoa_1779632766106_completion_certificate_page-0001.jpg"
   },
   {
