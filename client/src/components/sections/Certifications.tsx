@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Award, FileCheck, TrendingUp, BrainCircuit, X, ZoomIn, ZoomOut, Eye, Sparkles, ExternalLink } from "lucide-react";
+import { Award, FileCheck, TrendingUp, BrainCircuit, X, ZoomIn, ZoomOut, Eye, Sparkles, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { RevealText } from "@/components/ui/reveal-text";
 import { Button } from "@/components/ui/button";
@@ -195,6 +195,9 @@ export default function Certifications() {
   const [showCertificate, setShowCertificate] = useState(false);
   const [selectedCert, setSelectedCert] = useState<any>(null);
   const [zoom, setZoom] = useState(1);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const INITIAL_LIMIT = 6;
 
   const openCertificate = (cert: any) => {
     setSelectedCert(cert);
@@ -210,9 +213,18 @@ export default function Certifications() {
     setZoom(prev => Math.max(prev - 0.25, 1));
   };
 
+  const handleCategoryChange = (catId: string) => {
+    setActiveCategory(catId);
+    setIsExpanded(false);
+  };
+
   const filteredCertifications = activeCategory === "all"
     ? certifications
     : certifications.filter(cert => cert.category === activeCategory);
+
+  const displayedCertifications = isExpanded
+    ? filteredCertifications
+    : filteredCertifications.slice(0, INITIAL_LIMIT);
 
   return (
     <section id="certifications" className="py-16 md:py-24 relative overflow-hidden">
@@ -239,7 +251,7 @@ export default function Certifications() {
             return (
               <button
                 key={category.id}
-                onClick={() => setActiveCategory(category.id)}
+                onClick={() => handleCategoryChange(category.id)}
                 className={`relative px-4 py-2 text-sm rounded-full font-medium transition-all duration-300 ${
                   isActive
                     ? "text-primary-foreground font-semibold"
@@ -268,7 +280,7 @@ export default function Certifications() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
           <AnimatePresence mode="popLayout">
-            {filteredCertifications.map((cert, index) => (
+            {displayedCertifications.map((cert, index) => (
               <motion.div
                 key={cert.title}
                 layout
@@ -363,6 +375,27 @@ export default function Certifications() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* View More / Less Button */}
+        {filteredCertifications.length > INITIAL_LIMIT && (
+          <div className="flex justify-center mt-10">
+            <Button
+              onClick={() => setIsExpanded(!isExpanded)}
+              variant="outline"
+              className="group rounded-full border-primary/20 hover:border-primary/50 text-foreground bg-background/40 backdrop-blur-md px-6 py-5 flex items-center gap-2 hover:bg-primary/5 transition-all duration-300 shadow-lg"
+            >
+              {isExpanded ? (
+                <>
+                  Show Less <ChevronUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+                </>
+              ) : (
+                <>
+                  View More <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
+                </>
+              )}
+            </Button>
+          </div>
+        )}
 
         {/* Unified Certificate & Details Modal */}
         <AnimatePresence>
