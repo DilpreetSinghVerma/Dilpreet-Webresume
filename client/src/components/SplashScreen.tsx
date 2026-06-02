@@ -101,12 +101,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       .set(".preloader .progress-bar", { transformOrigin: "right" })
       .to(".preloader .progress-bar", {
         scaleX: 0,
-        duration: 1,
+        duration: 0.8,
         ease: "power3.in",
         force3D: true,
       });
 
-    // 2. Image cascade — slide reveal (replaces clip-path)
+    // 2. Image cascade — slide reveal
     preloaderImages.forEach((img, i) => {
       tl.to(
         img,
@@ -117,11 +117,11 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
           delay: i * 0.75,
           force3D: true,
         },
-        "-=5"
+        0.25
       );
     });
 
-    // 3. Image zoom-out & counter-translate (replaces clip-path)
+    // 3. Image zoom-out & counter-translate
     preloaderImagesInner.forEach((img, i) => {
       tl.to(
         img,
@@ -133,7 +133,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
           delay: i * 0.75,
           force3D: true,
         },
-        "-=5.25"
+        0.25
       );
     });
 
@@ -147,7 +147,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         stagger: 0.1,
         force3D: true,
       },
-      "-=5.5"
+      0.5
     );
 
     // 5. Name chars animate in
@@ -160,8 +160,11 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         stagger: 0.025,
         force3D: true,
       },
-      "-=5"
+      0.75
     );
+
+    // Add a label for the exit sequence
+    tl.addLabel("exit", 4.25);
 
     // 6. Images fly away upward (completely off-screen)
     tl.to(
@@ -172,7 +175,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         ease: "hop",
         force3D: true,
       },
-      "-=1.5"
+      "exit"
     );
 
     // 7. Copy lines slide out
@@ -180,61 +183,65 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       lines,
       {
         y: "-125%",
-        duration: 2,
+        duration: 1.25,
         ease: "hop",
-        stagger: 0.1,
+        stagger: 0.075,
         force3D: true,
       },
-      "-=2"
+      "exit"
     );
 
-    // 8. Name chars redistribute — middle fly out, first + last stay (integrated directly into timeline)
+    // 8. Name chars redistribute — middle fly out
     tl.to(
       middleChars,
       {
         yPercent: (i: number) => (i % 2 === 0 ? 100 : -100),
-        duration: 1,
+        duration: 0.8,
         ease: "hop",
-        stagger: 0.025,
+        stagger: 0.02,
         force3D: true,
       },
-      "-=2.5"
-    )
-      .set([initialChar.parentElement, lastChar.parentElement], {
-        overflow: "visible",
-      }, "<")
-      .to([initialChar, lastChar], {
-        x: (i: number) => {
-          if (i === 0) {
-            return centerX - initialRect.left - initialRect.width;
-          } else {
-            return centerX - lastRect.left;
-          }
-        },
-        duration: 1,
-        ease: "hop",
-        force3D: true,
-      }, "<0.5")
-      .set(headerRef.current, { mixBlendMode: "difference" })
+      "exit"
+    );
+
+    // Make masks overflow: visible so first/last letters can move freely
+    tl.set([initialChar.parentElement, lastChar.parentElement], {
+      overflow: "visible",
+    }, "exit");
+
+    // Move first and last characters to the center to form "DH"
+    tl.to([initialChar, lastChar], {
+      x: (i: number) => {
+        if (i === 0) {
+          return centerX - initialRect.left - initialRect.width;
+        } else {
+          return centerX - lastRect.left;
+        }
+      },
+      duration: 0.8,
+      ease: "hop",
+      force3D: true,
+    }, "exit+=0.25");
+
+    // 9. Preloader slides upward & header scales down in parallel!
+    tl.set(headerRef.current, { mixBlendMode: "difference" }, "exit+=1.05")
       .to(headerRef.current, {
         y: "2rem",
         scale: 0.35,
-        duration: 1.75,
+        duration: 1.5,
         ease: "hop",
         force3D: true,
-      });
-
-    // 9. Preloader slides upward to reveal the hero
-    tl.to(
-      ".preloader",
-      {
-        yPercent: -100,
-        duration: 1.75,
-        ease: "hop",
-        force3D: true,
-      },
-      "-=1.25"
-    );
+      }, "exit+=1.05")
+      .to(
+        ".preloader",
+        {
+          yPercent: -100,
+          duration: 1.5,
+          ease: "hop",
+          force3D: true,
+        },
+        "exit+=1.05"
+      );
 
     return () => {
       tl.kill();
