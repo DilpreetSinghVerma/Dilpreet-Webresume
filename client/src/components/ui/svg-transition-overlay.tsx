@@ -37,10 +37,15 @@ export default function SVGTransitionOverlay() {
           const from = direction === "in" ? len : 0;
           const to   = direction === "in" ? 0   : -len;
 
-          const kf: Keyframe[] = [
-            { strokeDashoffset: from, strokeWidth: 200 },
-            { strokeDashoffset: to,   strokeWidth: 700 },
-          ];
+          const kf: Keyframe[] = direction === "in"
+            ? [
+                { strokeDashoffset: len, strokeWidth: 200 },
+                { strokeDashoffset: 0,   strokeWidth: 700 },
+              ]
+            : [
+                { strokeDashoffset: 0,    strokeWidth: 700 },
+                { strokeDashoffset: -len, strokeWidth: 200 },
+              ];
           const opts: KeyframeAnimationOptions = {
             duration: 900,
             easing: "cubic-bezier(0.65, 0, 0.35, 1)",
