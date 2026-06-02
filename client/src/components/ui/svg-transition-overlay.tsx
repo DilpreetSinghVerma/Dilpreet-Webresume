@@ -1,33 +1,62 @@
 import { useEffect, useRef } from "react";
 import { animate } from "framer-motion";
 
+const DEFAULT_LENGTH = 15000; // Safe fallback length to prevent 0-length layout bugs
+
 export default function SVGTransitionOverlay() {
   const path1Ref = useRef<SVGPathElement>(null);
   const path2Ref = useRef<SVGPathElement>(null);
+  const lengthsRef = useRef({ len1: DEFAULT_LENGTH, len2: DEFAULT_LENGTH });
 
   useEffect(() => {
-    const p1 = path1Ref.current;
-    const p2 = path2Ref.current;
-    if (!p1 || !p2) return;
+    const updateLengths = () => {
+      const p1 = path1Ref.current;
+      const p2 = path2Ref.current;
+      if (!p1 || !p2) return;
 
-    // Measure exact path lengths to setup stroke dash attributes
-    const len1 = p1.getTotalLength();
-    const len2 = p2.getTotalLength();
+      const len1 = p1.getTotalLength() || DEFAULT_LENGTH;
+      const len2 = p2.getTotalLength() || DEFAULT_LENGTH;
 
-    // Set initial stroke style attributes (hidden state)
-    p1.style.strokeDasharray = `${len1}`;
-    p1.style.strokeDashoffset = `${len1}`;
-    p2.style.strokeDasharray = `${len2}`;
-    p2.style.strokeDashoffset = `${len2}`;
+      lengthsRef.current = { len1, len2 };
+
+      p1.style.strokeDasharray = `${len1}`;
+      p1.style.strokeDashoffset = `${len1}`;
+      p2.style.strokeDasharray = `${len2}`;
+      p2.style.strokeDashoffset = `${len2}`;
+    };
+
+    // Initialize lengths immediately
+    updateLengths();
+    
+    // Schedule a secondary update after browser layout has occurred
+    const r1 = requestAnimationFrame(() => {
+      requestAnimationFrame(updateLengths);
+    });
 
     const handleStart = () => {
-      // 1. Leave transition: animate paths to 0 (fully drawn) and expand thickness to 700px
+      const p1 = path1Ref.current;
+      const p2 = path2Ref.current;
+      if (!p1 || !p2) return;
+
+      // Force recalculation if it was previously unresolved
+      const len1 = p1.getTotalLength() || lengthsRef.current.len1 || DEFAULT_LENGTH;
+      const len2 = p2.getTotalLength() || lengthsRef.current.len2 || DEFAULT_LENGTH;
+      lengthsRef.current = { len1, len2 };
+
+      p1.style.strokeDasharray = `${len1}`;
+      p2.style.strokeDasharray = `${len2}`;
+
       animate(p1, { strokeDashoffset: 0, strokeWidth: 700 }, { duration: 1.0, ease: "easeInOut" });
       animate(p2, { strokeDashoffset: 0, strokeWidth: 700 }, { duration: 1.0, ease: "easeInOut" });
     };
 
     const handleEnd = async () => {
-      // 2. Enter transition: animate paths to -length (undrawn forward) and shrink thickness back to 200px
+      const p1 = path1Ref.current;
+      const p2 = path2Ref.current;
+      if (!p1 || !p2) return;
+
+      const { len1, len2 } = lengthsRef.current;
+
       const a1 = animate(p1, { strokeDashoffset: -len1, strokeWidth: 200 }, { duration: 1.0, ease: "easeInOut" });
       const a2 = animate(p2, { strokeDashoffset: -len2, strokeWidth: 200 }, { duration: 1.0, ease: "easeInOut" });
       
@@ -42,6 +71,7 @@ export default function SVGTransitionOverlay() {
     window.addEventListener("page-transition-end", handleEnd);
 
     return () => {
+      cancelAnimationFrame(r1);
       window.removeEventListener("page-transition-start", handleStart);
       window.removeEventListener("page-transition-end", handleEnd);
     };
