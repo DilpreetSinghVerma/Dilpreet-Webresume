@@ -7,10 +7,10 @@ gsap.registerPlugin(CustomEase);
 
 /** Images shown during the preloader cascade */
 const PRELOADER_IMAGES = [
-  "/dilpreet-portrait.png",
-  "/achievements/Hacathon 1.jpg",
-  "/achievements/Hackathon 2.jpg",
-  "/achievements/logo designing compitition 1.jpg",
+  "/splash_screen_optimized/img_1.jpg",
+  "/splash_screen_optimized/img_2.jpg",
+  "/splash_screen_optimized/img_3.jpg",
+  "/splash_screen_optimized/img_4.jpg",
 ];
 
 const COPY_TEXT =
@@ -81,12 +81,14 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       scaleX: 1,
       duration: 4,
       ease: "power3.inOut",
+      force3D: true,
     })
       .set(".preloader .progress-bar", { transformOrigin: "right" })
       .to(".preloader .progress-bar", {
         scaleX: 0,
         duration: 1,
         ease: "power3.in",
+        force3D: true,
       });
 
     // 2. Image cascade — clip-path reveal
@@ -98,6 +100,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
           duration: 1,
           ease: "hop",
           delay: i * 0.75,
+          force3D: true,
         },
         "-=5"
       );
@@ -112,6 +115,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
           duration: 1.5,
           ease: "hop",
           delay: i * 0.75,
+          force3D: true,
         },
         "-=5.25"
       );
@@ -125,6 +129,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         duration: 2,
         ease: "hop",
         stagger: 0.1,
+        force3D: true,
       },
       "-=5.5"
     );
@@ -137,6 +142,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         duration: 1,
         ease: "hop",
         stagger: 0.025,
+        force3D: true,
       },
       "-=5"
     );
@@ -148,6 +154,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
         duration: 1,
         ease: "hop",
+        force3D: true,
       },
       "-=1.5"
     );
@@ -160,6 +167,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         duration: 2,
         ease: "hop",
         stagger: 0.1,
+        force3D: true,
       },
       "-=2"
     );
@@ -176,6 +184,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         ease: "hop",
         stagger: 0.025,
         delay: 0.5,
+        force3D: true,
         onStart: () => {
           // Allow first and last chars to escape their masks
           const initialMask = initialChar.parentElement;
@@ -198,6 +207,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
             duration: 1,
             ease: "hop",
             delay: 0.5,
+            force3D: true,
             x: (i: number) => {
               if (i === 0) {
                 return centerX - initialRect.left - initialRect.width;
@@ -213,6 +223,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
                 scale: 0.35,
                 duration: 1.75,
                 ease: "hop",
+                force3D: true,
               });
             },
           });
@@ -228,6 +239,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
         duration: 1.75,
         ease: "hop",
+        force3D: true,
       },
       "-=0.5"
     );
