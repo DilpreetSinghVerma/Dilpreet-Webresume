@@ -9,10 +9,10 @@ import { contactSchema, type ContactMessage } from "@shared/schema";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import { useLocation } from "wouter";
+import { useTransitionNavigate } from "@/hooks/use-transition-navigate";
 
 export default function Contact() {
-    const [, setLocation] = useLocation();
+    const navigate = useTransitionNavigate();
     const { toast } = useToast();
     const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactMessage>({
         resolver: zodResolver(contactSchema)
@@ -111,7 +111,7 @@ export default function Contact() {
                                 className="pt-4 flex flex-wrap gap-4"
                             >
                                 <button
-                                    onClick={() => setLocation("/resume")}
+                                    onClick={() => navigate("/resume")}
                                     className="group relative inline-flex items-center gap-3 px-8 py-4 bg-primary/10 text-primary border border-primary/20 rounded-xl font-bold overflow-hidden transition-all hover:bg-primary/20 hover:border-primary/50 active:scale-95 cursor-pointer"
                                 >
                                     <ExternalLink className="h-5 w-5" />

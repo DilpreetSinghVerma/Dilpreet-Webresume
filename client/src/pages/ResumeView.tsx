@@ -1,10 +1,10 @@
-import { useLocation } from "wouter";
+import { useTransitionNavigate } from "@/hooks/use-transition-navigate";
 import { ArrowLeft, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CursorGlow from "@/components/ui/cursor-glow";
 
 export default function ResumeView() {
-  const [, setLocation] = useLocation();
+  const navigate = useTransitionNavigate();
 
   return (
     <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative bg-background flex flex-col">
@@ -15,7 +15,7 @@ export default function ResumeView() {
         <Button 
           variant="ghost" 
           className="gap-2 text-muted-foreground hover:text-foreground hover:bg-foreground/5 transition-colors"
-          onClick={() => setLocation("/")}
+          onClick={() => navigate("/")}
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Portfolio
