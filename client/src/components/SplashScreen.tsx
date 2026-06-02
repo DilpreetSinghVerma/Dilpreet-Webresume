@@ -48,6 +48,16 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
     const chars = charSplit.elements;
     const lines = lineSplit.elements;
 
+    const initialChar = chars[0];
+    const lastChar = chars[chars.length - 1];
+    const middleChars = chars.slice(1, -1);
+
+    // Measure positions safely BEFORE applying GSAP transforms
+    const viewportWidth = window.innerWidth;
+    const centerX = viewportWidth / 2;
+    const initialRect = initialChar.getBoundingClientRect();
+    const lastRect = lastChar.getBoundingClientRect();
+
     // Initial states
     chars.forEach((char, i) => {
       gsap.set(char, { yPercent: i % 2 === 0 ? -100 : 100 });
@@ -68,9 +78,6 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
     preloaderImagesInner.forEach((img) => {
       gsap.set(img, { yPercent: -100, scale: 2 });
     });
-
-    const initialChar = chars[0];
-    const lastChar = chars[chars.length - 1];
 
     // ─── Main timeline ───
     const tl = gsap.timeline({
@@ -156,11 +163,11 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       "-=5"
     );
 
-    // 6. Images fly away upward (replaces clip-path)
+    // 6. Images fly away upward (completely off-screen)
     tl.to(
       ".preloader-images",
       {
-        yPercent: -150,
+        y: -window.innerHeight,
         duration: 1.25,
         ease: "hop",
         force3D: true,
@@ -181,67 +188,43 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       "-=2"
     );
 
-    // 8. Name chars redistribute — middle fly out, first + last stay
+    // 8. Name chars redistribute — middle fly out, first + last stay (integrated directly into timeline)
     tl.to(
-      chars,
+      middleChars,
       {
-        yPercent: (index: number) => {
-          if (index === 0 || index === chars.length - 1) return 0;
-          return index % 2 === 0 ? 100 : -100;
-        },
+        yPercent: (i: number) => (i % 2 === 0 ? 100 : -100),
         duration: 1,
         ease: "hop",
         stagger: 0.025,
-        delay: 0.5,
         force3D: true,
-        onStart: () => {
-          // Allow first and last chars to escape their masks
-          const initialMask = initialChar.parentElement;
-          const lastMask = lastChar.parentElement;
-
-          if (initialMask?.classList.contains("char-mask")) {
-            initialMask.style.overflow = "visible";
-          }
-          if (lastMask?.classList.contains("char-mask")) {
-            lastMask.style.overflow = "visible";
-          }
-
-          // Move first + last to center
-          const viewportWidth = window.innerWidth;
-          const centerX = viewportWidth / 2;
-          const initialRect = initialChar.getBoundingClientRect();
-          const lastRect = lastChar.getBoundingClientRect();
-
-          gsap.to([initialChar, lastChar], {
-            duration: 1,
-            ease: "hop",
-            delay: 0.5,
-            force3D: true,
-            x: (i: number) => {
-              if (i === 0) {
-                return centerX - initialRect.left - initialRect.width;
-              } else {
-                return centerX - lastRect.left;
-              }
-            },
-            onComplete: () => {
-              // Scale the entire header down and blend
-              gsap.set(headerRef.current, { mixBlendMode: "difference" });
-              gsap.to(headerRef.current, {
-                y: "2rem",
-                scale: 0.35,
-                duration: 1.75,
-                ease: "hop",
-                force3D: true,
-              });
-            },
-          });
-        },
       },
       "-=2.5"
-    );
+    )
+      .set([initialChar.parentElement, lastChar.parentElement], {
+        overflow: "visible",
+      }, "<")
+      .to([initialChar, lastChar], {
+        x: (i: number) => {
+          if (i === 0) {
+            return centerX - initialRect.left - initialRect.width;
+          } else {
+            return centerX - lastRect.left;
+          }
+        },
+        duration: 1,
+        ease: "hop",
+        force3D: true,
+      }, "<0.5")
+      .set(headerRef.current, { mixBlendMode: "difference" })
+      .to(headerRef.current, {
+        y: "2rem",
+        scale: 0.35,
+        duration: 1.75,
+        ease: "hop",
+        force3D: true,
+      });
 
-    // 9. Preloader slides upward to reveal the hero (replaces clip-path)
+    // 9. Preloader slides upward to reveal the hero
     tl.to(
       ".preloader",
       {
@@ -250,7 +233,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         ease: "hop",
         force3D: true,
       },
-      "-=0.5"
+      "-=1.25"
     );
 
     return () => {
