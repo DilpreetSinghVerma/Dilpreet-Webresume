@@ -61,6 +61,14 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       ".preloader-images .img img"
     );
 
+    // Set initial state for images (GPU translation reveal instead of clip-path)
+    preloaderImages.forEach((img) => {
+      gsap.set(img, { yPercent: 100 });
+    });
+    preloaderImagesInner.forEach((img) => {
+      gsap.set(img, { yPercent: -100, scale: 2 });
+    });
+
     const initialChar = chars[0];
     const lastChar = chars[chars.length - 1];
 
@@ -91,12 +99,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         force3D: true,
       });
 
-    // 2. Image cascade — clip-path reveal
+    // 2. Image cascade — slide reveal (replaces clip-path)
     preloaderImages.forEach((img, i) => {
       tl.to(
         img,
         {
-          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          yPercent: 0,
           duration: 1,
           ease: "hop",
           delay: i * 0.75,
@@ -106,11 +114,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       );
     });
 
-    // 3. Image zoom-out
+    // 3. Image zoom-out & counter-translate (replaces clip-path)
     preloaderImagesInner.forEach((img, i) => {
       tl.to(
         img,
         {
+          yPercent: 0,
           scale: 1,
           duration: 1.5,
           ease: "hop",
@@ -147,12 +156,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       "-=5"
     );
 
-    // 6. Images clip away upward
+    // 6. Images fly away upward (replaces clip-path)
     tl.to(
       ".preloader-images",
       {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
-        duration: 1,
+        yPercent: -150,
+        duration: 1.25,
         ease: "hop",
         force3D: true,
       },
@@ -232,11 +241,11 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       "-=2.5"
     );
 
-    // 9. Preloader wipes upward to reveal the hero
+    // 9. Preloader slides upward to reveal the hero (replaces clip-path)
     tl.to(
       ".preloader",
       {
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+        yPercent: -100,
         duration: 1.75,
         ease: "hop",
         force3D: true,
