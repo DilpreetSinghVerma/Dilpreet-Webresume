@@ -11,6 +11,13 @@ import * as THREE from 'three';
 // Extend Three.js with MeshLine
 extend({ MeshLineGeometry, MeshLineMaterial });
 
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    meshLineGeometry: any;
+    meshLineMaterial: any;
+  }
+}
+
 const cardGLB = '/models/card.glb';
 const cardTexturePath = '/textures/card_texture.png?v=6';
 const strapTexturePath = '/textures/strap_texture.png?v=4';
@@ -48,12 +55,12 @@ export default function Lanyard({
 }
 
 function Band({ maxSpeed = 50, minSpeed = 0 }) {
-  const band = useRef<any>(),
-    fixed = useRef<any>(),
-    j1 = useRef<any>(),
-    j2 = useRef<any>(),
-    j3 = useRef<any>(),
-    card = useRef<any>();
+  const band = useRef<any>(null),
+    fixed = useRef<any>(null),
+    j1 = useRef<any>(null),
+    j2 = useRef<any>(null),
+    j3 = useRef<any>(null),
+    card = useRef<any>(null);
 
   const vec = new THREE.Vector3(),
     ang = new THREE.Vector3(),

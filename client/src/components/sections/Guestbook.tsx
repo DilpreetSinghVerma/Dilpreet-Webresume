@@ -15,7 +15,7 @@ import { useAdmin } from "@/hooks/use-admin";
 
 export default function Guestbook() {
     const { toast } = useToast();
-    const { isAdmin } = useAdmin();
+    const { isAdmin, logout } = useAdmin();
     const [showAll, setShowAll] = useState(false);
     
     const { data: entries = [], isLoading } = useQuery<GuestbookEntry[]>({
