@@ -288,7 +288,4 @@
   height: 100%;
 }
 
-.transition-svg-overlay path {
-  stroke-dashoffset: 99999;
-  stroke-dasharray: 99999;
-}
+/* path animation is controlled entirely by JS – no CSS overrides */

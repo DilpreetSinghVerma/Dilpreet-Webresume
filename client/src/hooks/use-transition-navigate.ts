@@ -1,27 +1,45 @@
 import { useLocation } from "wouter";
 import { useCallback } from "react";
 
+/**
+ * Navigation hook that orchestrates page transitions with the SVG overlay.
+ *
+ * Sequence:
+ *   1. Dispatch "page-transition-start"  (overlay starts drawing IN)
+ *   2. Wait for "page-transition-cover-done" (overlay has fully covered viewport)
+ *   3. setLocation(to)                   (swap the route)
+ *   4. Dispatch "page-transition-end"     (overlay starts drawing OUT)
+ */
 export function useTransitionNavigate() {
   const [, setLocation] = useLocation();
 
-  const navigate = useCallback(async (to: string) => {
-    if (to === window.location.pathname) return;
+  const navigate = useCallback(
+    async (to: string) => {
+      if (to === window.location.pathname) return;
 
-    // Trigger exit animation (cover viewport with dynamic strokes)
-    window.dispatchEvent(new CustomEvent("page-transition-start"));
+      // 1. Fire exit animation
+      window.dispatchEvent(new CustomEvent("page-transition-start"));
 
-    // Wait 1000ms for full stroke cover
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      // 2. Wait until the overlay signals cover is complete
+      await new Promise<void>((resolve) => {
+        const onDone = () => {
+          window.removeEventListener("page-transition-cover-done", onDone);
+          resolve();
+        };
+        window.addEventListener("page-transition-cover-done", onDone);
+      });
 
-    // Update location using wouter's default location hook (synchronously)
-    setLocation(to);
+      // 3. Swap route (hidden behind overlay)
+      setLocation(to);
 
-    // Wait 100ms to ensure React mounts and renders the target page component
-    await new Promise((resolve) => setTimeout(resolve, 100));
+      // 4. Small tick to let React render the new page
+      await new Promise((r) => setTimeout(r, 50));
 
-    // Trigger entrance animation (sweep strokes away to reveal new page)
-    window.dispatchEvent(new CustomEvent("page-transition-end"));
-  }, [setLocation]);
+      // 5. Fire entrance animation (reveal new page)
+      window.dispatchEvent(new CustomEvent("page-transition-end"));
+    },
+    [setLocation]
+  );
 
   return navigate;
 }
