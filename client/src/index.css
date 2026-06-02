@@ -289,3 +289,153 @@
 }
 
 /* path animation is controlled entirely by JS – no CSS overrides */
+
+/* ═══════════════════════════════════════════
+   GSAP Landing-Reveal Preloader
+   ═══════════════════════════════════════════ */
+
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  background-color: #020204;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  will-change: clip-path;
+  overflow: hidden;
+  z-index: 10000;
+}
+
+.preloader .progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #00e5ff, #7c3aed, #00e5ff);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+.preloader-images {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 22rem;
+  height: 22rem;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  will-change: clip-path;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.preloader-images .img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+  will-change: clip-path;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.preloader-images .img img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(2);
+  will-change: transform;
+}
+
+.preloader-copy {
+  position: absolute;
+  bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36%;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "Inter", "Manrope", sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 1.7;
+}
+
+.preloader-header {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(55dvh);
+  transform-origin: top;
+  will-change: transform;
+  z-index: 10001;
+  pointer-events: none;
+}
+
+.preloader-header .name-text {
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #fff;
+  font-family: var(--font-display, "Inter", sans-serif);
+  font-size: 6rem;
+  font-weight: 700;
+  line-height: 0.9;
+  display: block;
+  letter-spacing: -0.04em;
+  text-shadow: 0 0 40px rgba(0, 229, 255, 0.15);
+}
+
+.preloader-header .name-text .char,
+.preloader-copy .line,
+.preloader-hero-text .line {
+  position: relative;
+  display: inline-block;
+  transform: translateY(0);
+  will-change: transform;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1000px) {
+  .preloader-images {
+    top: 35%;
+    width: 12rem;
+    height: 12rem;
+  }
+
+  .preloader-copy {
+    width: 80%;
+    font-size: 0.65rem;
+  }
+
+  .preloader-header {
+    transform: translateY(50dvh);
+  }
+
+  .preloader-header .name-text {
+    font-size: 3.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .preloader-images {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .preloader-header .name-text {
+    font-size: 2.4rem;
+  }
+
+  .preloader-copy {
+    width: 90%;
+    bottom: 3rem;
+  }
+}

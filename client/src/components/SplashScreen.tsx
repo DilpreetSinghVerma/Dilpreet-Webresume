@@ -1,134 +1,265 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
+import { splitIntoChars, splitIntoLines } from "@/lib/split-text";
 
-export default function SplashScreen({ onDone }: { onDone: () => void }) {
-  const [visible, setVisible] = useState(true);
+gsap.registerPlugin(CustomEase);
+
+/** Images shown during the preloader cascade */
+const PRELOADER_IMAGES = [
+  "/dilpreet-portrait.png",
+  "/Hacathon 1.jpg",
+  "/Hackathon 2.jpg",
+  "/logo designing compitition 1.jpg",
+];
+
+const COPY_TEXT =
+  "A full-stack developer and AI engineer focused on building scalable, real-world solutions with precision and passion.";
+
+interface SplashScreenProps {
+  onDone: () => void;
+}
+
+export default function SplashScreen({ onDone }: SplashScreenProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const hasRun = useRef(false);
 
   useEffect(() => {
-    // Total splash duration: 2.8s visible, then fade out, then call onDone
-    const exitTimer = setTimeout(() => setVisible(false), 2600);
-    const doneTimer = setTimeout(() => onDone(), 3200);
+    if (hasRun.current) return;
+    hasRun.current = true;
+
+    // Register custom ease
+    CustomEase.create("hop", "0.9, 0, 0.1, 1");
+
+    const nameEl = containerRef.current?.querySelector(
+      ".name-text"
+    ) as HTMLElement | null;
+    const copyEl = containerRef.current?.querySelector(
+      ".preloader-copy p"
+    ) as HTMLElement | null;
+
+    if (!nameEl || !copyEl || !containerRef.current || !headerRef.current)
+      return;
+
+    // ─── Split text into chars / lines ───
+    const charSplit = splitIntoChars(nameEl);
+    const lineSplit = splitIntoLines(copyEl);
+    const chars = charSplit.elements;
+    const lines = lineSplit.elements;
+
+    // Initial states
+    chars.forEach((char, i) => {
+      gsap.set(char, { yPercent: i % 2 === 0 ? -100 : 100 });
+    });
+    gsap.set(lines, { yPercent: 100 });
+
+    const preloaderImages = gsap.utils.toArray<HTMLElement>(
+      ".preloader-images .img"
+    );
+    const preloaderImagesInner = gsap.utils.toArray<HTMLElement>(
+      ".preloader-images .img img"
+    );
+
+    const initialChar = chars[0];
+    const lastChar = chars[chars.length - 1];
+
+    // ─── Main timeline ───
+    const tl = gsap.timeline({
+      delay: 0.25,
+      onComplete: () => {
+        // Clean up preloader DOM + tell Home the splash is done
+        if (headerRef.current) {
+          headerRef.current.style.display = "none";
+        }
+        onDone();
+      },
+    });
+
+    // 1. Progress bar fills
+    tl.to(".preloader .progress-bar", {
+      scaleX: 1,
+      duration: 4,
+      ease: "power3.inOut",
+    })
+      .set(".preloader .progress-bar", { transformOrigin: "right" })
+      .to(".preloader .progress-bar", {
+        scaleX: 0,
+        duration: 1,
+        ease: "power3.in",
+      });
+
+    // 2. Image cascade — clip-path reveal
+    preloaderImages.forEach((img, i) => {
+      tl.to(
+        img,
+        {
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+          duration: 1,
+          ease: "hop",
+          delay: i * 0.75,
+        },
+        "-=5"
+      );
+    });
+
+    // 3. Image zoom-out
+    preloaderImagesInner.forEach((img, i) => {
+      tl.to(
+        img,
+        {
+          scale: 1,
+          duration: 1.5,
+          ease: "hop",
+          delay: i * 0.75,
+        },
+        "-=5.25"
+      );
+    });
+
+    // 4. Copy lines slide in
+    tl.to(
+      lines,
+      {
+        yPercent: 0,
+        duration: 2,
+        ease: "hop",
+        stagger: 0.1,
+      },
+      "-=5.5"
+    );
+
+    // 5. Name chars animate in
+    tl.to(
+      chars,
+      {
+        yPercent: 0,
+        duration: 1,
+        ease: "hop",
+        stagger: 0.025,
+      },
+      "-=5"
+    );
+
+    // 6. Images clip away upward
+    tl.to(
+      ".preloader-images",
+      {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+        duration: 1,
+        ease: "hop",
+      },
+      "-=1.5"
+    );
+
+    // 7. Copy lines slide out
+    tl.to(
+      lines,
+      {
+        y: "-125%",
+        duration: 2,
+        ease: "hop",
+        stagger: 0.1,
+      },
+      "-=2"
+    );
+
+    // 8. Name chars redistribute — middle fly out, first + last stay
+    tl.to(
+      chars,
+      {
+        yPercent: (index: number) => {
+          if (index === 0 || index === chars.length - 1) return 0;
+          return index % 2 === 0 ? 100 : -100;
+        },
+        duration: 1,
+        ease: "hop",
+        stagger: 0.025,
+        delay: 0.5,
+        onStart: () => {
+          // Allow first and last chars to escape their masks
+          const initialMask = initialChar.parentElement;
+          const lastMask = lastChar.parentElement;
+
+          if (initialMask?.classList.contains("char-mask")) {
+            initialMask.style.overflow = "visible";
+          }
+          if (lastMask?.classList.contains("char-mask")) {
+            lastMask.style.overflow = "visible";
+          }
+
+          // Move first + last to center
+          const viewportWidth = window.innerWidth;
+          const centerX = viewportWidth / 2;
+          const initialRect = initialChar.getBoundingClientRect();
+          const lastRect = lastChar.getBoundingClientRect();
+
+          gsap.to([initialChar, lastChar], {
+            duration: 1,
+            ease: "hop",
+            delay: 0.5,
+            x: (i: number) => {
+              if (i === 0) {
+                return centerX - initialRect.left - initialRect.width;
+              } else {
+                return centerX - lastRect.left;
+              }
+            },
+            onComplete: () => {
+              // Scale the entire header down and blend
+              gsap.set(headerRef.current, { mixBlendMode: "difference" });
+              gsap.to(headerRef.current, {
+                y: "2rem",
+                scale: 0.35,
+                duration: 1.75,
+                ease: "hop",
+              });
+            },
+          });
+        },
+      },
+      "-=2.5"
+    );
+
+    // 9. Preloader wipes upward to reveal the hero
+    tl.to(
+      ".preloader",
+      {
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+        duration: 1.75,
+        ease: "hop",
+      },
+      "-=0.5"
+    );
+
     return () => {
-      clearTimeout(exitTimer);
-      clearTimeout(doneTimer);
+      tl.kill();
     };
   }, [onDone]);
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          key="splash"
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center"
-          style={{ backgroundColor: "#020204" }}
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
-        >
-          {/* Subtle radial glow behind logo */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0,229,255,0.06) 0%, transparent 70%)",
-            }}
-          />
+    <>
+      {/* Dark overlay with images + copy */}
+      <div ref={containerRef} className="preloader">
+        <div className="progress-bar" />
 
-          {/* Center content */}
-          <div className="flex flex-col items-center gap-8">
+        <div className="preloader-images">
+          {PRELOADER_IMAGES.map((src, i) => (
+            <div className="img" key={i}>
+              <img src={src} alt="" />
+            </div>
+          ))}
+        </div>
 
-            {/* DS. Logo */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.85 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col items-center gap-3"
-            >
-              {/* Logo box */}
-              <motion.div
-                className="w-20 h-20 rounded-2xl flex items-center justify-center"
-                style={{
-                  border: "1px solid rgba(0,229,255,0.25)",
-                  background: "rgba(0,229,255,0.04)",
-                }}
-                animate={{
-                  boxShadow: [
-                    "0 0 20px rgba(0,229,255,0.1)",
-                    "0 0 45px rgba(0,229,255,0.25)",
-                    "0 0 20px rgba(0,229,255,0.1)",
-                  ],
-                }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <span
-                  className="text-4xl font-bold tracking-tight"
-                  style={{
-                    fontFamily: "var(--font-display, sans-serif)",
-                    color: "#00e5ff",
-                    textShadow: "0 0 20px rgba(0,229,255,0.6)",
-                  }}
-                >
-                  DS.
-                </span>
-              </motion.div>
+        <div className="preloader-copy">
+          <p>{COPY_TEXT}</p>
+        </div>
+      </div>
 
-              {/* Name */}
-              <motion.p
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5, ease: "easeOut" }}
-                style={{
-                  fontFamily: "monospace",
-                  fontSize: "11px",
-                  letterSpacing: "0.3em",
-                  color: "rgba(0,229,255,0.45)",
-                  textTransform: "uppercase",
-                }}
-              >
-                Dilpreet Singh
-              </motion.p>
-            </motion.div>
-
-            {/* Progress bar */}
-            <motion.div
-              className="relative w-40 h-px overflow-hidden rounded-full"
-              style={{ background: "rgba(255,255,255,0.06)" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-            >
-              <motion.div
-                className="absolute left-0 top-0 h-full rounded-full"
-                style={{
-                  background: "linear-gradient(90deg, transparent, #00e5ff, transparent)",
-                  boxShadow: "0 0 8px rgba(0,229,255,0.8)",
-                }}
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ delay: 0.5, duration: 1.8, ease: "easeInOut" }}
-              />
-            </motion.div>
-
-          </div>
-
-          {/* Bottom role tag */}
-          <motion.p
-            className="absolute bottom-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            style={{
-              fontFamily: "monospace",
-              fontSize: "10px",
-              letterSpacing: "0.25em",
-              color: "rgba(255,255,255,0.15)",
-              textTransform: "uppercase",
-            }}
-          >
-            AIML · Full‑Stack · Developer
-          </motion.p>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* Name header — lives outside the preloader for mix-blend-mode */}
+      <div ref={headerRef} className="preloader-header">
+        <span className="name-text">Dilpreet Singh</span>
+      </div>
+    </>
   );
 }
