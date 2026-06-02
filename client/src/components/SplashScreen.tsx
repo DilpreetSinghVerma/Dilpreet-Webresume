@@ -8,9 +8,9 @@ gsap.registerPlugin(CustomEase);
 /** Images shown during the preloader cascade */
 const PRELOADER_IMAGES = [
   "/dilpreet-portrait.png",
-  "/Hacathon 1.jpg",
-  "/Hackathon 2.jpg",
-  "/logo designing compitition 1.jpg",
+  "/achievements/Hacathon 1.jpg",
+  "/achievements/Hackathon 2.jpg",
+  "/achievements/logo designing compitition 1.jpg",
 ];
 
 const COPY_TEXT =
@@ -32,7 +32,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
     // Register custom ease
     CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
-    const nameEl = containerRef.current?.querySelector(
+    const nameEl = headerRef.current?.querySelector(
       ".name-text"
     ) as HTMLElement | null;
     const copyEl = containerRef.current?.querySelector(
