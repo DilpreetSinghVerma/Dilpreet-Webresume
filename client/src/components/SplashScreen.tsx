@@ -71,12 +71,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       ".preloader-images .img img"
     );
 
-    // Set initial state for images (GPU translation reveal instead of clip-path)
+    // Set initial state for images (restored clip-path!)
     preloaderImages.forEach((img) => {
-      gsap.set(img, { yPercent: 100 });
+      gsap.set(img, { clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" });
     });
     preloaderImagesInner.forEach((img) => {
-      gsap.set(img, { yPercent: -100, scale: 2 });
+      gsap.set(img, { scale: 2 });
     });
 
     // ─── Main timeline ───
@@ -106,12 +106,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
         force3D: true,
       });
 
-    // 2. Image cascade — slide reveal
+    // 2. Image cascade — clip-path reveal (restored!)
     preloaderImages.forEach((img, i) => {
       tl.to(
         img,
         {
-          yPercent: 0,
+          clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
           duration: 1,
           ease: "hop",
           delay: i * 0.75,
@@ -121,12 +121,11 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       );
     });
 
-    // 3. Image zoom-out & counter-translate
+    // 3. Image zoom-out (restored!)
     preloaderImagesInner.forEach((img, i) => {
       tl.to(
         img,
         {
-          yPercent: 0,
           scale: 1,
           duration: 1.5,
           ease: "hop",
@@ -166,12 +165,12 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
     // Add a label for the exit sequence
     tl.addLabel("exit", 4.25);
 
-    // 6. Images fly away upward (completely off-screen)
+    // 6. Images clip away upward (restored!)
     tl.to(
       ".preloader-images",
       {
-        y: -window.innerHeight,
-        duration: 1.25,
+        clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)",
+        duration: 0.8,
         ease: "hop",
         force3D: true,
       },
@@ -196,9 +195,9 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
       middleChars,
       {
         yPercent: (i: number) => (i % 2 === 0 ? 100 : -100),
-        duration: 0.8,
+        duration: 0.6,
         ease: "hop",
-        stagger: 0.02,
+        stagger: 0.015,
         force3D: true,
       },
       "exit"
@@ -218,29 +217,29 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
           return centerX - lastRect.left;
         }
       },
-      duration: 0.8,
+      duration: 0.6,
       ease: "hop",
       force3D: true,
-    }, "exit+=0.25");
+    }, "exit+=0.15");
 
     // 9. Preloader slides upward & header scales down in parallel!
-    tl.set(headerRef.current, { mixBlendMode: "difference" }, "exit+=1.05")
+    tl.set(headerRef.current, { mixBlendMode: "difference" }, "exit+=0.5")
       .to(headerRef.current, {
         y: "2rem",
         scale: 0.35,
-        duration: 1.5,
+        duration: 0.8,
         ease: "hop",
         force3D: true,
-      }, "exit+=1.05")
+      }, "exit+=0.5")
       .to(
         ".preloader",
         {
           yPercent: -100,
-          duration: 1.5,
+          duration: 0.8,
           ease: "hop",
           force3D: true,
         },
-        "exit+=1.05"
+        "exit+=0.5"
       );
 
     return () => {
