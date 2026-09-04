@@ -37,6 +37,33 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes("@react-three/rapier") || id.includes("@dimforge/rapier3d-compat")) {
+            return "vendor-physics";
+          }
+          if (id.includes("three") || id.includes("@react-three") || id.includes("postprocessing")) {
+            return "vendor-three";
+          }
+          if (id.includes("framer-motion")) {
+            return "vendor-motion";
+          }
+          if (id.includes("lucide-react")) {
+            return "vendor-icons";
+          }
+          if (
+            id.includes("node_modules/react/") ||
+            id.includes("node_modules/react-dom/") ||
+            id.includes("node_modules/wouter/") ||
+            id.includes("@tanstack/react-query")
+          ) {
+            return "vendor-react";
+          }
+        },
+      },
+    },
   },
   server: {
     host: "0.0.0.0",

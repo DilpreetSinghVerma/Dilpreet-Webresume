@@ -67,8 +67,14 @@ export default function Vision() {
             </div>
 
             {/* Subtle background glow */}
-            <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-accent/5 rounded-full blur-[120px] pointer-events-none" />
+            <div 
+                className="absolute -top-24 -right-24 w-96 h-96 rounded-full pointer-events-none" 
+                style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.06) 0%, transparent 70%)" }}
+            />
+            <div 
+                className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full pointer-events-none" 
+                style={{ background: "radial-gradient(circle, hsl(var(--accent) / 0.06) 0%, transparent 70%)" }}
+            />
         </section>
     );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import Navbar from "@/components/layout/Navbar";
 import ScrollProgress from "@/components/ui/scroll-progress";
 import Hero from "@/components/sections/Hero";
@@ -9,12 +9,13 @@ import Growth from "@/components/sections/Growth";
 import Certifications from "@/components/sections/Certifications";
 import Contact from "@/components/sections/Contact";
 import CursorGlow from "@/components/ui/cursor-glow";
-import AITerminal from "@/components/ui/ai-terminal";
-import { NeuralAssistant } from "@/components/ui/neural-assistant";
-import EasterEgg from "@/components/ui/easter-egg";
 import TechStackBadge from "@/components/ui/tech-stack-badge";
 import Vision from "@/components/sections/Vision";
 import SplashScreen from "@/components/SplashScreen";
+
+const AITerminal = lazy(() => import("@/components/ui/ai-terminal"));
+const NeuralAssistant = lazy(() => import("@/components/ui/neural-assistant").then(m => ({ default: m.NeuralAssistant })));
+const EasterEgg = lazy(() => import("@/components/ui/easter-egg"));
 
 export default function Home() {
   // Show splash only once per session (not on every refresh)
@@ -36,9 +37,11 @@ export default function Home() {
       <main className="min-h-screen selection:bg-primary selection:text-primary-foreground relative">
         {/* Fixed overlays */}
         <CursorGlow />
-        <AITerminal />
-        <NeuralAssistant />
-        <EasterEgg />
+        <Suspense fallback={null}>
+          <AITerminal />
+          <NeuralAssistant />
+          <EasterEgg />
+        </Suspense>
         <ScrollProgress />
         <Navbar />
 

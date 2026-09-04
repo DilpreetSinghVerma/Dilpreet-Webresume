@@ -2,10 +2,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Scene from "@/components/3d/Scene";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Github, Linkedin, Mail, Instagram, Download, ExternalLink } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { useTransitionNavigate } from "@/hooks/use-transition-navigate";
 import Magnetic from "@/components/ui/magnetic";
-import Lanyard from "@/components/3d/Lanyard";
+
+const Lanyard = lazy(() => import("@/components/3d/Lanyard"));
 
 const FULL_TEXT = "DILPREET SINGH";
 const TYPING_SPEED = 80;
@@ -64,7 +65,9 @@ export default function Hero() {
 
       {/* 3D Lanyard Card - Desktop/TV only (≥1024px) */}
       <div className="absolute top-0 right-0 w-full lg:w-[55%] h-full z-50 pointer-events-none hidden lg:block">
-        <Lanyard />
+        <Suspense fallback={null}>
+          <Lanyard />
+        </Suspense>
       </div>
 
       {/* Portrait - Tablet only (sm → lg) */}

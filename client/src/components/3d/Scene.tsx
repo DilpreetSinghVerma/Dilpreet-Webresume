@@ -74,6 +74,7 @@ export default function Scene() {
   const [isDark, setIsDark] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [activeColor, setActiveColor] = useState("#00e5ff"); // Default Cyan
+  const [isTabActive, setIsTabActive] = useState(true);
 
   useEffect(() => {
     const checkTheme = () => {
@@ -88,25 +89,35 @@ export default function Scene() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
+    const handleVisibilityChange = () => {
+      setIsTabActive(document.visibilityState === "visible");
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    let rafId: number | null = null;
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const height = window.innerHeight;
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const scrollY = window.scrollY;
+        const height = window.innerHeight;
 
-      // Dynamic color shifts — only update if the color actually changes
-      let newColor = "#00e5ff";
-      if (scrollY < height * 0.8) {
-        newColor = "#00e5ff"; // Hero - Cyan
-      } else if (scrollY < height * 1.8) {
-        newColor = "#10b981"; // Skills - Emerald
-      } else if (scrollY < height * 2.8) {
-        newColor = "#8b5cf6"; // Experience - Violet
-      } else if (scrollY < height * 3.8) {
-        newColor = "#f43f5e"; // Projects - Rose
-      } else {
-        newColor = "#f59e0b"; // Contact - Amber
-      }
+        // Dynamic color shifts — only update if the color actually changes
+        let newColor = "#00e5ff";
+        if (scrollY < height * 0.8) {
+          newColor = "#00e5ff"; // Hero - Cyan
+        } else if (scrollY < height * 1.8) {
+          newColor = "#10b981"; // Skills - Emerald
+        } else if (scrollY < height * 2.8) {
+          newColor = "#8b5cf6"; // Experience - Violet
+        } else if (scrollY < height * 3.8) {
+          newColor = "#f43f5e"; // Projects - Rose
+        } else {
+          newColor = "#f59e0b"; // Contact - Amber
+        }
 
-      setActiveColor((current) => current !== newColor ? newColor : current);
+        setActiveColor((current) => (current !== newColor ? newColor : current));
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -114,7 +125,9 @@ export default function Scene() {
     return () => {
       observer.disconnect();
       window.removeEventListener("resize", checkMobile);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -138,15 +151,16 @@ export default function Scene() {
       <Canvas
         camera={{ position: [0, 0, 2], fov: 45 }}
         gl={glConfig}
-        dpr={isMobile ? [0.8, 1] : [1, 1.2]}
+        frameloop={isTabActive ? "always" : "never"}
+        dpr={isMobile ? [0.75, 1] : [1, 1.2]}
       >
-        <Stars count={isMobile ? 60 : 500} color={starColor} />
+        <Stars count={isMobile ? 50 : 350} color={starColor} />
         <AmbientGlow color={activeColor} position={[-1.5, 0.5, -1]} isMobile={isMobile} />
         <AmbientGlow color={isDark ? "#7c3aed" : "#8b5cf6"} position={[1.5, -0.5, -1]} isMobile={isMobile} />
 
         {isDark && !isMobile && (
           <EffectComposer multisampling={0}>
-            <Bloom luminanceThreshold={0.5} intensity={0.6} radius={0.2} />
+            <Bloom luminanceThreshold={0.6} intensity={0.5} radius={0.15} />
           </EffectComposer>
         )}
       </Canvas>

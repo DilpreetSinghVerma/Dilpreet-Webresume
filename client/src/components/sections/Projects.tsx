@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Languages, X, ExternalLink, Info, Github, CalendarCheck, PenTool } from "lucide-react";
 import { RevealText } from "@/components/ui/reveal-text";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
 const projects = [
@@ -74,9 +74,17 @@ function TiltCard({ project, index, onClick }: { project: any, index: number, on
 
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [10, -10]), { stiffness: 300, damping: 30 });
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-10, 10]), { stiffness: 300, damping: 30 });
+  const rectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
+
+  function handleMouseEnter(event: React.MouseEvent<HTMLDivElement>) {
+    rectRef.current = event.currentTarget.getBoundingClientRect();
+  }
 
   function handleMouse(event: React.MouseEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
+    if (!rectRef.current) {
+      rectRef.current = event.currentTarget.getBoundingClientRect();
+    }
+    const rect = rectRef.current;
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
     const xPct = mouseX / rect.width - 0.5;
@@ -86,6 +94,7 @@ function TiltCard({ project, index, onClick }: { project: any, index: number, on
   }
 
   function handleMouseLeave() {
+    rectRef.current = null;
     x.set(0);
     y.set(0);
   }
@@ -98,6 +107,7 @@ function TiltCard({ project, index, onClick }: { project: any, index: number, on
       transition={{ delay: index * 0.05 }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       className={`${project.span} group relative cursor-pointer perspective-1000`}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouse}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}

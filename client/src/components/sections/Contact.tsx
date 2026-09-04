@@ -198,8 +198,14 @@ export default function Contact() {
             </div>
 
             {/* Background decoration */}
-            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full pointer-events-none -z-10" />
-            <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-accent/5 blur-[100px] rounded-full pointer-events-none -z-10" />
+            <div 
+                className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none -z-10" 
+                style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.06) 0%, transparent 70%)" }}
+            />
+            <div 
+                className="absolute top-0 left-0 w-[300px] h-[300px] rounded-full pointer-events-none -z-10" 
+                style={{ background: "radial-gradient(circle, hsl(var(--accent) / 0.06) 0%, transparent 70%)" }}
+            />
         </section>
     );
 }

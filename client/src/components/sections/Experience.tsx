@@ -134,7 +134,10 @@ export default function Experience() {
 
   return (
     <section className="py-24 relative overflow-hidden" id="experience" ref={containerRef}>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div 
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none -z-10" 
+        style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.05) 0%, transparent 70%)" }}
+      />
 
       <div className="container px-4 md:px-6 relative z-10">
         <div className="text-center mb-12">

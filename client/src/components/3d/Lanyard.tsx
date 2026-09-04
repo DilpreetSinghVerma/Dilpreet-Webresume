@@ -28,17 +28,54 @@ export default function Lanyard({
   fov = 25,
   transparent = true
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isTabActive, setIsTabActive] = useState(true);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsTabActive(document.visibilityState === 'visible');
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { rootMargin: '100px' }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      observer.disconnect();
+    };
+  }, []);
+
+  const shouldRender = isVisible && isTabActive;
+
   return (
-    <div className="absolute inset-0 z-0 pointer-events-auto">
+    <div ref={containerRef} className="absolute inset-0 z-0 pointer-events-auto">
       <Canvas
         camera={{ position: position, fov: fov }}
-        gl={{ alpha: transparent, antialias: true }}
+        frameloop={shouldRender ? 'always' : 'never'}
+        dpr={[1, 1.5]}
+        gl={{
+          alpha: transparent,
+          antialias: true,
+          powerPreference: 'high-performance',
+          stencil: false,
+          depth: true
+        }}
         onCreated={({ gl }) => {
           gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1);
         }}
       >
         <ambientLight intensity={1.5} />
-        <directionalLight position={[5, 5, 5]} intensity={2} castShadow />
+        <directionalLight position={[5, 5, 5]} intensity={2} />
         <directionalLight position={[-5, 5, -5]} intensity={1} />
         <Physics gravity={gravity} timeStep={1 / 60}>
           <Band />
@@ -144,7 +181,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
       curve.points[1].copy(j2.current.lerped);
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(32));
+      band.current.geometry.setPoints(curve.getPoints(20));
 
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
@@ -152,15 +189,17 @@ function Band({ maxSpeed = 50, minSpeed = 0 }) {
     }
   });
 
-  curve.curveType = 'chordal';
-  strapTexture.wrapS = strapTexture.wrapT = THREE.RepeatWrapping;
+  useEffect(() => {
+    curve.curveType = 'chordal';
+    strapTexture.wrapS = strapTexture.wrapT = THREE.RepeatWrapping;
 
-  // PlaneGeometry has native 0→1 UVs — use flipY=true (default) so portrait is right-side up.
-  cardTexture.flipY = true;
-  cardTexture.wrapS = cardTexture.wrapT = THREE.ClampToEdgeWrapping;
-  cardTexture.repeat.set(1, 1);
-  cardTexture.offset.set(0, 0);
-  cardTexture.needsUpdate = true;
+    // PlaneGeometry has native 0→1 UVs — use flipY=true (default) so portrait is right-side up.
+    cardTexture.flipY = true;
+    cardTexture.wrapS = cardTexture.wrapT = THREE.ClampToEdgeWrapping;
+    cardTexture.repeat.set(1, 1);
+    cardTexture.offset.set(0, 0);
+    cardTexture.needsUpdate = true;
+  }, [cardTexture, strapTexture, curve]);
 
   return (
     <>
