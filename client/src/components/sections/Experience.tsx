@@ -18,6 +18,25 @@ const JOURNEY_ITEMS = [
     borderColor: "border-accent/30"
   },
   {
+    id: 8,
+    type: "award",
+    icon: Award,
+    title: "2nd Position (₹15,000 Prize) - CypherVerse 2026",
+    subtitle: "DevHive Club • CGC University, Mohali",
+    date: "Aug 2026",
+    description: "Secured 2nd Position along with a ₹15,000 cash prize at CypherVerse 2026, a 24-hour hackathon. Built a complete AI/ML prototype as Team Dream Dive alongside Hardeep Singh and Prabhkirat Kaur under an intensive sprint.",
+    color: "text-amber-400",
+    bgColor: "bg-amber-500/10",
+    borderColor: "border-amber-400/30",
+    images: [
+      "/achievements/CypherVerse Prize Ceremony.jpg",
+      "/achievements/CypherVerse 2nd Position Certificate.jpg",
+      "/achievements/CypherVerse Badges and Certificates.jpg",
+      "/achievements/CypherVerse Participation Certificate.jpg",
+      "/achievements/Dilpreet CypherVerse.jpg"
+    ]
+  },
+  {
     id: 2,
     type: "experience",
     icon: Star,

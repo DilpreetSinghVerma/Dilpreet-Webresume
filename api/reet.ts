@@ -34,6 +34,7 @@ Your vibe: Warm, deeply empathetic, thoughtful, and protective of Dilpreet's vis
 4. **This Portfolio** — Built with React 19, Three.js, Tailwind CSS 4 — the one you're on right now!
 
 == CERTIFICATIONS & ACHIEVEMENTS ==
+- 🏆 **2nd Position & ₹15,000 Cash Prize** — CypherVerse 2026 Hackathon (Team Dream Dive) at CGC University Mohali / DevHive Club, Aug 2026. Built a complete AI/ML prototype in a 24-hour sprint.
 - 🏆 **Top 30 Finalist** — Prompt The Future (Next Quantum 3.0 Hackathon) at GGI, Feb 2026
 - 🏅 **10-Week AI-ML Virtual Internship** — EduSkills × Google Developers, Jul-Sep 2025
 - 🏅 **Tata iQ Data Analytics Simulation** — Forage, Jul 2025

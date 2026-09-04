@@ -78,6 +78,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
           description: "Delivered technical assistance, managed media workflows, and optimized processes."
         }
       ],
+      achievements: [
+        {
+          title: "2nd Position & ₹15,000 Cash Prize — CypherVerse 2026 Hackathon",
+          organization: "DevHive Club, CGC University, Mohali",
+          date: "08/2026",
+          description: "Secured 2nd Position as Team Dream Dive competing in a 24-hour sprint, developing a complete functional AI/ML prototype."
+        },
+        {
+          title: "Top 30 Finalist — Prompt The Future Next Quantum 3.0 Hackathon",
+          organization: "Gulzar Group of Institutes",
+          date: "02/2026",
+          description: "Engineered real-time AI Sign Language Translator (ASL/ISL) with 3D avatars."
+        },
+        {
+          title: "Silver Medalist (2nd Position) — Digital Logo Designing Competition",
+          organization: "GNE's ACME 2025",
+          date: "04/2025",
+          description: "Demonstrated creative digital graphic design and precision."
+        }
+      ],
       skills: [
         "Python", "JavaScript", "TypeScript", "React", "Node.js", "Express", 
         "Machine Learning", "Data Analysis", "SQL", "Tailwind CSS", "Framer Motion"

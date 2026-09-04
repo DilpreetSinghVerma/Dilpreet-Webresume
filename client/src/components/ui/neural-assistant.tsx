@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button';
 // ─── Knowledge Base ───────────────────────────────────────────────────────────
 const INTENTS = [
     {
-        keywords: ["hackathon", "competition", "quantum", "silent", "coders", "win", "top 30", "achievement", "ggi", "first place", "finalist"],
-        response: "🏆 Dilpreet's team **Silent Coders** placed in the **Top 30** at the *'Prompt The Future' Next Quantum 3.0 Hackathon* (2026)!\n\nThey engineered a real-time **AI Sign Language Translator** that converts speech into 3D animations. He also secured **2nd Place** in Digital Logo Designing at *GNE ACME 2025*, showcasing his blend of technical logic and creative design."
+        keywords: ["hackathon", "competition", "cypherverse", "dream dive", "cgc", "quantum", "silent", "coders", "win", "top 30", "second place", "2nd", "prize", "achievement", "ggi", "first place", "finalist"],
+        response: "🏆 **Recent Hackathon Wins:**\n\n🥈 **2nd Position & ₹15,000 Cash Prize** — *CypherVerse 2026 Hackathon* (Aug 2026) hosted by DevHive Club at CGC University, Mohali! Dilpreet & Team **Dream Dive** built a complete AI/ML prototype under a high-intensity 24-hour sprint.\n\n🏆 **Top 30 Finalist** — *'Prompt The Future' Next Quantum 3.0 Hackathon* (2026) with Team **Silent Coders**, engineering a real-time AI Sign Language Translator.\n\n🎨 **2nd Place** — Digital Logo Designing at *GNE ACME 2025*."
     },
     {
         keywords: ["vision", "mission", "philosophy", "goal", "future", "engineer", "ecosystem"],

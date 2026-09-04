@@ -16,6 +16,23 @@ const categories = [
 
 const certifications = [
   {
+    title: "2nd Position (₹15,000 Prize) — CypherVerse 2026 Hackathon",
+    issuer: "DevHive Club, CGC University, Mohali",
+    date: "August 2026",
+    icon: Award,
+    featured: true,
+    category: "ai-ml",
+    description: "Secured 2nd Position along with a ₹15,000 cash prize at CypherVerse 2026, a 24-hour hackathon hosted by the DevHive Club at CGC University, Mohali.",
+    details: [
+      "Secured 2nd Position (Runner-Up) and a ₹15,000 cash prize competing against university engineering teams.",
+      "Competed as Team Dream Dive alongside Hardeep Singh and Prabhkirat Kaur, representing Gulzar Group of Institutes (GGI).",
+      "Engineered and pitched a complete functional AI/ML prototype in an intensive 24-hour sprint under tight deadlines.",
+      "Awarded official Certificate of Appreciation by CGC University leadership and the judging panel."
+    ],
+    tags: ["Hackathon", "2nd Position", "₹15,000 Prize", "AI/ML", "Team Dream Dive", "DevHive", "CGC University"],
+    certificateImage: "/cypherverse-certificate.jpg"
+  },
+  {
     title: "Skyscanner Front-End Software Engineering Job Simulation",
     issuer: "Forage",
     date: "May 2026",
